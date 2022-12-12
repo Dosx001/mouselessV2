@@ -254,47 +254,37 @@ const blobList = {
   currentIndex: 0,
   loadBlobs: function() {
     if (!onWebPage) return;
-
     const linkElems = document.querySelectorAll<HTMLElement>(
       "a, button, input, select, textarea, summary, [role='button'], [tabindex='0']"
     );
-
     //Remove old container contents
     blobList.container.innerText = "";
     blobList.createOverview();
-
     //Remove old blobs
     blobList.blobs = {};
-
-    let i = 0;
+    // let i = 0;
     let nRealBlobs = 0;
-    function addBlob() {
+    // function addBlob() {
+    for (let i = 0; i < linkElems.length; i++) {
       const linkElem = linkElems[i];
       //We don't want hidden elements
       if (
         linkElem === undefined ||
         linkElem.style.display == "none" ||
         linkElem.style.visibility == "hidden"
-      ) {
-        return true;
-      }
-
+      )
+        continue;
       //Get element's absolute position
       const pos = getElemPos(linkElem);
-
       //Lots of things which don't really exist have an X and Y value of 0
-      if (pos.top == 0 && pos.left == 0) return true;
-
+      if (pos.top == 0 && pos.left == 0) continue;
       //We don't need to get things far above our current scroll position
-      if (pos.top < window.scrollY - 100) return true;
-
+      if (pos.top < window.scrollY - 100) continue;
       //We don't need things below our scroll position either
-      if (pos.top - 100 > window.scrollY + window.innerHeight) return true;
-
+      if (pos.top - 100 > window.scrollY + window.innerHeight) continue;
       //Create the blob's key
       const key = createKey(nRealBlobs);
       nRealBlobs += 1;
-
       const blobElem = document.createElement("div");
       blobElem.innerText = key.toUpperCase();
       blobElem.style.cssText = [
@@ -313,16 +303,11 @@ const blobList = {
         "",
       ].join(" !important;");
       blobList.container.appendChild(blobElem);
-
       blobList.blobs[key] = {
         blobElem: blobElem,
         linkElem: linkElem,
       };
-
-      return true;
     }
-
-    while (addBlob()) { }
   },
 
   showBlobs: function() {

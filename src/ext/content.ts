@@ -453,7 +453,7 @@ window.addEventListener(
 
       //Hide blobs if appropriate
       //Escape key always hides blobs if visible
-      if (evt.which === 27 || isMatch(keys.blobs_hide, evt)) {
+      if (evt.code === "Escape" || isMatch(keys.blobs_hide, evt)) {
         blobList.hideBlobs();
         return;
       }

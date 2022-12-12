@@ -1,10 +1,13 @@
 body {
+  background-color: #0d1117;
+  color: darkgray;
+  margin: 1rem;
   overflow: hidden;
 }
 form .option {
-  margin: 12px;
-  margin-left: 0px;
   display: inline-block;
+  margin-left: 0px;
+  margin: 12px;
   width: 200px;
 }
 form .option.big {
@@ -12,18 +15,42 @@ form .option.big {
 }
 form .option .current {
   display: block;
-  width: 100%;
   height: 100%;
+  width: 100%;
 }
 form .option textarea.current {
-  resize: vertical;
   height: 70px;
+  resize: vertical;
+  width: 95%;
 }
 form button,
 select {
   display: block;
-  margin: 24px;
   margin-left: 0px;
-  width: 50%;
+  margin: 24px;
   text-align: center;
+  width: 50%;
+}
+label {
+  white-space: nowrap;
+}
+input,
+button,
+select {
+  border-radius: 1%;
+}
+button,
+select {
+  cursor: pointer;
+}
+input,
+button,
+select,
+textarea {
+  background: black;
+  border: 1px solid #484848;
+  color: darkgray;
+  &:focus {
+    outline: 1px solid darkred;
+  }
 }

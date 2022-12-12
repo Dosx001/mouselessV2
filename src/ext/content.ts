@@ -591,24 +591,27 @@ window.onkeyup = (evt) => {
 };
 
 const scroller = {
-  start: function(acceleration: number) {
+  raf: 0,
+  acceleration: 0,
+  velocity: 0,
+  startDate: 0,
+  endDate: 0,
+  startTime: 0,
+  endTime: 0,
+  start: (acceleration: number) => {
     scroller.acceleration = acceleration;
-
     if (scroller.raf === 0) scroller.update();
   },
-
-  stop: function() {
+  stop: () => {
     scroller.acceleration = 0;
   },
-
-  update: function() {
+  update: () => {
     const tdiff = scroller.endTime - scroller.startTime;
     if (tdiff < 100) {
       scroller.velocity += scroller.acceleration;
       window.scrollBy(0, scroller.velocity * tdiff);
       scroller.velocity *= conf.scroll_friction;
     }
-
     if (tdiff < 100 && scroller.velocity > -0.1 && scroller.velocity < 0.1) {
       scroller.velocity = 0;
       cancelAnimationFrame(scroller.raf);
@@ -619,11 +622,6 @@ const scroller = {
       scroller.raf = requestAnimationFrame(scroller.update);
     }
   },
-  raf: 0,
-  acceleration: 0,
-  velocity: 0,
-  startDate: 0,
-  endDate: 0,
 };
 
 let timer = 0;

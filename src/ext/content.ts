@@ -270,11 +270,6 @@ const blobList = {
     let nRealBlobs = 0;
     function addBlob() {
       const linkElem = linkElems[i];
-
-      if (i++ >= linkElems.length) return false;
-
-      if (linkElem === undefined) return true;
-
       //We don't want hidden elements
       if (
         linkElem === undefined ||

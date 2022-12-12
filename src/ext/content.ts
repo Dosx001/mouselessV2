@@ -205,7 +205,7 @@ const blobList = {
 
   createContainer: function() {
     const container = document.createElement("div");
-    container.style = [
+    container.style.cssText = [
       "pointer-events: none",
       "display: none",
       "position: absolute;",
@@ -221,7 +221,7 @@ const blobList = {
 
   createOverview: function() {
     const overview = document.createElement("div");
-    overview.style = [
+    overview.style.cssText = [
       "position: fixed",
       "top: 0px",
       "left: 0px",
@@ -302,7 +302,7 @@ const blobList = {
 
       const blobElem = document.createElement("div");
       blobElem.innerText = key.toUpperCase();
-      blobElem.style = [
+      blobElem.style.cssText = [
         "position: absolute",
         "background-color: yellow",
         "border: 1px solid black",

@@ -404,8 +404,6 @@ setInterval(function() {
   currentUrl = location.href;
 }, conf.location_change_check_timeout);
 
-// const pressedKeys = [];
-
 function isValidElem(el: HTMLButtonElement) {
   const tag = el.tagName.toLowerCase();
 

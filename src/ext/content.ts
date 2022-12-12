@@ -5,7 +5,7 @@ function callBridge(action, ...args) {
   });
 }
 
-var bridge = {
+const bridge = {
   changeTabLeft: function() {
     callBridge("changeTabLeft");
   },
@@ -25,7 +25,7 @@ var bridge = {
   },
 
   setClipboard: function(txt) {
-    var el = document.createElement("input");
+    const el = document.createElement("input");
     document.body.appendChild(el);
     el.value = txt;
     el.select();
@@ -34,8 +34,8 @@ var bridge = {
   },
 };
 
-var enabled = false;
-var blacklisted = false;
+let enabled = false;
+let blacklisted = false;
 
 browser.runtime.onMessage.addListener((obj) => {
   switch (obj.action) {
@@ -50,7 +50,7 @@ browser.runtime.onMessage.addListener((obj) => {
   }
 });
 
-var defaultConf = {
+const defaultConf = {
   blacklist: "",
   scroll_speed: 0.3,
   scroll_speed_fast: 1.1,
@@ -70,9 +70,9 @@ var defaultConf = {
   location_change_check_timeout: 2000,
   yt_fix_space: true,
 };
-var conf = defaultConf;
+const conf = defaultConf;
 
-var defaultKeys = {
+const defaultKeys = {
   scroll_up: "k",
   scroll_down: "l",
   scroll_up_fast: "<Shift>_",
@@ -92,29 +92,29 @@ var defaultKeys = {
   history_back: "<Control>j",
   history_forward: "<Control>;",
 };
-var keys = {};
+const keys = {};
 
 browser.storage.local.get(["keys", "conf"]).then((obj) => {
   // Get keys
-  var keyNames = Object.keys(defaultKeys);
+  const keyNames = Object.keys(defaultKeys);
   if (obj.keys === undefined) obj.keys = {};
-  for (var i in keyNames) {
-    var name = keyNames[i];
+  for (const i in keyNames) {
+    const name = keyNames[i];
     interpretKey(name, obj.keys[name] || defaultKeys[name]);
   }
 
   // Get conf
-  var confNames = Object.keys(defaultConf);
+  const confNames = Object.keys(defaultConf);
   if (obj.conf === undefined) obj.conf = {};
-  for (var i in confNames) {
-    var name = confNames[i];
+  for (const i in confNames) {
+    const name = confNames[i];
     conf[name] = obj.conf[name] == null ? defaultConf[name] : obj.conf[name];
   }
 
   // Is this URL blacklisted?
-  var rxes = conf.blacklist.split("\n").filter((x) => x.trim() !== "");
-  for (var i in rxes) {
-    var rx = new RegExp(rxes[i].trim());
+  const rxes = conf.blacklist.split("\n").filter((x) => x.trim() !== "");
+  for (const i in rxes) {
+    const rx = new RegExp(rxes[i].trim());
     if (rx.test(location.href)) {
       blacklisted = true;
       break;
@@ -123,11 +123,11 @@ browser.storage.local.get(["keys", "conf"]).then((obj) => {
 });
 
 function interpretKey(name, k) {
-  var key = {};
+  const key = {};
 
-  var matches = k.match(/<.*>/g);
-  for (var i in matches) {
-    var m = matches[i].replace("<", "").replace(">", "").trim().toLowerCase();
+  const matches = k.match(/<.*>/g);
+  for (const i in matches) {
+    const m = matches[i].replace("<", "").replace(">", "").trim().toLowerCase();
 
     if (m === "control") key.ctrlKey = true;
     else if (m === "shift") key.shiftKey = true;
@@ -157,11 +157,11 @@ function isMatch(k, evt) {
 
 //There's a lot we don't want to do if we're not on an actual webpage, but on
 //the "speed dial"-ish pages.
-var onWebPage = document.body !== undefined;
+const onWebPage = document.body !== undefined;
 
 function createKey(n) {
-  var str = "";
-  var base = conf.chars.length;
+  let str = "";
+  const base = conf.chars.length;
 
   if (n == 0) return conf.chars[0];
 
@@ -174,8 +174,8 @@ function createKey(n) {
 }
 
 function getElemPos(elem) {
-  var curtop = 0;
-  var curleft = 0;
+  let curtop = 0;
+  let curleft = 0;
 
   do {
     curtop += elem.offsetTop;
@@ -185,7 +185,7 @@ function getElemPos(elem) {
   return { top: curtop, left: curleft };
 }
 
-var blobList = {
+const blobList = {
   blobs: {},
   container: null,
   overview: null,
@@ -196,7 +196,7 @@ var blobList = {
   currentKey: "",
 
   createContainer: function() {
-    var container = document.createElement("div");
+    const container = document.createElement("div");
     container.style = [
       "pointer-events: none",
       "display: none",
@@ -212,7 +212,7 @@ var blobList = {
   },
 
   createOverview: function() {
-    var overview = document.createElement("div");
+    const overview = document.createElement("div");
     overview.style = [
       "position: fixed",
       "top: 0px",
@@ -247,7 +247,7 @@ var blobList = {
   loadBlobs: function() {
     if (!onWebPage) return;
 
-    var linkElems = document.querySelectorAll(
+    const linkElems = document.querySelectorAll(
       "a, button, input, select, textarea, summary, [role='button'], [tabindex='0']"
     );
 
@@ -258,10 +258,10 @@ var blobList = {
     //Remove old blobs
     blobList.blobs = {};
 
-    var i = 0;
-    var nRealBlobs = 0;
+    let i = 0;
+    let nRealBlobs = 0;
     function addBlob() {
-      var linkElem = linkElems[i];
+      const linkElem = linkElems[i];
 
       if (i++ >= linkElems.length) return false;
 
@@ -277,7 +277,7 @@ var blobList = {
       }
 
       //Get element's absolute position
-      var pos = getElemPos(linkElem);
+      const pos = getElemPos(linkElem);
 
       //Lots of things which don't really exist have an X and Y value of 0
       if (pos.top == 0 && pos.left == 0) return true;
@@ -292,7 +292,7 @@ var blobList = {
       const key = createKey(nRealBlobs);
       nRealBlobs += 1;
 
-      var blobElem = document.createElement("div");
+      const blobElem = document.createElement("div");
       blobElem.innerText = key.toUpperCase();
       blobElem.style = [
         "position: absolute",
@@ -336,7 +336,7 @@ var blobList = {
   click: function() {
     if (!blobList.visible) return;
 
-    var blob = blobList.blobs[blobList.currentKey];
+    const blob = blobList.blobs[blobList.currentKey];
     if (!blob) return;
 
     if (
@@ -357,7 +357,7 @@ var blobList = {
   clickNewTab: function() {
     if (!blobList.visible) return;
 
-    var blob = blobList.blobs[blobList.currentKey];
+    const blob = blobList.blobs[blobList.currentKey];
     if (!blob) return;
 
     blobList.hideBlobs();
@@ -372,7 +372,7 @@ var blobList = {
   clickClipboard: function() {
     if (!blobList.visible) return;
 
-    var blob = blobList.blobs[blobList.currentKey];
+    const blob = blobList.blobs[blobList.currentKey];
     if (!blob) return;
 
     if (!blob.linkElem.href) return;
@@ -385,7 +385,7 @@ var blobList = {
   focus: function() {
     if (!blobList.visible) return;
 
-    var blob = blobList.blobs[blobList.currentKey];
+    const blob = blobList.blobs[blobList.currentKey];
     if (!blob) return;
 
     blobList.hideBlobs();
@@ -408,7 +408,7 @@ var blobList = {
 blobList.init();
 
 //Reload blobs whenever the URL changes
-var currentUrl = location.href;
+let currentUrl = location.href;
 setInterval(function() {
   if (currentUrl !== location.href) {
     blobList.loadBlobs();
@@ -416,14 +416,14 @@ setInterval(function() {
   currentUrl = location.href;
 }, conf.location_change_check_timeout);
 
-var pressedKeys = [];
+const pressedKeys = [];
 
 function inArray(arr, val) {
   return arr.indexOf(val) !== -1;
 }
 
 function isValidElem(elem) {
-  var tag = elem.tagName.toLowerCase();
+  const tag = elem.tagName.toLowerCase();
 
   if (tag === "textarea") return false;
 
@@ -449,7 +449,7 @@ window.addEventListener(
     if (!enabled || blacklisted) return;
     if (/about:.+/.test(location.href)) return;
 
-    var active = document.activeElement;
+    const active = document.activeElement;
 
     //We don't want to do anything if the user is typing in an input field,
     //unless the key is to deselect an input field
@@ -489,7 +489,7 @@ window.addEventListener(
         return;
       }
 
-      var c = evt.key;
+      const c = evt.key;
       if (conf.chars.indexOf(c) !== -1) {
         blobList.appendKey(c);
 
@@ -617,7 +617,7 @@ window.addEventListener(
   true
 );
 
-var scroll = {
+let scroll = {
   start: function(acceleration) {
     scroll.acceleration = acceleration;
 
@@ -629,7 +629,7 @@ var scroll = {
   },
 
   update: function() {
-    var tdiff = scroll.endTime - scroll.startTime;
+    const tdiff = scroll.endTime - scroll.startTime;
     if (tdiff < 100) {
       scroll.velocity += scroll.acceleration;
       window.scrollBy(0, scroll.velocity * tdiff);
@@ -654,4 +654,4 @@ var scroll = {
   endDate: 0,
 };
 
-var timer = false;
+let timer = false;

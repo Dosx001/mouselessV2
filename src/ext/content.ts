@@ -133,10 +133,8 @@ browser.storage.local.get(["keys", "conf"]).then((obj) => {
 
 function interpretKey(name: string, k: string) {
   const key: HotKey = {};
-
-  const matches = k.match(/<.*>/g);
-  for (const i in matches) {
-    const m = matches[i].replace("<", "").replace(">", "").trim().toLowerCase();
+  k.match(/<.*>/g)?.forEach((val) => {
+    const m = val.replace("<", "").replace(">", "").trim().toLowerCase();
     switch (m) {
       case "control":
         key.ctrlKey = true;
@@ -153,7 +151,7 @@ function interpretKey(name: string, k: string) {
       default:
         console.error("Unknown modifier:", m);
     }
-  }
+  });
   key.code = k.replace(/<.*?>/g, "").trim();
   keys[name] = key;
 }

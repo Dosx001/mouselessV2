@@ -1,10 +1,10 @@
 interface HotKey {
   code?: string;
   key?: string;
-  ctrlKey: boolean;
-  shiftKey: boolean;
-  altKey: boolean;
-  metaKey: boolean;
+  ctrlKey?: boolean;
+  shiftKey?: boolean;
+  altKey?: boolean;
+  metaKey?: boolean;
 }
 
 function callBridge(action: string, ...args) {

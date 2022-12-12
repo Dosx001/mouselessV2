@@ -173,16 +173,13 @@ function isMatch(k: HotKey, evt: HotKey) {
 const onWebPage = document.body !== undefined;
 
 function createKey(n: number) {
+  if (n === 0) return conf.chars[0];
   let str = "";
   const base = conf.chars.length;
-
-  if (n == 0) return conf.chars[0];
-
-  while (n > 0) {
+  while (0 < n) {
     str += conf.chars[n % base];
     n = Math.floor(n / base);
   }
-
   return str;
 }
 

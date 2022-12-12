@@ -1,4 +1,13 @@
-function callBridge(action, ...args) {
+interface HotKey {
+  code?: string;
+  key?: string;
+  ctrlKey: boolean;
+  shiftKey: boolean;
+  altKey: boolean;
+  metaKey: boolean;
+}
+
+function callBridge(action: string, ...args) {
   browser.runtime.sendMessage({
     action: action,
     args: args,
@@ -20,11 +29,11 @@ const bridge = {
     callBridge("moveTabRight");
   },
 
-  openTab: function(href) {
+  openTab: function(href: string) {
     callBridge("openTab", href);
   },
 
-  setClipboard: function(txt) {
+  setClipboard: function(txt: string) {
     const el = document.createElement("input");
     document.body.appendChild(el);
     el.value = txt;
@@ -122,8 +131,8 @@ browser.storage.local.get(["keys", "conf"]).then((obj) => {
   }
 });
 
-function interpretKey(name, k) {
-  const key = {};
+function interpretKey(name: string, k: string) {
+  const key: HotKey = {};
 
   const matches = k.match(/<.*>/g);
   for (const i in matches) {
@@ -141,7 +150,7 @@ function interpretKey(name, k) {
   keys[name] = key;
 }
 
-function isMatch(k, evt) {
+function isMatch(k: HotKey, evt: HotKey) {
   if (
     k.code === evt.key &&
     !!k.ctrlKey == evt.ctrlKey &&
@@ -159,7 +168,7 @@ function isMatch(k, evt) {
 //the "speed dial"-ish pages.
 const onWebPage = document.body !== undefined;
 
-function createKey(n) {
+function createKey(n: number) {
   let str = "";
   const base = conf.chars.length;
 
@@ -173,14 +182,14 @@ function createKey(n) {
   return str;
 }
 
-function getElemPos(elem) {
+function getElemPos(el: HTMLElement) {
   let curtop = 0;
   let curleft = 0;
 
   do {
-    curtop += elem.offsetTop;
-    curleft += elem.offsetLeft;
-  } while ((elem = elem.offsetParent));
+    curtop += el.offsetTop;
+    curleft += el.offsetLeft;
+  } while ((el = el.offsetParent as HTMLElement));
 
   return { top: curtop, left: curleft };
 }
@@ -247,7 +256,7 @@ const blobList = {
   loadBlobs: function() {
     if (!onWebPage) return;
 
-    const linkElems = document.querySelectorAll(
+    const linkElems = document.querySelectorAll<HTMLElement>(
       "a, button, input, select, textarea, summary, [role='button'], [tabindex='0']"
     );
 
@@ -392,7 +401,7 @@ const blobList = {
     blob.linkElem.focus();
   },
 
-  appendKey: function(c) {
+  appendKey: function(c: string) {
     blobList.currentKey += c;
     blobList.overview.innerText = blobList.currentKey;
   },
@@ -416,14 +425,10 @@ setInterval(function() {
   currentUrl = location.href;
 }, conf.location_change_check_timeout);
 
-const pressedKeys = [];
+// const pressedKeys = [];
 
-function inArray(arr, val) {
-  return arr.indexOf(val) !== -1;
-}
-
-function isValidElem(elem) {
-  const tag = elem.tagName.toLowerCase();
+function isValidElem(el: HTMLButtonElement) {
+  const tag = el.tagName.toLowerCase();
 
   if (tag === "textarea") return false;
 
@@ -431,11 +436,11 @@ function isValidElem(elem) {
 
   if (tag === "canvas") return false;
 
-  if (elem.contentEditable.toLowerCase() === "true") return false;
+  if (el.contentEditable.toLowerCase() === "true") return false;
 
   if (
     tag === "input" &&
-    !inArray(conf.input_whitelist, elem.type.toLowerCase())
+    conf.input_whitelist.indexOf(el.type.toLowerCase()) === -1
   ) {
     return false;
   }
@@ -449,7 +454,7 @@ window.addEventListener(
     if (!enabled || blacklisted) return;
     if (/about:.+/.test(location.href)) return;
 
-    const active = document.activeElement;
+    const active = document.activeElement as HTMLButtonElement;
 
     //We don't want to do anything if the user is typing in an input field,
     //unless the key is to deselect an input field
@@ -483,7 +488,7 @@ window.addEventListener(
         //Stop auto-submit timeout
         if (timer) {
           clearTimeout(timer);
-          timer = false;
+          timer = 0;
         }
 
         return;
@@ -587,7 +592,7 @@ window.addEventListener(
       location.pathname.indexOf("/watch") === 0 &&
       evt.keyCode === 32
     ) {
-      document.getElementById("movie_player").click();
+      document.getElementById("movie_player")!.click();
 
       //We don't want to stop the event from propagating
       //if it hasn't matched anything yet
@@ -618,7 +623,7 @@ window.addEventListener(
 );
 
 let scroll = {
-  start: function(acceleration) {
+  start: function(acceleration: number) {
     scroll.acceleration = acceleration;
 
     if (scroll.raf == null) scroll.update();

@@ -159,17 +159,13 @@ function interpretKey(name: string, k: string) {
 }
 
 function isMatch(k: HotKey, evt: HotKey) {
-  if (
+  return (
     k.code === evt.key &&
-    !!k.ctrlKey == evt.ctrlKey &&
-    !!k.shiftKey == evt.shiftKey &&
-    !!k.altKey == evt.altKey &&
-    !!k.metaKey == evt.metaKey
-  ) {
-    return true;
-  }
-
-  return false;
+    !!k.ctrlKey === evt.ctrlKey &&
+    !!k.shiftKey === evt.shiftKey &&
+    !!k.altKey === evt.altKey &&
+    !!k.metaKey === evt.metaKey
+  );
 }
 
 //There's a lot we don't want to do if we're not on an actual webpage, but on

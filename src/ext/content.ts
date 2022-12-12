@@ -594,7 +594,7 @@ const scroller = {
   start: function(acceleration: number) {
     scroller.acceleration = acceleration;
 
-    if (scroller.raf == null) scroller.update();
+    if (scroller.raf === 0) scroller.update();
   },
 
   stop: function() {
@@ -612,14 +612,14 @@ const scroller = {
     if (tdiff < 100 && scroller.velocity > -0.1 && scroller.velocity < 0.1) {
       scroller.velocity = 0;
       cancelAnimationFrame(scroller.raf);
-      scroller.raf = null;
+      scroller.raf = 0;
     } else {
       scroller.startTime = scroller.endTime;
       scroller.endTime = new Date().getTime();
       scroller.raf = requestAnimationFrame(scroller.update);
     }
   },
-  raf: null,
+  raf: 0,
   acceleration: 0,
   velocity: 0,
   startDate: 0,

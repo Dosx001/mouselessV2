@@ -1,0 +1,48 @@
+{
+  "manifest_version": 2,
+  "name": "Mouseless V2",
+  "version": "0.12.1",
+  "description": "Quick keyboard access to links and other interactive elements",
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "ext/content.js"
+      ]
+    }
+  ],
+  "background": {
+    "scripts": [
+      "ext/background.js"
+    ]
+  },
+  "options_ui": {
+    "page": "settings/options.html"
+  },
+  "icons": {
+    "32": "assets/icon-32.png",
+    "48": "assets/icon-48.png",
+    "64": "assets/icon-64.png",
+    "128": "assets/icon-128.png"
+  },
+  "browser_action": {
+    "default_icon": {
+      "32": "assets/icon-32.png",
+      "48": "assets/icon-48.png",
+      "64": "assets/icon-64.png",
+      "128": "assets/icon-128.png"
+    }
+  },
+  "applications": {
+    "gecko": {
+      "id": "@mouselessV2"
+    }
+  },
+  "permissions": [
+    "clipboardWrite",
+    "tabs",
+    "storage"
+  ]
+}

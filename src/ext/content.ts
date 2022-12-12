@@ -296,7 +296,7 @@ var blobList = {
 				return true;
 
 			//Create the blob's key
-			key = createKey(nRealBlobs);
+			const key = createKey(nRealBlobs);
 			nRealBlobs += 1;
 
 			var blobElem = document.createElement("div");

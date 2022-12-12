@@ -1,7 +1,7 @@
-var enabled = false;
+let ENABLED = false;
 
-async function sendTabEnabled(id, noretry) {
-  var obj = { action: enabled ? "enable" : "disable" };
+async function sendTabEnabled(id: number, noretry: boolean) {
+  const obj = { action: ENABLED ? "enable" : "disable" };
 
   browser.tabs.sendMessage(id, obj).catch((err) => {
     if (noretry) {
@@ -21,74 +21,70 @@ async function sendTabEnabled(id, noretry) {
 }
 
 async function toggle() {
-  enabled = !enabled;
+  ENABLED = !ENABLED;
 
-  var name = "assets/" + (enabled ? "icon" : "icon-off");
-  var title = enabled ? "Turn off Mouseless" : "Turn on Mouseless";
+  const name = "assets/" + (ENABLED ? "icon" : "icon-off");
+  const title = ENABLED ? "Turn off Mouseless" : "Turn on Mouseless";
 
-  var a;
-  browser.browserAction.setIcon(
-    (a = {
-      path: name + "-48.png",
-    })
-  );
+  browser.browserAction.setIcon({
+    path: name + "-48.png",
+  });
 
   browser.browserAction.setTitle({ title });
 
-  var tabs = await browser.tabs.query({});
-  for (var i in tabs) sendTabEnabled(tabs[i].id);
+  const tabs = await browser.tabs.query({});
+  for (const i in tabs) sendTabEnabled(tabs[i].id!, false);
 }
 toggle();
 
 browser.browserAction.onClicked.addListener(toggle);
 
 browser.tabs.onUpdated.addListener((id, evt) => {
-  if (evt.status === "complete") sendTabEnabled(id);
+  if (evt.status === "complete") sendTabEnabled(id, false);
 });
 
-async function getCurrTabOffset(off) {
-  var win = await browser.windows.getCurrent();
-  var tab = (await browser.tabs.query({ active: true, windowId: win.id }))[0];
-  var tabCount = (await browser.tabs.query({ windowId: win.id })).length;
+async function getCurrTabOffset(off: number) {
+  const win = await browser.windows.getCurrent();
+  const tab = (await browser.tabs.query({ active: true, windowId: win.id }))[0];
+  const tabCount = (await browser.tabs.query({ windowId: win.id })).length;
 
-  var idx = tab.index + off;
+  let idx = tab.index + off;
   if (idx < 0) idx = tabCount - 1;
   else if (idx >= tabCount) idx = 0;
 
   return [tab, win, idx];
 }
 
-var bridge = {
+const brigdeBg = {
   changeTabLeft: async function() {
-    var [_, win, index] = await getCurrTabOffset(-1);
-    var ntab = (await browser.tabs.query({ windowId: win.id, index }))[0];
-    browser.tabs.update(ntab.id, { active: true });
+    const [_, win, index] = await getCurrTabOffset(-1);
+    const ntab = (await browser.tabs.query({ windowId: win.id, index }))[0];
+    browser.tabs.update(ntab.id!, { active: true });
   },
   changeTabRight: async function() {
-    var [_, win, index] = await getCurrTabOffset(1);
-    var ntab = (await browser.tabs.query({ windowId: win.id, index }))[0];
-    browser.tabs.update(ntab.id, { active: true });
+    const [_, win, index] = await getCurrTabOffset(1);
+    const ntab = (await browser.tabs.query({ windowId: win.id, index }))[0];
+    browser.tabs.update(ntab.id!, { active: true });
   },
 
   moveTabLeft: async function() {
-    var [tab, _, index] = await getCurrTabOffset(-1);
+    const [tab, _, index] = await getCurrTabOffset(-1);
     browser.tabs.move(tab.id, { index });
   },
   moveTabRight: async function() {
-    var [tab, _, index] = await getCurrTabOffset(1);
+    const [tab, _, index] = await getCurrTabOffset(1);
     browser.tabs.move(tab.id, { index });
   },
 
-  openTab: function(href) {
+  openTab: function(href: string) {
     browser.tabs.create({
       url: href,
     });
   },
 };
 
-browser.runtime.onMessage.addListener(function(msg) {
-  var fn = bridge[msg.action];
+browser.runtime.onMessage.addListener((msg) => {
+  const fn = brigdeBg[msg.action as keyof typeof brigdeBg];
   if (!fn) throw new Error("No such action: " + msg.action);
-
   fn.apply(null, msg.args);
 });

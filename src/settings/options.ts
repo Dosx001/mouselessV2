@@ -1,4 +1,4 @@
-var presets = {
+const presets = {
   qwerty_us: {
     conf: {
       chars: ";alskdjfir",
@@ -26,7 +26,6 @@ var presets = {
       history_forward: "<Control>;",
     },
   },
-
   qwerty_no: {
     conf: {
       chars: "øalskdjfir",
@@ -54,7 +53,6 @@ var presets = {
       history_forward: "<Control>ø",
     },
   },
-
   azerty: {
     conf: {
       chars: "mqlskdjfir",
@@ -82,7 +80,6 @@ var presets = {
       history_forward: "<Control>m",
     },
   },
-
   dvorak: {
     conf: {
       chars: "sanotehucp",
@@ -110,7 +107,6 @@ var presets = {
       history_forward: "<Control>s",
     },
   },
-
   colemak: {
     conf: {
       chars: "oairesntup",
@@ -138,7 +134,6 @@ var presets = {
       history_forward: "<Control>o",
     },
   },
-
   numeric_links: {
     conf: {
       chars: "123456789",
@@ -168,57 +163,46 @@ var presets = {
   },
 };
 
-var defaultPreset = presets.qwerty_us;
+const defaultPreset = presets.qwerty_us;
 
-function forEachOption(cb) {
-  var opts = document.querySelectorAll("form .option");
-
-  for (var i in opts) {
-    if (!opts.hasOwnProperty(i)) continue;
-    var str = opts[i].getAttribute("name");
-    var [section, name] = str.split(".");
-    var curr = opts[i].querySelector(".current");
-    cb(opts[i], section, name, curr);
+function forEachOption(
+  fn: (section: string, name: string, el: HTMLSelectElement) => void
+) {
+  const opts = document.querySelectorAll<HTMLElement>("form .option");
+  for (const i in opts) {
+    if (!Object.prototype.hasOwnProperty.call(opts, i)) continue;
+    const [section, name] = opts[i].getAttribute("name")!.split(".");
+    const el = opts[i].querySelector<HTMLSelectElement>(".current")!;
+    fn(section, name, el);
   }
 }
 
 // Select preset
-document.querySelector("select").addEventListener("change", (e) => {
-  if (!e.target.value) return;
-
-  var preset = e.target.value;
-  forEachOption((el, section, name, curr) => {
-    curr.value = presets[preset][section][name];
+document.querySelector<HTMLSelectElement>("select")!.onchange = (ev) => {
+  const el = ev.target as HTMLSelectElement;
+  if (!el.value) return;
+  const preset = el.value as keyof typeof presets;
+  forEachOption((section: string, name: string, el: HTMLSelectElement) => {
+    el.value = presets[preset][section][name];
   });
-});
+};
 
 // Save options
-document.querySelector("form").addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  var opts = document.querySelectorAll("form .option");
-  var vals = {};
-
-  forEachOption((el, section, name, curr) => {
+document.querySelector<HTMLFormElement>("form")!.onsubmit = (ev) => {
+  ev.preventDefault();
+  const vals: { [key: string]: { [key: string]: string } } = {};
+  forEachOption((section: string, name: string, el: HTMLSelectElement) => {
     vals[section] = vals[section] || {};
-    vals[section][name] = curr.value === "" ? " " : curr.value;
+    vals[section][name] = el.value;
   });
   browser.storage.local.set(vals);
-});
+};
 
 // Load options
-async function loadOpts() {
-  var opts = document.querySelectorAll("form .option");
-
-  var vals = await browser.storage.local.get(["keys", "conf"]);
-
-  forEachOption((el, section, name, curr) => {
-    var sec = vals[section] || {};
-    var saved = sec[name];
-
-    var def = defaultPreset[section][name];
-
-    curr.value = saved == null ? def : saved;
+document.addEventListener("DOMContentLoaded", async () => {
+  const vals = await browser.storage.local.get(["keys", "conf"]);
+  forEachOption((section: string, name: string, el: HTMLSelectElement) => {
+    const sec = vals[section] || {};
+    el.value = sec[name] ?? defaultPreset[section][name];
   });
-}
-document.addEventListener("DOMContentLoaded", loadOpts);
+});

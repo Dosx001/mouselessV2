@@ -137,16 +137,24 @@ function interpretKey(name: string, k: string) {
   const matches = k.match(/<.*>/g);
   for (const i in matches) {
     const m = matches[i].replace("<", "").replace(">", "").trim().toLowerCase();
-
-    if (m === "control") key.ctrlKey = true;
-    else if (m === "shift") key.shiftKey = true;
-    else if (m === "alt") key.altKey = true;
-    else if (m === "meta") key.metaKey = true;
-    else console.error("Unknown modifier:", m);
+    switch (m) {
+      case "control":
+        key.ctrlKey = true;
+        break;
+      case "shift":
+        key.shiftKey = true;
+        break;
+      case "alt":
+        key.altKey = true;
+        break;
+      case "meta":
+        key.metaKey = true;
+        break;
+      default:
+        console.error("Unknown modifier:", m);
+    }
   }
-
   key.code = k.replace(/<.*?>/g, "").trim();
-
   keys[name] = key;
 }
 

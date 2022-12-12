@@ -184,12 +184,10 @@ function createKey(n: number) {
 function getElemPos(el: HTMLElement) {
   let curtop = 0;
   let curleft = 0;
-
   do {
     curtop += el.offsetTop;
     curleft += el.offsetLeft;
   } while ((el = el.offsetParent as HTMLElement));
-
   return { top: curtop, left: curleft };
 }
 
@@ -197,12 +195,9 @@ const blobList = {
   blobs: {},
   container: null,
   overview: null,
-
   visible: false,
   needLoadBlobs: true,
-
   currentKey: "",
-
   createContainer: function() {
     const container = document.createElement("div");
     container.style.cssText = [
@@ -536,13 +531,13 @@ window.addEventListener(
 
       //Scrolling
     } else if (onWebPage && isMatch(keys.scroll_up, evt)) {
-      scroll.start(-conf.scroll_speed);
+      scroller.start(-conf.scroll_speed);
     } else if (onWebPage && isMatch(keys.scroll_down, evt)) {
-      scroll.start(conf.scroll_speed);
+      scroller.start(conf.scroll_speed);
     } else if (onWebPage && isMatch(keys.scroll_up_fast, evt)) {
-      scroll.start(-conf.scroll_speed_fast);
+      scroller.start(-conf.scroll_speed_fast);
     } else if (onWebPage && isMatch(keys.scroll_down_fast, evt)) {
-      scroll.start(conf.scroll_speed_fast);
+      scroller.start(conf.scroll_speed_fast);
 
       //Back and forwards
     } else if (isMatch(keys.history_back, evt)) {
@@ -591,40 +586,39 @@ window.onkeyup = (evt) => {
     isMatch(keys.scroll_up_fast, evt) ||
     isMatch(keys.scroll_down_fast, evt)
   ) {
-    scroll.stop();
+    scroller.stop();
   }
 };
 
-let scroll = {
+const scroller = {
   start: function(acceleration: number) {
-    scroll.acceleration = acceleration;
+    scroller.acceleration = acceleration;
 
-    if (scroll.raf == null) scroll.update();
+    if (scroller.raf == null) scroller.update();
   },
 
   stop: function() {
-    scroll.acceleration = 0;
+    scroller.acceleration = 0;
   },
 
   update: function() {
-    const tdiff = scroll.endTime - scroll.startTime;
+    const tdiff = scroller.endTime - scroller.startTime;
     if (tdiff < 100) {
-      scroll.velocity += scroll.acceleration;
-      window.scrollBy(0, scroll.velocity * tdiff);
-      scroll.velocity *= conf.scroll_friction;
+      scroller.velocity += scroller.acceleration;
+      window.scrollBy(0, scroller.velocity * tdiff);
+      scroller.velocity *= conf.scroll_friction;
     }
 
-    if (tdiff < 100 && scroll.velocity > -0.1 && scroll.velocity < 0.1) {
-      scroll.velocity = 0;
-      cancelAnimationFrame(scroll.raf);
-      scroll.raf = null;
+    if (tdiff < 100 && scroller.velocity > -0.1 && scroller.velocity < 0.1) {
+      scroller.velocity = 0;
+      cancelAnimationFrame(scroller.raf);
+      scroller.raf = null;
     } else {
-      scroll.startTime = scroll.endTime;
-      scroll.endTime = new Date().getTime();
-      scroll.raf = requestAnimationFrame(scroll.update);
+      scroller.startTime = scroller.endTime;
+      scroller.endTime = new Date().getTime();
+      scroller.raf = requestAnimationFrame(scroller.update);
     }
   },
-
   raf: null,
   acceleration: 0,
   velocity: 0,

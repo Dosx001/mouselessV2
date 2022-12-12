@@ -502,7 +502,7 @@ window.addEventListener(
         if (timer) {
           clearTimeout(timer);
         }
-        if (conf.timer > 0) {
+        if (0 < conf.timer) {
           timer = this.setTimeout(blobList.click, conf.timer);
         }
 
@@ -659,4 +659,4 @@ let scroll = {
   endDate: 0,
 };
 
-let timer = false;
+let timer = 0;

@@ -584,20 +584,16 @@ window.addEventListener(
   true
 );
 
-window.addEventListener(
-  "keyup",
-  function(evt) {
-    if (
-      isMatch(keys.scroll_up, evt) ||
-      isMatch(keys.scroll_down, evt) ||
-      isMatch(keys.scroll_up_fast, evt) ||
-      isMatch(keys.scroll_down_fast, evt)
-    ) {
-      scroll.stop();
-    }
-  },
-  true
-);
+window.onkeyup = (evt) => {
+  if (
+    isMatch(keys.scroll_up, evt) ||
+    isMatch(keys.scroll_down, evt) ||
+    isMatch(keys.scroll_up_fast, evt) ||
+    isMatch(keys.scroll_down_fast, evt)
+  ) {
+    scroll.stop();
+  }
+};
 
 let scroll = {
   start: function(acceleration: number) {

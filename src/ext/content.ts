@@ -373,18 +373,16 @@ setInterval(function() {
 }, conf.get("location_change_check_timeout"));
 
 function isValidElem(el: HTMLButtonElement) {
-  const tag = el.tagName.toLowerCase();
-  if (tag === "textarea") return false;
-  if (tag === "select") return false;
-  if (tag === "canvas") return false;
-  if (el.contentEditable.toLowerCase() === "true") return false;
-  if (
-    tag === "input" &&
-    conf.get("input_whitelist").indexOf(el.type.toLowerCase()) === -1
-  ) {
-    return false;
+  switch (el.tagName.toLowerCase()) {
+    case "textarea":
+    case "select":
+    case "canvas":
+      return false;
+    case "input":
+      if (conf.get("input_whitelist").indexOf(el.type.toLowerCase()) === -1)
+        return false;
   }
-  return true;
+  return el.contentEditable.toLowerCase() !== "true";
 }
 
 window.addEventListener(

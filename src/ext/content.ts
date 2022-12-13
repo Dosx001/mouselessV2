@@ -98,7 +98,7 @@ const defaultKeys = {
   history_back: "<Control>j",
   history_forward: "<Control>;",
 };
-const keys = {};
+const keys = new Map();
 
 browser.storage.local.get(["keys", "conf"]).then((obj) => {
   // Get keys
@@ -159,7 +159,7 @@ function interpretKey(name: string, k: string) {
     }
   });
   key.code = k.replace(/<.*?>/g, "").trim();
-  keys[name] = key;
+  keys.set(name, key);
 }
 
 function isMatch(k: HotKey, evt: HotKey) {
@@ -401,7 +401,7 @@ window.addEventListener(
     //We don't want to do anything if the user is typing in an input field,
     //unless the key is to deselect an input field
     if (!isValidElem(active)) {
-      if (isMatch(keys.elem_deselect, evt)) {
+      if (isMatch(keys.get("elem_deselect"), evt)) {
         active.blur();
         setTimeout(() => active.blur(), 50); // In case something tries to refocus
         blobList.hideBlobs();
@@ -416,12 +416,12 @@ window.addEventListener(
       evt.stopPropagation();
       //Hide blobs if appropriate
       //Escape key always hides blobs if visible
-      if (evt.code === "Escape" || isMatch(keys.blobs_hide, evt)) {
+      if (evt.code === "Escape" || isMatch(keys.get("blobs_hide"), evt)) {
         blobList.hideBlobs();
         return;
       }
       //Backspace if appropriate
-      if (isMatch(keys.blobs_backspace, evt)) {
+      if (isMatch(keys.get("blobs_backspace"), evt)) {
         blobList.backspace();
         //Stop auto-submit timeout
         if (timer) {
@@ -445,69 +445,69 @@ window.addEventListener(
     }
     //Handle other key presses
     //Deselect element
-    if (onWebPage && isMatch(keys.elem_deselect, evt)) {
+    if (onWebPage && isMatch(keys.get("elem_deselect"), evt)) {
       blobList.hideBlobs();
       active.blur();
       //Show/hide/reload blobs
     } else if (
       onWebPage &&
       !blobList.visible &&
-      isMatch(keys.blobs_show, evt)
+      isMatch(keys.get("blobs_show"), evt)
     ) {
       blobList.loadBlobs();
       blobList.needLoadBlobs = false;
       blobList.showBlobs();
-    } else if (onWebPage && blobList.visible && isMatch(keys.blobs_hide, evt)) {
+    } else if (onWebPage && blobList.visible && isMatch(keys.get("blobs_hide"), evt)) {
       blobList.hideBlobs();
       //Simulate clicks
     } else if (
       onWebPage &&
       blobList.visible &&
-      isMatch(keys.blobs_click, evt)
+      isMatch(keys.get("blobs_click"), evt)
     ) {
       blobList.click();
     } else if (
       onWebPage &&
       blobList.visible &&
-      isMatch(keys.blobs_click_new_tab, evt)
+      isMatch(keys.get("blobs_click_new_tab"), evt)
     ) {
       blobList.clickNewTab();
     } else if (
       onWebPage &&
       blobList.visible &&
-      isMatch(keys.blobs_click_clipboard, evt)
+      isMatch(keys.get("blobs_click_clipboard"), evt)
     ) {
       blobList.clickClipboard();
       //Focus element
     } else if (
       onWebPage &&
       blobList.visible &&
-      isMatch(keys.blobs_focus, evt)
+      isMatch(keys.get("blobs_focus"), evt)
     ) {
       blobList.focus();
       //Scrolling
-    } else if (onWebPage && isMatch(keys.scroll_up, evt)) {
+    } else if (onWebPage && isMatch(keys.get("scroll_up"), evt)) {
       scroller.start(-conf.get("scroll_speed"));
-    } else if (onWebPage && isMatch(keys.scroll_down, evt)) {
+    } else if (onWebPage && isMatch(keys.get("scroll_down"), evt)) {
       scroller.start(conf.get("scroll_speed"));
-    } else if (onWebPage && isMatch(keys.scroll_up_fast, evt)) {
+    } else if (onWebPage && isMatch(keys.get("scroll_up_fast"), evt)) {
       scroller.start(-conf.get("scroll_speed_fast"));
-    } else if (onWebPage && isMatch(keys.scroll_down_fast, evt)) {
+    } else if (onWebPage && isMatch(keys.get("scroll_down_fast"), evt)) {
       scroller.start(conf.get("scroll_speed_fast"));
       //Back and forwards
-    } else if (isMatch(keys.history_back, evt)) {
+    } else if (isMatch(keys.get("history_back"), evt)) {
       history.back();
-    } else if (isMatch(keys.history_forward, evt)) {
+    } else if (isMatch(keys.get("history_forward"), evt)) {
       history.forward();
       //Change tab
-    } else if (isMatch(keys.change_tab_left, evt)) {
+    } else if (isMatch(keys.get("change_tab_left"), evt)) {
       bridge.changeTabLeft();
-    } else if (isMatch(keys.change_tab_right, evt)) {
+    } else if (isMatch(keys.get("change_tab_right"), evt)) {
       bridge.changeTabRight();
       //Move tab
-    } else if (isMatch(keys.move_tab_left, evt)) {
+    } else if (isMatch(keys.get("move_tab_left"), evt)) {
       bridge.moveTabLeft();
-    } else if (isMatch(keys.move_tab_right, evt)) {
+    } else if (isMatch(keys.get("move_tab_right"), evt)) {
       bridge.moveTabRight();
       //Fix youtube space by emulating clicking the player
     } else if (
@@ -531,10 +531,10 @@ window.addEventListener(
 
 window.onkeyup = (evt) => {
   if (
-    isMatch(keys.scroll_up, evt) ||
-    isMatch(keys.scroll_down, evt) ||
-    isMatch(keys.scroll_up_fast, evt) ||
-    isMatch(keys.scroll_down_fast, evt)
+    isMatch(keys.get("scroll_up"), evt) ||
+    isMatch(keys.get("scroll_down"), evt) ||
+    isMatch(keys.get("scroll_up_fast"), evt) ||
+    isMatch(keys.get("scroll_down_fast"), evt)
   ) {
     scroller.stop();
   }

@@ -76,7 +76,7 @@ const defaultConf = {
   location_change_check_timeout: 2000,
   yt_fix_space: true,
 };
-const conf = defaultConf;
+const conf = new Map();
 
 const defaultKeys = {
   scroll_up: "k",
@@ -106,17 +106,28 @@ browser.storage.local.get(["keys", "conf"]).then((obj) => {
   if (obj.keys === undefined) obj.keys = {};
   for (const i in keyNames) {
     const name = keyNames[i];
-    interpretKey(name, obj.keys[name] || defaultKeys[name]);
+    interpretKey(
+      name,
+      obj.keys[name] || defaultKeys[name as keyof typeof defaultKeys]
+    );
   }
   // Get conf
   const confNames = Object.keys(defaultConf);
   if (obj.conf === undefined) obj.conf = {};
   for (const i in confNames) {
     const name = confNames[i];
-    conf[name] = obj.conf[name] == null ? defaultConf[name] : obj.conf[name];
+    conf.set(
+      name,
+      obj.conf[name]
+        ? obj.conf[name]
+        : defaultConf[name as keyof typeof defaultConf]
+    );
   }
   // Is this URL blacklisted?
-  const rxes = conf.blacklist.split("\n").filter((x) => x.trim() !== "");
+  const rxes = conf
+    .get("blacklist")
+    .split("\n")
+    .filter((x) => x.trim() !== "");
   for (const i in rxes) {
     const rx = new RegExp(rxes[i].trim());
     if (rx.test(location.href)) {
@@ -166,11 +177,11 @@ function isMatch(k: HotKey, evt: HotKey) {
 const onWebPage = document.body !== undefined;
 
 function createKey(n: number) {
-  if (n === 0) return conf.chars[0];
+  if (n === 0) return conf.get("chars")[0];
   let str = "";
-  const base = conf.chars.length;
+  const base = conf.get("chars").length;
   while (0 < n) {
-    str += conf.chars[n % base];
+    str += conf.get("chars")[n % base];
     n = Math.floor(n / base);
   }
   return str;
@@ -364,7 +375,7 @@ setInterval(function() {
     blobList.loadBlobs();
   }
   currentUrl = location.href;
-}, conf.location_change_check_timeout);
+}, conf.get("location_change_check_timeout"));
 
 function isValidElem(el: HTMLButtonElement) {
   const tag = el.tagName.toLowerCase();
@@ -374,7 +385,7 @@ function isValidElem(el: HTMLButtonElement) {
   if (el.contentEditable.toLowerCase() === "true") return false;
   if (
     tag === "input" &&
-    conf.input_whitelist.indexOf(el.type.toLowerCase()) === -1
+    conf.get("input_whitelist").indexOf(el.type.toLowerCase()) === -1
   ) {
     return false;
   }
@@ -420,14 +431,14 @@ window.addEventListener(
         return;
       }
       const c = evt.key;
-      if (conf.chars.indexOf(c) !== -1) {
+      if (conf.get("chars").indexOf(c) !== -1) {
         blobList.appendKey(c);
         //Reset auto-submit timeout
         if (timer) {
           clearTimeout(timer);
         }
-        if (0 < conf.timer) {
-          timer = this.setTimeout(blobList.click, conf.timer);
+        if (0 < conf.get("timer")) {
+          timer = this.setTimeout(blobList.click, conf.get("timer"));
         }
         return false;
       }
@@ -476,13 +487,13 @@ window.addEventListener(
       blobList.focus();
       //Scrolling
     } else if (onWebPage && isMatch(keys.scroll_up, evt)) {
-      scroller.start(-conf.scroll_speed);
+      scroller.start(-conf.get("scroll_speed"));
     } else if (onWebPage && isMatch(keys.scroll_down, evt)) {
-      scroller.start(conf.scroll_speed);
+      scroller.start(conf.get("scroll_speed"));
     } else if (onWebPage && isMatch(keys.scroll_up_fast, evt)) {
-      scroller.start(-conf.scroll_speed_fast);
+      scroller.start(-conf.get("scroll_speed_fast"));
     } else if (onWebPage && isMatch(keys.scroll_down_fast, evt)) {
-      scroller.start(conf.scroll_speed_fast);
+      scroller.start(conf.get("scroll_speed_fast"));
       //Back and forwards
     } else if (isMatch(keys.history_back, evt)) {
       history.back();
@@ -500,7 +511,7 @@ window.addEventListener(
       bridge.moveTabRight();
       //Fix youtube space by emulating clicking the player
     } else if (
-      conf.yt_fix_space &&
+      conf.get("yt_fix_space ") &&
       /youtube\.com/.test(location.host) &&
       location.pathname.indexOf("/watch") === 0 &&
       evt.keyCode === 32
@@ -549,7 +560,7 @@ const scroller = {
     if (tdiff < 100) {
       scroller.velocity += scroller.acceleration;
       window.scrollBy(0, scroller.velocity * tdiff);
-      scroller.velocity *= conf.scroll_friction;
+      scroller.velocity *= conf.get("scroll_friction");
     }
     if (tdiff < 100 && scroller.velocity > -0.1 && scroller.velocity < 0.1) {
       scroller.velocity = 0;

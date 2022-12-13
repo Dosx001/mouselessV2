@@ -195,12 +195,12 @@ document.querySelector<HTMLFormElement>("form")!.onsubmit = (ev) => {
     vals[section] = vals[section] || {};
     vals[section][name] = el.value;
   });
-  browser.storage.local.set(vals);
+  browser.storage.sync.set(vals);
 };
 
 // Load options
 document.addEventListener("DOMContentLoaded", async () => {
-  const vals = await browser.storage.local.get(["keys", "conf"]);
+  const vals = await browser.storage.sync.get(["keys", "conf"]);
   forEachOption((section: string, name: string, el: HTMLSelectElement) => {
     const sec = vals[section] || {};
     el.value = sec[name] ?? defaultPreset[section][name];

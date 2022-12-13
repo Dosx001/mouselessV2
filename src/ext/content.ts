@@ -95,7 +95,7 @@ const defaultKeys = {
 };
 const keys = new Map();
 
-browser.storage.local.get(["keys", "conf"]).then((obj) => {
+browser.storage.sync.get(["keys", "conf"]).then((obj) => {
   // Get keys
   const keyNames = Object.keys(defaultKeys);
   if (obj.keys === undefined) obj.keys = {};

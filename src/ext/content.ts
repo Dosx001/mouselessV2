@@ -441,69 +441,59 @@ window.addEventListener(
     //Handle other key presses
     //Deselect element
     if (onWebPage) {
-      if (isMatch(keys.get("elem_deselect"), evt)) {
-        blobList.hideBlobs();
-        active.blur();
-        //Show/hide/reload blobs
-      } else if (!blobList.visible && isMatch(keys.get("blobs_show"), evt)) {
-        blobList.loadBlobs();
-        blobList.needLoadBlobs = false;
-        blobList.showBlobs();
-      } else if (blobList.visible && isMatch(keys.get("blobs_hide"), evt)) {
-        blobList.hideBlobs();
-        //Simulate clicks
-      } else if (blobList.visible && isMatch(keys.get("blobs_click"), evt)) {
-        blobList.click();
-      } else if (
-        blobList.visible &&
-        isMatch(keys.get("blobs_click_new_tab"), evt)
-      ) {
-        blobList.clickNewTab();
-      } else if (
-        blobList.visible &&
-        isMatch(keys.get("blobs_click_clipboard"), evt)
-      ) {
-        blobList.clickClipboard();
-        //Focus element
-      } else if (blobList.visible && isMatch(keys.get("blobs_focus"), evt)) {
-        blobList.focus();
-        //Scrolling
-      } else if (isMatch(keys.get("scroll_up"), evt)) {
-        scroller.start(-conf.get("scroll_speed"));
-      } else if (isMatch(keys.get("scroll_down"), evt)) {
-        scroller.start(conf.get("scroll_speed"));
-      } else if (isMatch(keys.get("scroll_up_fast"), evt)) {
-        scroller.start(-conf.get("scroll_speed_fast"));
-      } else if (isMatch(keys.get("scroll_down_fast"), evt)) {
-        scroller.start(conf.get("scroll_speed_fast"));
-        //Back and forwards
-      } else if (isMatch(keys.get("history_back"), evt)) {
-        history.back();
-      } else if (isMatch(keys.get("history_forward"), evt)) {
-        history.forward();
-        //Change tab
-      } else if (isMatch(keys.get("change_tab_left"), evt)) {
-        bridge.changeTabLeft();
-      } else if (isMatch(keys.get("change_tab_right"), evt)) {
-        bridge.changeTabRight();
-        //Move tab
-      } else if (isMatch(keys.get("move_tab_left"), evt)) {
-        bridge.moveTabLeft();
-      } else if (isMatch(keys.get("move_tab_right"), evt)) {
-        bridge.moveTabRight();
-        //Fix youtube space by emulating clicking the player
-      } else if (
-        conf.get("yt_fix_space ") &&
-        /youtube\.com/.test(location.host) &&
-        location.pathname.indexOf("/watch") === 0 &&
-        evt.code === "Space"
-      ) {
-        document.getElementById("movie_player")!.click();
-        //We don't want to stop the event from propagating
-        //if it hasn't matched anything yet
+      if (blobList.visible) {
+        if (isMatch(keys.get("blobs_hide"), evt)) {
+          blobList.hideBlobs();
+        } else if (isMatch(keys.get("blobs_click"), evt)) {
+          blobList.click();
+        } else if (isMatch(keys.get("blobs_click_new_tab"), evt)) {
+          blobList.clickNewTab();
+        } else if (isMatch(keys.get("blobs_click_clipboard"), evt)) {
+          blobList.clickClipboard();
+        } else if (isMatch(keys.get("blobs_focus"), evt)) {
+          blobList.focus();
+        }
+      } else {
+        if (isMatch(keys.get("blobs_show"), evt)) {
+          blobList.loadBlobs();
+          blobList.needLoadBlobs = false;
+          blobList.showBlobs();
+        } else if (isMatch(keys.get("elem_deselect"), evt)) {
+          blobList.hideBlobs();
+          active.blur();
+        } else if (isMatch(keys.get("scroll_up"), evt)) {
+          scroller.start(-conf.get("scroll_speed"));
+        } else if (isMatch(keys.get("scroll_down"), evt)) {
+          scroller.start(conf.get("scroll_speed"));
+        } else if (isMatch(keys.get("scroll_up_fast"), evt)) {
+          scroller.start(-conf.get("scroll_speed_fast"));
+        } else if (isMatch(keys.get("scroll_down_fast"), evt)) {
+          scroller.start(conf.get("scroll_speed_fast"));
+        } else if (isMatch(keys.get("history_back"), evt)) {
+          history.back();
+        } else if (isMatch(keys.get("history_forward"), evt)) {
+          history.forward();
+        } else if (isMatch(keys.get("change_tab_left"), evt)) {
+          bridge.changeTabLeft();
+        } else if (isMatch(keys.get("change_tab_right"), evt)) {
+          bridge.changeTabRight();
+        } else if (isMatch(keys.get("move_tab_left"), evt)) {
+          bridge.moveTabLeft();
+        } else if (isMatch(keys.get("move_tab_right"), evt)) {
+          bridge.moveTabRight();
+          //Fix youtube space by emulating clicking the player
+        } else if (
+          conf.get("yt_fix_space ") &&
+          /youtube\.com/.test(location.host) &&
+          location.pathname.indexOf("/watch") === 0 &&
+          evt.code === "Space"
+        ) {
+          document.getElementById("movie_player")!.click();
+        } else {
+          //We don't want to stop the event from propagating
+          return true;
+        }
       }
-    } else {
-      return true;
     }
     evt.preventDefault();
     evt.stopPropagation();

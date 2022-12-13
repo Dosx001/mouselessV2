@@ -127,7 +127,7 @@ browser.storage.local.get(["keys", "conf"]).then((obj) => {
   const rxes = conf
     .get("blacklist")
     .split("\n")
-    .filter((x) => x.trim() !== "");
+    .filter((s: string) => s.trim() !== "");
   for (const i in rxes) {
     const rx = new RegExp(rxes[i].trim());
     if (rx.test(location.href)) {
@@ -457,7 +457,11 @@ window.addEventListener(
       blobList.loadBlobs();
       blobList.needLoadBlobs = false;
       blobList.showBlobs();
-    } else if (onWebPage && blobList.visible && isMatch(keys.get("blobs_hide"), evt)) {
+    } else if (
+      onWebPage &&
+      blobList.visible &&
+      isMatch(keys.get("blobs_hide"), evt)
+    ) {
       blobList.hideBlobs();
       //Simulate clicks
     } else if (
@@ -514,7 +518,7 @@ window.addEventListener(
       conf.get("yt_fix_space ") &&
       /youtube\.com/.test(location.host) &&
       location.pathname.indexOf("/watch") === 0 &&
-      evt.keyCode === 32
+      evt.code === "Space"
     ) {
       document.getElementById("movie_player")!.click();
       //We don't want to stop the event from propagating

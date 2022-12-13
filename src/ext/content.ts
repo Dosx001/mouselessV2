@@ -21,18 +21,15 @@ const bridge = {
   changeTabRight: function() {
     callBridge("changeTabRight");
   },
-
   moveTabLeft: function() {
     callBridge("moveTabLeft");
   },
   moveTabRight: function() {
     callBridge("moveTabRight");
   },
-
   openTab: function(href: string) {
     callBridge("openTab", href);
   },
-
   setClipboard: function(txt: string) {
     const el = document.createElement("input");
     document.body.appendChild(el);
@@ -111,7 +108,6 @@ browser.storage.local.get(["keys", "conf"]).then((obj) => {
     const name = keyNames[i];
     interpretKey(name, obj.keys[name] || defaultKeys[name]);
   }
-
   // Get conf
   const confNames = Object.keys(defaultConf);
   if (obj.conf === undefined) obj.conf = {};
@@ -119,7 +115,6 @@ browser.storage.local.get(["keys", "conf"]).then((obj) => {
     const name = confNames[i];
     conf[name] = obj.conf[name] == null ? defaultConf[name] : obj.conf[name];
   }
-
   // Is this URL blacklisted?
   const rxes = conf.blacklist.split("\n").filter((x) => x.trim() !== "");
   for (const i in rxes) {
@@ -294,24 +289,19 @@ const blobList = {
       });
     }
   },
-
   showBlobs: function() {
     blobList.visible = true;
     blobList.container.style.display = "block";
   },
-
   hideBlobs: function() {
     blobList.currentKey = "";
     blobList.visible = false;
     blobList.container.style.display = "none";
   },
-
   click: function() {
     if (!blobList.visible) return;
-
     const blob = blobList.blobs.get(blobList.currentKey);
     if (!blob) return;
-
     if (
       blob.linkElem.tagName == "A" &&
       blob.linkElem.href &&
@@ -326,13 +316,10 @@ const blobList = {
       blob.linkElem.focus();
     }
   },
-
   clickNewTab: function() {
     if (!blobList.visible) return;
-
     const blob = blobList.blobs.get(blobList.currentKey);
     if (!blob) return;
-
     blobList.hideBlobs();
     if (blob.linkElem.tagName == "A" && blob.linkElem.href) {
       bridge.openTab(blob.linkElem.href);
@@ -341,35 +328,25 @@ const blobList = {
       blob.linkElem.focus();
     }
   },
-
   clickClipboard: function() {
     if (!blobList.visible) return;
-
     const blob = blobList.blobs.get(blobList.currentKey);
     if (!blob) return;
-
     if (!blob.linkElem.href) return;
-
     bridge.setClipboard(blob.linkElem.href);
-
     blobList.hideBlobs();
   },
-
   focus: function() {
     if (!blobList.visible) return;
-
     const blob = blobList.blobs.get(blobList.currentKey);
     if (!blob) return;
-
     blobList.hideBlobs();
     blob.linkElem.focus();
   },
-
   appendKey: function(c: string) {
     blobList.currentKey += c;
     blobList.overview.innerText = blobList.currentKey;
   },
-
   backspace: function() {
     blobList.currentKey = blobList.currentKey.substring(
       0,
@@ -391,22 +368,16 @@ setInterval(function() {
 
 function isValidElem(el: HTMLButtonElement) {
   const tag = el.tagName.toLowerCase();
-
   if (tag === "textarea") return false;
-
   if (tag === "select") return false;
-
   if (tag === "canvas") return false;
-
   if (el.contentEditable.toLowerCase() === "true") return false;
-
   if (
     tag === "input" &&
     conf.input_whitelist.indexOf(el.type.toLowerCase()) === -1
   ) {
     return false;
   }
-
   return true;
 }
 
@@ -415,9 +386,7 @@ window.addEventListener(
   function(evt) {
     if (!enabled || blacklisted) return;
     if (/about:.+/.test(location.href)) return;
-
     const active = document.activeElement as HTMLButtonElement;
-
     //We don't want to do anything if the user is typing in an input field,
     //unless the key is to deselect an input field
     if (!isValidElem(active)) {
@@ -430,36 +399,29 @@ window.addEventListener(
         return;
       }
     }
-
     //User is typing a key to a blob
     if (blobList.visible) {
       evt.preventDefault();
       evt.stopPropagation();
-
       //Hide blobs if appropriate
       //Escape key always hides blobs if visible
       if (evt.code === "Escape" || isMatch(keys.blobs_hide, evt)) {
         blobList.hideBlobs();
         return;
       }
-
       //Backspace if appropriate
       if (isMatch(keys.blobs_backspace, evt)) {
         blobList.backspace();
-
         //Stop auto-submit timeout
         if (timer) {
           clearTimeout(timer);
           timer = 0;
         }
-
         return;
       }
-
       const c = evt.key;
       if (conf.chars.indexOf(c) !== -1) {
         blobList.appendKey(c);
-
         //Reset auto-submit timeout
         if (timer) {
           clearTimeout(timer);
@@ -467,18 +429,14 @@ window.addEventListener(
         if (0 < conf.timer) {
           timer = this.setTimeout(blobList.click, conf.timer);
         }
-
         return false;
       }
     }
-
     //Handle other key presses
-
     //Deselect element
     if (onWebPage && isMatch(keys.elem_deselect, evt)) {
       blobList.hideBlobs();
       active.blur();
-
       //Show/hide/reload blobs
     } else if (
       onWebPage &&
@@ -490,7 +448,6 @@ window.addEventListener(
       blobList.showBlobs();
     } else if (onWebPage && blobList.visible && isMatch(keys.blobs_hide, evt)) {
       blobList.hideBlobs();
-
       //Simulate clicks
     } else if (
       onWebPage &&
@@ -510,7 +467,6 @@ window.addEventListener(
       isMatch(keys.blobs_click_clipboard, evt)
     ) {
       blobList.clickClipboard();
-
       //Focus element
     } else if (
       onWebPage &&
@@ -518,7 +474,6 @@ window.addEventListener(
       isMatch(keys.blobs_focus, evt)
     ) {
       blobList.focus();
-
       //Scrolling
     } else if (onWebPage && isMatch(keys.scroll_up, evt)) {
       scroller.start(-conf.scroll_speed);
@@ -528,25 +483,21 @@ window.addEventListener(
       scroller.start(-conf.scroll_speed_fast);
     } else if (onWebPage && isMatch(keys.scroll_down_fast, evt)) {
       scroller.start(conf.scroll_speed_fast);
-
       //Back and forwards
     } else if (isMatch(keys.history_back, evt)) {
       history.back();
     } else if (isMatch(keys.history_forward, evt)) {
       history.forward();
-
       //Change tab
     } else if (isMatch(keys.change_tab_left, evt)) {
       bridge.changeTabLeft();
     } else if (isMatch(keys.change_tab_right, evt)) {
       bridge.changeTabRight();
-
       //Move tab
     } else if (isMatch(keys.move_tab_left, evt)) {
       bridge.moveTabLeft();
     } else if (isMatch(keys.move_tab_right, evt)) {
       bridge.moveTabRight();
-
       //Fix youtube space by emulating clicking the player
     } else if (
       conf.yt_fix_space &&
@@ -555,13 +506,11 @@ window.addEventListener(
       evt.keyCode === 32
     ) {
       document.getElementById("movie_player")!.click();
-
       //We don't want to stop the event from propagating
       //if it hasn't matched anything yet
     } else {
       return true;
     }
-
     evt.preventDefault();
     evt.stopPropagation();
     return false;

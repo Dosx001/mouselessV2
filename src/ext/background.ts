@@ -2,7 +2,6 @@ let ENABLED = false;
 
 async function sendTabEnabled(id: number, noretry: boolean) {
   const obj = { action: ENABLED ? "enable" : "disable" };
-
   browser.tabs.sendMessage(id, obj).catch((err) => {
     if (noretry) {
       console.error(
@@ -22,21 +21,16 @@ async function sendTabEnabled(id: number, noretry: boolean) {
 
 async function toggle() {
   ENABLED = !ENABLED;
-
   const name = "assets/" + (ENABLED ? "icon" : "icon-off");
   const title = ENABLED ? "Turn off Mouseless" : "Turn on Mouseless";
-
   browser.browserAction.setIcon({
     path: name + "-48.png",
   });
-
   browser.browserAction.setTitle({ title });
-
   const tabs = await browser.tabs.query({});
   for (const i in tabs) sendTabEnabled(tabs[i].id!, false);
 }
 toggle();
-
 browser.browserAction.onClicked.addListener(toggle);
 
 browser.tabs.onUpdated.addListener((id, evt) => {
@@ -47,7 +41,6 @@ async function getCurrTabOffset(off: number) {
   const win = await browser.windows.getCurrent();
   const tab = (await browser.tabs.query({ active: true, windowId: win.id }))[0];
   const tabCount = (await browser.tabs.query({ windowId: win.id })).length;
-
   let idx = tab.index + off;
   if (idx < 0) idx = tabCount - 1;
   else if (idx >= tabCount) idx = 0;

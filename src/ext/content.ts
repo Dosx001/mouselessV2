@@ -7,30 +7,30 @@ interface HotKey {
   metaKey?: boolean;
 }
 
-function callBridge(action: string, href = "") {
+const callBridge = (action: string, href = "") => {
   browser.runtime.sendMessage({
     action: action,
     href: href,
   });
-}
+};
 
 const bridge = {
-  changeTabLeft: function() {
+  changeTabLeft: () => {
     callBridge("changeTabLeft");
   },
-  changeTabRight: function() {
+  changeTabRight: () => {
     callBridge("changeTabRight");
   },
-  moveTabLeft: function() {
+  moveTabLeft: () => {
     callBridge("moveTabLeft");
   },
-  moveTabRight: function() {
+  moveTabRight: () => {
     callBridge("moveTabRight");
   },
-  openTab: function(href: string) {
+  openTab: (href: string) => {
     callBridge("openTab", href);
   },
-  setClipboard: function(txt: string) {
+  setClipboard: (txt: string) => {
     navigator.clipboard.writeText(txt);
   },
 };
@@ -132,7 +132,7 @@ browser.storage.local.get(["keys", "conf"]).then((obj) => {
   }
 });
 
-function interpretKey(name: string, k: string) {
+const interpretKey = (name: string, k: string) => {
   const key: HotKey = {};
   k.match(/<.*>/g)?.forEach((val) => {
     const m = val.replace("<", "").replace(">", "").trim().toLowerCase();
@@ -155,23 +155,20 @@ function interpretKey(name: string, k: string) {
   });
   key.code = k.replace(/<.*?>/g, "").trim();
   keys.set(name, key);
-}
+};
 
-function isMatch(k: HotKey, evt: HotKey) {
-  return (
-    k.code === evt.key &&
-    !!k.ctrlKey === evt.ctrlKey &&
-    !!k.shiftKey === evt.shiftKey &&
-    !!k.altKey === evt.altKey &&
-    !!k.metaKey === evt.metaKey
-  );
-}
+const isMatch = (k: HotKey, evt: HotKey) =>
+  k.code === evt.key &&
+  !!k.ctrlKey === evt.ctrlKey &&
+  !!k.shiftKey === evt.shiftKey &&
+  !!k.altKey === evt.altKey &&
+  !!k.metaKey === evt.metaKey;
 
 //There's a lot we don't want to do if we're not on an actual webpage, but on
 //the "speed dial"-ish pages.
 const onWebPage = document.body !== undefined;
 
-function createKey(n: number) {
+const createKey = (n: number) => {
   if (n === 0) return conf.get("chars")[0];
   let str = "";
   const base = conf.get("chars").length;
@@ -180,9 +177,9 @@ function createKey(n: number) {
     n = Math.floor(n / base);
   }
   return str;
-}
+};
 
-function getElemPos(el: HTMLElement) {
+const getElemPos = (el: HTMLElement) => {
   let curtop = 0;
   let curleft = 0;
   do {
@@ -190,7 +187,7 @@ function getElemPos(el: HTMLElement) {
     curleft += el.offsetLeft;
   } while ((el = el.offsetParent as HTMLElement));
   return { top: curtop, left: curleft };
-}
+};
 
 const blobList = {
   blobs: new Map(),
@@ -238,7 +235,7 @@ const blobList = {
       blobList.needLoadBlobs = true;
     };
   },
-  loadBlobs: function() {
+  loadBlobs: () => {
     if (!onWebPage) return;
     const linkElems = document.querySelectorAll<HTMLElement>(
       "a, button, input, select, textarea, summary, [role='button'], [tabindex='0']"
@@ -248,9 +245,7 @@ const blobList = {
     blobList.createOverview();
     //Remove old blobs
     blobList.blobs.clear();
-    // let i = 0;
     let nRealBlobs = 0;
-    // function addBlob() {
     for (let i = 0; i < linkElems.length; i++) {
       const linkElem = linkElems[i];
       //We don't want hidden elements
@@ -295,16 +290,16 @@ const blobList = {
       });
     }
   },
-  showBlobs: function() {
+  showBlobs: () => {
     blobList.visible = true;
     blobList.container.style.display = "block";
   },
-  hideBlobs: function() {
+  hideBlobs: () => {
     blobList.currentKey = "";
     blobList.visible = false;
     blobList.container.style.display = "none";
   },
-  click: function() {
+  click: () => {
     if (!blobList.visible) return;
     const blob = blobList.blobs.get(blobList.currentKey);
     if (!blob) return;
@@ -322,7 +317,7 @@ const blobList = {
       blob.linkElem.focus();
     }
   },
-  clickNewTab: function() {
+  clickNewTab: () => {
     if (!blobList.visible) return;
     const blob = blobList.blobs.get(blobList.currentKey);
     if (!blob) return;
@@ -334,7 +329,7 @@ const blobList = {
       blob.linkElem.focus();
     }
   },
-  clickClipboard: function() {
+  clickClipboard: () => {
     if (!blobList.visible) return;
     const blob = blobList.blobs.get(blobList.currentKey);
     if (!blob) return;
@@ -342,18 +337,18 @@ const blobList = {
     bridge.setClipboard(blob.linkElem.href);
     blobList.hideBlobs();
   },
-  focus: function() {
+  focus: () => {
     if (!blobList.visible) return;
     const blob = blobList.blobs.get(blobList.currentKey);
     if (!blob) return;
     blobList.hideBlobs();
     blob.linkElem.focus();
   },
-  appendKey: function(c: string) {
+  appendKey: (c: string) => {
     blobList.currentKey += c;
     blobList.overview.innerText = blobList.currentKey;
   },
-  backspace: function() {
+  backspace: () => {
     blobList.currentKey = blobList.currentKey.substring(
       0,
       blobList.currentKey.length - 1
@@ -365,14 +360,14 @@ blobList.init();
 
 //Reload blobs whenever the URL changes
 let currentUrl = location.href;
-setInterval(function() {
+setInterval(() => {
   if (currentUrl !== location.href) {
     blobList.loadBlobs();
   }
   currentUrl = location.href;
 }, conf.get("location_change_check_timeout"));
 
-function isValidElem(el: HTMLButtonElement) {
+const isValidElem = (el: HTMLButtonElement) => {
   switch (el.tagName.toLowerCase()) {
     case "textarea":
     case "select":
@@ -383,7 +378,7 @@ function isValidElem(el: HTMLButtonElement) {
         return false;
   }
   return el.contentEditable.toLowerCase() !== "true";
-}
+};
 
 window.addEventListener(
   "keydown",

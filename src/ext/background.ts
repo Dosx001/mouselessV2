@@ -1,6 +1,6 @@
 let ENABLED = false;
 
-async function sendTabEnabled(id: number, noretry: boolean) {
+const sendTabEnabled = async (id: number, noretry: boolean) => {
   const obj = { action: ENABLED ? "enable" : "disable" };
   browser.tabs.sendMessage(id, obj).catch((err) => {
     if (noretry) {
@@ -17,9 +17,9 @@ async function sendTabEnabled(id: number, noretry: boolean) {
       setTimeout(() => sendTabEnabled(id, true), 100);
     }
   });
-}
+};
 
-async function toggle() {
+const toggle = async () => {
   ENABLED = !ENABLED;
   const name = "assets/" + (ENABLED ? "icon" : "icon-off");
   const title = ENABLED ? "Turn off Mouseless" : "Turn on Mouseless";
@@ -29,7 +29,7 @@ async function toggle() {
   browser.browserAction.setTitle({ title });
   const tabs = await browser.tabs.query({});
   for (const i in tabs) sendTabEnabled(tabs[i].id!, false);
-}
+};
 toggle();
 browser.browserAction.onClicked.addListener(toggle);
 
@@ -37,7 +37,7 @@ browser.tabs.onUpdated.addListener((id, evt) => {
   if (evt.status === "complete") sendTabEnabled(id, false);
 });
 
-async function getCurrTabOffset(off: number) {
+const getCurrTabOffset = async (off: number) => {
   const win = await browser.windows.getCurrent();
   const tab = (await browser.tabs.query({ active: true, windowId: win.id }))[0];
   const tabCount = (await browser.tabs.query({ windowId: win.id })).length;
@@ -45,7 +45,7 @@ async function getCurrTabOffset(off: number) {
   if (idx < 0) idx = tabCount - 1;
   else if (idx >= tabCount) idx = 0;
   return { tabId: tab.id!, winId: win.id!, index: idx! };
-}
+};
 
 browser.runtime.onMessage.addListener(async (msg) => {
   switch (msg.action) {

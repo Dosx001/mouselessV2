@@ -165,9 +165,9 @@ const presets = {
 
 const defaultPreset = presets.qwerty_us;
 
-function forEachOption(
+const forEachOption = (
   fn: (section: string, name: string, el: HTMLSelectElement) => void
-) {
+) => {
   const opts = document.querySelectorAll<HTMLElement>("form .option");
   for (const i in opts) {
     if (!Object.prototype.hasOwnProperty.call(opts, i)) continue;
@@ -175,7 +175,7 @@ function forEachOption(
     const el = opts[i].querySelector<HTMLSelectElement>(".current")!;
     fn(section, name, el);
   }
-}
+};
 
 // Select preset
 document.querySelector<HTMLSelectElement>("select")!.onchange = (ev) => {

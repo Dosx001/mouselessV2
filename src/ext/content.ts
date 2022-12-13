@@ -242,7 +242,6 @@ const blobList = {
       blobList.needLoadBlobs = true;
     };
   },
-  currentIndex: 0,
   loadBlobs: function() {
     if (!onWebPage) return;
     const linkElems = document.querySelectorAll<HTMLElement>(

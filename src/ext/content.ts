@@ -261,14 +261,14 @@ const blobList = {
       //We don't want hidden elements
       if (
         linkElem === undefined ||
-        linkElem.style.display == "none" ||
-        linkElem.style.visibility == "hidden"
+        linkElem.style.display === "none" ||
+        linkElem.style.visibility === "hidden"
       )
         continue;
       //Get element's absolute position
       const pos = getElemPos(linkElem);
       //Lots of things which don't really exist have an X and Y value of 0
-      if (pos.top == 0 && pos.left == 0) continue;
+      if (pos.top === 0 && pos.left === 0) continue;
       //We don't need to get things far above our current scroll position
       if (pos.top < window.scrollY - 100) continue;
       //We don't need things below our scroll position either
@@ -314,7 +314,7 @@ const blobList = {
     const blob = blobList.blobs.get(blobList.currentKey);
     if (!blob) return;
     if (
-      blob.linkElem.tagName == "A" &&
+      blob.linkElem.tagName === "A" &&
       blob.linkElem.href &&
       blob.linkElem.href.indexOf("javascript") != 0
     ) {
@@ -332,7 +332,7 @@ const blobList = {
     const blob = blobList.blobs.get(blobList.currentKey);
     if (!blob) return;
     blobList.hideBlobs();
-    if (blob.linkElem.tagName == "A" && blob.linkElem.href) {
+    if (blob.linkElem.tagName === "A" && blob.linkElem.href) {
       bridge.openTab(blob.linkElem.href);
     } else {
       blob.linkElem.click();

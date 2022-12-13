@@ -235,17 +235,13 @@ const blobList = {
     blobList.container.appendChild(overview);
     blobList.overview = overview;
   },
-
-  init: function() {
+  init: () => {
     if (!onWebPage) return;
-
     blobList.createContainer();
-
-    window.addEventListener("scroll", function() {
+    window.onscroll = () => {
       blobList.needLoadBlobs = true;
-    });
+    };
   },
-
   currentIndex: 0,
   loadBlobs: function() {
     if (!onWebPage) return;

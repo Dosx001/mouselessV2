@@ -56,7 +56,7 @@ const defaultConf = {
   scroll_speed: 0.3,
   scroll_speed_fast: 1.1,
   scroll_friction: 0.8,
-  chars: ";alskdjfir",
+  chars: ";alskdjfiwoe",
   timer: 0,
   input_whitelist: [
     "checkbox",
@@ -74,24 +74,24 @@ const defaultConf = {
 const conf = new Map();
 
 const defaultKeys = {
-  scroll_up: "k",
-  scroll_down: "l",
-  scroll_up_fast: "<Shift>_",
-  scroll_down_fast: "<Shift>+",
-  blobs_show: "h",
+  scroll_up: "<Alt>k",
+  scroll_down: "<Alt>j",
+  scroll_up_fast: "<Alt><Shift>K",
+  scroll_down_fast: "<Alt><Shift>J",
+  blobs_show: ";",
   blobs_hide: "Escape",
   blobs_click: "Enter",
-  blobs_click_new_tab: "<Shift>Enter",
-  blobs_click_clipboard: "<Control>Enter",
+  blobs_click_new_tab: "<Control>Enter",
+  blobs_click_clipboard: "<Shift>Enter",
   blobs_focus: "Tab",
   blobs_backspace: "Backspace",
   elem_deselect: "Escape",
-  change_tab_left: "j",
-  change_tab_right: ";",
-  move_tab_left: "<Shift>J",
-  move_tab_right: "<Shift>:",
-  history_back: "<Control>j",
-  history_forward: "<Control>;",
+  change_tab_left: "<Alt><Shift>P",
+  change_tab_right: "<Alt><Shift>N",
+  move_tab_left: "<Alt>p",
+  move_tab_right: "<Alt>n",
+  history_back: "<Alt>h",
+  history_forward: "<Alt>l",
 };
 const keys = new Map();
 

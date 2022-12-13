@@ -134,7 +134,7 @@ browser.storage.sync.get(["keys", "conf"]).then((obj) => {
 
 const interpretKey = (name: string, k: string) => {
   const key: HotKey = {};
-  k.match(/<.*>/g)?.forEach((val) => {
+  k.match(/<[a-zA-Z]+>/g)?.forEach((val) => {
     const m = val.replace("<", "").replace(">", "").trim().toLowerCase();
     switch (m) {
       case "control":

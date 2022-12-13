@@ -193,14 +193,13 @@ function getElemPos(el: HTMLElement) {
 
 const blobList = {
   blobs: {},
-  container: null,
-  overview: null,
+  container: document.createElement("div"),
+  overview: document.createElement("div"),
   visible: false,
   needLoadBlobs: true,
   currentKey: "",
-  createContainer: function() {
-    const container = document.createElement("div");
-    container.style.cssText = [
+  createContainer: () => {
+    blobList.container.style.cssText = [
       "pointer-events: none",
       "display: none",
       "position: absolute;",
@@ -210,13 +209,10 @@ const blobList = {
       "box-sizing: content-box",
       "",
     ].join(" !important;");
-    document.body.appendChild(container);
-    blobList.container = container;
+    document.body.appendChild(blobList.container);
   },
-
-  createOverview: function() {
-    const overview = document.createElement("div");
-    overview.style.cssText = [
+  createOverview: () => {
+    blobList.overview.style.cssText = [
       "position: fixed",
       "top: 0px",
       "left: 0px",
@@ -232,8 +228,7 @@ const blobList = {
       "box-sizing: content-box",
       "",
     ].join(" !important;");
-    blobList.container.appendChild(overview);
-    blobList.overview = overview;
+    blobList.container.appendChild(blobList.overview);
   },
   init: () => {
     if (!onWebPage) return;

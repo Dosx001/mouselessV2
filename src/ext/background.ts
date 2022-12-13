@@ -55,36 +55,34 @@ async function getCurrTabOffset(off: number) {
   return [tab, win, idx];
 }
 
-const brigdeBg = {
-  changeTabLeft: async function() {
-    const [_, win, index] = await getCurrTabOffset(-1);
-    const ntab = (await browser.tabs.query({ windowId: win.id, index }))[0];
-    browser.tabs.update(ntab.id!, { active: true });
-  },
-  changeTabRight: async function() {
-    const [_, win, index] = await getCurrTabOffset(1);
-    const ntab = (await browser.tabs.query({ windowId: win.id, index }))[0];
-    browser.tabs.update(ntab.id!, { active: true });
-  },
-
-  moveTabLeft: async function() {
-    const [tab, _, index] = await getCurrTabOffset(-1);
-    browser.tabs.move(tab.id, { index });
-  },
-  moveTabRight: async function() {
-    const [tab, _, index] = await getCurrTabOffset(1);
-    browser.tabs.move(tab.id, { index });
-  },
-
-  openTab: function(href: string) {
-    browser.tabs.create({
-      url: href,
-    });
-  },
-};
-
-browser.runtime.onMessage.addListener((msg) => {
-  const fn = brigdeBg[msg.action as keyof typeof brigdeBg];
-  if (!fn) throw new Error("No such action: " + msg.action);
-  fn.apply(null, msg.args);
+browser.runtime.onMessage.addListener(async (msg) => {
+  switch (msg.action) {
+    case "changeTabLeft": {
+      const [_, win, index] = await getCurrTabOffset(-1);
+      const ntab = (await browser.tabs.query({ windowId: win.id, index }))[0];
+      browser.tabs.update(ntab.id!, { active: true });
+      break;
+    }
+    case "changeTabRight": {
+      const [_, win, index] = await getCurrTabOffset(1);
+      const ntab = (await browser.tabs.query({ windowId: win.id, index }))[0];
+      browser.tabs.update(ntab.id!, { active: true });
+      break;
+    }
+    case "moveTabLeft": {
+      const [tab, _, index] = await getCurrTabOffset(-1);
+      browser.tabs.move(tab.id, { index });
+      break;
+    }
+    case "moveTabRight": {
+      const [tab, _, index] = await getCurrTabOffset(1);
+      browser.tabs.move(tab.id, { index });
+      break;
+    }
+    case "openTab":
+      browser.tabs.create({
+        url: msg.href,
+      });
+      break;
+  }
 });

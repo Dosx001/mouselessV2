@@ -7,10 +7,10 @@ interface HotKey {
   metaKey?: boolean;
 }
 
-function callBridge(action: string, ...args) {
+function callBridge(action: string, href = "") {
   browser.runtime.sendMessage({
     action: action,
-    args: args,
+    href: href,
   });
 }
 

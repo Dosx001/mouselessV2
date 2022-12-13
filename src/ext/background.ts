@@ -44,38 +44,41 @@ async function getCurrTabOffset(off: number) {
   let idx = tab.index + off;
   if (idx < 0) idx = tabCount - 1;
   else if (idx >= tabCount) idx = 0;
-
-  return [tab, win, idx];
+  return { tabId: tab.id!, winId: win.id!, index: idx! };
 }
 
 browser.runtime.onMessage.addListener(async (msg) => {
   switch (msg.action) {
     case "changeTabLeft": {
-      const [_, win, index] = await getCurrTabOffset(-1);
-      const ntab = (await browser.tabs.query({ windowId: win.id, index }))[0];
-      browser.tabs.update(ntab.id!, { active: true });
+      const loc = await getCurrTabOffset(-1);
+      browser.tabs.update(
+        (await browser.tabs.query({ windowId: loc.winId, index: loc.index }))[0]
+          .id!,
+        { active: true }
+      );
       break;
     }
     case "changeTabRight": {
-      const [_, win, index] = await getCurrTabOffset(1);
-      const ntab = (await browser.tabs.query({ windowId: win.id, index }))[0];
-      browser.tabs.update(ntab.id!, { active: true });
+      const loc = await getCurrTabOffset(1);
+      browser.tabs.update(
+        (await browser.tabs.query({ windowId: loc.winId, index: loc.index }))[0]
+          .id!,
+        { active: true }
+      );
       break;
     }
     case "moveTabLeft": {
-      const [tab, _, index] = await getCurrTabOffset(-1);
-      browser.tabs.move(tab.id, { index });
+      const loc = await getCurrTabOffset(-1);
+      browser.tabs.move(loc.tabId, { index: loc.index });
       break;
     }
     case "moveTabRight": {
-      const [tab, _, index] = await getCurrTabOffset(1);
-      browser.tabs.move(tab.id, { index });
+      const loc = await getCurrTabOffset(1);
+      browser.tabs.move(loc.tabId, { index: loc.index });
       break;
     }
     case "openTab":
-      browser.tabs.create({
-        url: msg.href,
-      });
+      browser.tabs.create({ url: msg.href });
       break;
   }
 });

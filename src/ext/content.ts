@@ -31,12 +31,7 @@ const bridge = {
     callBridge("openTab", href);
   },
   setClipboard: function(txt: string) {
-    const el = document.createElement("input");
-    document.body.appendChild(el);
-    el.value = txt;
-    el.select();
-    document.execCommand("copy");
-    document.body.removeChild(el);
+    navigator.clipboard.writeText(txt);
   },
 };
 

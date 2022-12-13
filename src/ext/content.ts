@@ -192,7 +192,7 @@ function getElemPos(el: HTMLElement) {
 }
 
 const blobList = {
-  blobs: {},
+  blobs: new Map(),
   container: document.createElement("div"),
   overview: document.createElement("div"),
   visible: false,
@@ -246,7 +246,7 @@ const blobList = {
     blobList.container.innerText = "";
     blobList.createOverview();
     //Remove old blobs
-    blobList.blobs = {};
+    blobList.blobs.clear();
     // let i = 0;
     let nRealBlobs = 0;
     // function addBlob() {
@@ -288,10 +288,10 @@ const blobList = {
         "",
       ].join(" !important;");
       blobList.container.appendChild(blobElem);
-      blobList.blobs[key] = {
+      blobList.blobs.set(key, {
         blobElem: blobElem,
         linkElem: linkElem,
-      };
+      });
     }
   },
 
@@ -309,7 +309,7 @@ const blobList = {
   click: function() {
     if (!blobList.visible) return;
 
-    const blob = blobList.blobs[blobList.currentKey];
+    const blob = blobList.blobs.get(blobList.currentKey);
     if (!blob) return;
 
     if (
@@ -330,7 +330,7 @@ const blobList = {
   clickNewTab: function() {
     if (!blobList.visible) return;
 
-    const blob = blobList.blobs[blobList.currentKey];
+    const blob = blobList.blobs.get(blobList.currentKey);
     if (!blob) return;
 
     blobList.hideBlobs();
@@ -345,7 +345,7 @@ const blobList = {
   clickClipboard: function() {
     if (!blobList.visible) return;
 
-    const blob = blobList.blobs[blobList.currentKey];
+    const blob = blobList.blobs.get(blobList.currentKey);
     if (!blob) return;
 
     if (!blob.linkElem.href) return;
@@ -358,7 +358,7 @@ const blobList = {
   focus: function() {
     if (!blobList.visible) return;
 
-    const blob = blobList.blobs[blobList.currentKey];
+    const blob = blobList.blobs.get(blobList.currentKey);
     if (!blob) return;
 
     blobList.hideBlobs();

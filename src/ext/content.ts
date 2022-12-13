@@ -400,10 +400,8 @@ window.addEventListener(
         active.blur();
         setTimeout(() => active.blur(), 50); // In case something tries to refocus
         blobList.hideBlobs();
-        return;
-      } else {
-        return;
       }
+      return;
     }
     //User is typing a key to a blob
     if (blobList.visible) {

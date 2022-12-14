@@ -14,6 +14,7 @@ const presets = {
     blobs_click: "Enter",
     blobs_click_new_tab: "<Control>Enter",
     blobs_click_clipboard: "<Shift>Enter",
+    blobs_click_paste: "<Alt>p",
     blobs_focus: "Tab",
     blobs_backspace: "Backspace",
     elem_deselect: "Escape",

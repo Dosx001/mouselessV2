@@ -32,6 +32,10 @@ const bridge = {
   setClipboard: (txt: string) => {
     navigator.clipboard.writeText(txt);
   },
+  pasteClipboard: async (el: HTMLInputElement) => {
+    el.value += await navigator.clipboard.readText();
+    el.focus();
+  },
 };
 
 let enabled = false;
@@ -80,6 +84,7 @@ const keys = {
   blobs_click: { key: "" },
   blobs_click_new_tab: { key: "" },
   blobs_click_clipboard: { key: "" },
+  blobs_click_paste: { key: "" },
   blobs_focus: { key: "" },
   blobs_backspace: { key: "" },
   elem_deselect: { key: "" },
@@ -103,6 +108,7 @@ browser.storage.sync.get(["keys", "conf"]).then((obj) => {
     blobs_click: "Enter",
     blobs_click_new_tab: "<Control>Enter",
     blobs_click_clipboard: "<Shift>Enter",
+    blobs_click_paste: "<Alt>p",
     blobs_focus: "Tab",
     blobs_backspace: "Backspace",
     elem_deselect: "Escape",
@@ -187,7 +193,7 @@ const getElemPos = (el: HTMLElement) => {
 };
 
 const blobList = {
-  blobs: new Map(),
+  blobs: new Map<string, { blobElem: HTMLDivElement; linkElem: HTMLElement }>(),
   container: document.createElement("div"),
   overview: document.createElement("div"),
   visible: false,
@@ -302,12 +308,12 @@ const blobList = {
     if (!blob) return;
     if (
       blob.linkElem.tagName === "A" &&
-      blob.linkElem.href &&
-      blob.linkElem.href.indexOf("javascript") != 0
+      (blob.linkElem as HTMLAnchorElement).href &&
+      (blob.linkElem as HTMLAnchorElement).href.indexOf("javascript") != 0
     ) {
       blobList.hideBlobs();
       blob.linkElem.focus();
-      location.href = blob.linkElem.href;
+      location.href = (blob.linkElem as HTMLAnchorElement).href;
     } else {
       blobList.hideBlobs();
       blob.linkElem.click();
@@ -319,8 +325,11 @@ const blobList = {
     const blob = blobList.blobs.get(blobList.currentKey);
     if (!blob) return;
     blobList.hideBlobs();
-    if (blob.linkElem.tagName === "A" && blob.linkElem.href) {
-      bridge.openTab(blob.linkElem.href);
+    if (
+      blob.linkElem.tagName === "A" &&
+      (blob.linkElem as HTMLAnchorElement).href
+    ) {
+      bridge.openTab((blob.linkElem as HTMLAnchorElement).href);
     } else {
       blob.linkElem.click();
       blob.linkElem.focus();
@@ -330,8 +339,15 @@ const blobList = {
     if (!blobList.visible) return;
     const blob = blobList.blobs.get(blobList.currentKey);
     if (!blob) return;
-    if (!blob.linkElem.href) return;
-    bridge.setClipboard(blob.linkElem.href);
+    if (!(blob.linkElem as HTMLAnchorElement).href) return;
+    bridge.setClipboard((blob.linkElem as HTMLAnchorElement).href);
+    blobList.hideBlobs();
+  },
+  clickPaste: () => {
+    if (!blobList.visible) return;
+    const blob = blobList.blobs.get(blobList.currentKey);
+    if (!blob) return;
+    bridge.pasteClipboard(blob.linkElem as HTMLInputElement);
     blobList.hideBlobs();
   },
   focus: () => {
@@ -439,6 +455,8 @@ window.addEventListener(
           blobList.clickNewTab();
         } else if (isMatch(keys.blobs_click_clipboard, evt)) {
           blobList.clickClipboard();
+        } else if (isMatch(keys.blobs_click_paste, evt)) {
+          blobList.clickPaste();
         } else if (isMatch(keys.blobs_focus, evt)) {
           blobList.focus();
         }

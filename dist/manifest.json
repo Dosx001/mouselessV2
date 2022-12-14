@@ -41,8 +41,9 @@
     }
   },
   "permissions": [
+    "clipboardRead",
     "clipboardWrite",
-    "tabs",
-    "storage"
+    "storage",
+    "tabs"
   ]
 }

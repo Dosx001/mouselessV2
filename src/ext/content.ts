@@ -1,6 +1,5 @@
 interface HotKey {
-  code?: string;
-  key?: string;
+  key: string;
   ctrlKey?: boolean;
   shiftKey?: boolean;
   altKey?: boolean;
@@ -51,7 +50,7 @@ browser.runtime.onMessage.addListener((obj) => {
   }
 });
 
-const defaultConf = {
+const conf = {
   blacklist: "",
   scroll_speed: 0.3,
   scroll_speed_fast: 1.1,
@@ -70,56 +69,60 @@ const defaultConf = {
   ],
   location_change_check_timeout: 2000,
 };
-const conf = new Map();
 
-const defaultKeys = {
-  scroll_up: "<Alt>k",
-  scroll_down: "<Alt>j",
-  scroll_up_fast: "<Alt><Shift>K",
-  scroll_down_fast: "<Alt><Shift>J",
-  blobs_show: ";",
-  blobs_hide: "Escape",
-  blobs_click: "Enter",
-  blobs_click_new_tab: "<Control>Enter",
-  blobs_click_clipboard: "<Shift>Enter",
-  blobs_focus: "Tab",
-  blobs_backspace: "Backspace",
-  elem_deselect: "Escape",
-  change_tab_left: "<Alt><Shift>P",
-  change_tab_right: "<Alt><Shift>N",
-  move_tab_left: "<Alt>p",
-  move_tab_right: "<Alt>n",
-  history_back: "<Alt>h",
-  history_forward: "<Alt>l",
+const keys = {
+  scroll_up: { key: "" },
+  scroll_down: { key: "" },
+  scroll_up_fast: { key: "" },
+  scroll_down_fast: { key: "" },
+  blobs_show: { key: "" },
+  blobs_hide: { key: "" },
+  blobs_click: { key: "" },
+  blobs_click_new_tab: { key: "" },
+  blobs_click_clipboard: { key: "" },
+  blobs_focus: { key: "" },
+  blobs_backspace: { key: "" },
+  elem_deselect: { key: "" },
+  change_tab_left: { key: "" },
+  change_tab_right: { key: "" },
+  move_tab_left: { key: "" },
+  move_tab_right: { key: "" },
+  history_back: { key: "" },
+  history_forward: { key: "" },
 };
-const keys = new Map();
 
 browser.storage.sync.get(["keys", "conf"]).then((obj) => {
   // Get keys
-  const keyNames = Object.keys(defaultKeys);
-  if (obj.keys === undefined) obj.keys = {};
-  for (const i in keyNames) {
-    const name = keyNames[i];
-    interpretKey(
-      name,
-      obj.keys[name] || defaultKeys[name as keyof typeof defaultKeys]
-    );
-  }
+  const defaultKeys = {
+    scroll_up: "<Alt>k",
+    scroll_down: "<Alt>j",
+    scroll_up_fast: "<Alt><Shift>K",
+    scroll_down_fast: "<Alt><Shift>J",
+    blobs_show: ";",
+    blobs_hide: "Escape",
+    blobs_click: "Enter",
+    blobs_click_new_tab: "<Control>Enter",
+    blobs_click_clipboard: "<Shift>Enter",
+    blobs_focus: "Tab",
+    blobs_backspace: "Backspace",
+    elem_deselect: "Escape",
+    change_tab_left: "<Alt>p",
+    change_tab_right: "<Alt>n",
+    move_tab_left: "<Alt><Shift>P",
+    move_tab_right: "<Alt><Shift>N",
+    history_back: "<Alt>h",
+    history_forward: "<Alt>l",
+  };
+  Object.entries((obj.keys as typeof defaultKeys) ?? defaultKeys).forEach(
+    ([key, value]) => {
+      interpretKey(key, value);
+    }
+  );
   // Get conf
-  const confNames = Object.keys(defaultConf);
-  if (obj.conf === undefined) obj.conf = {};
-  for (const i in confNames) {
-    const name = confNames[i];
-    conf.set(
-      name,
-      obj.conf[name]
-        ? obj.conf[name]
-        : defaultConf[name as keyof typeof defaultConf]
-    );
-  }
-  // Is this URL blacklisted?
-  const rxes = conf
-    .get("blacklist")
+  Object.entries((obj.conf as typeof conf) ?? conf).forEach(([key, value]) => {
+    (conf as any)[key] = value;
+  });
+  const rxes = conf.blacklist
     .split("\n")
     .filter((s: string) => s.trim() !== "");
   for (const i in rxes) {
@@ -132,7 +135,7 @@ browser.storage.sync.get(["keys", "conf"]).then((obj) => {
 });
 
 const interpretKey = (name: string, k: string) => {
-  const key: HotKey = {};
+  const key: HotKey = { key: k.replace(/<.*?>/g, "").trim() };
   k.match(/<[a-zA-Z]+>/g)?.forEach((val) => {
     const m = val.replace("<", "").replace(">", "").trim().toLowerCase();
     switch (m) {
@@ -152,12 +155,11 @@ const interpretKey = (name: string, k: string) => {
         console.error("Unknown modifier:", m);
     }
   });
-  key.code = k.replace(/<.*?>/g, "").trim();
-  keys.set(name, key);
+  (keys as any)[name] = key;
 };
 
-const isMatch = (k: HotKey, evt: HotKey) =>
-  k.code === evt.key &&
+const isMatch = (k: HotKey, evt: KeyboardEvent) =>
+  k.key === evt.key &&
   !!k.ctrlKey === evt.ctrlKey &&
   !!k.shiftKey === evt.shiftKey &&
   !!k.altKey === evt.altKey &&
@@ -168,11 +170,11 @@ const isMatch = (k: HotKey, evt: HotKey) =>
 const onWebPage = document.body !== undefined;
 
 const createKey = (n: number) => {
-  if (n === 0) return conf.get("chars")[0];
+  if (n === 0) return conf.chars[0];
   let str = "";
-  const base = conf.get("chars").length;
+  const base = conf.chars.length;
   while (0 < n) {
-    str += conf.get("chars")[n % base];
+    str += conf.chars[n % base];
     n = Math.floor(n / base);
   }
   return str;
@@ -364,7 +366,7 @@ setInterval(() => {
     blobList.loadBlobs();
   }
   currentUrl = location.href;
-}, conf.get("location_change_check_timeout"));
+}, conf.location_change_check_timeout);
 
 const isValidElem = (el: HTMLButtonElement) => {
   switch (el.tagName.toLowerCase()) {
@@ -373,7 +375,7 @@ const isValidElem = (el: HTMLButtonElement) => {
     case "canvas":
       return false;
     case "input":
-      if (conf.get("input_whitelist").indexOf(el.type.toLowerCase()) === -1)
+      if (conf.input_whitelist.indexOf(el.type.toLowerCase()) === -1)
         return false;
   }
   return el.contentEditable.toLowerCase() !== "true";
@@ -388,7 +390,8 @@ window.addEventListener(
     //We don't want to do anything if the user is typing in an input field,
     //unless the key is to deselect an input field
     if (!isValidElem(active)) {
-      if (isMatch(keys.get("elem_deselect"), evt)) {
+      keys.scroll_up;
+      if (isMatch(keys.elem_deselect, evt)) {
         active.blur();
         setTimeout(() => active.blur(), 50); // In case something tries to refocus
         blobList.hideBlobs();
@@ -401,12 +404,12 @@ window.addEventListener(
       evt.stopPropagation();
       //Hide blobs if appropriate
       //Escape key always hides blobs if visible
-      if (evt.code === "Escape" || isMatch(keys.get("blobs_hide"), evt)) {
+      if (evt.code === "Escape" || isMatch(keys.blobs_hide, evt)) {
         blobList.hideBlobs();
         return;
       }
       //Backspace if appropriate
-      if (isMatch(keys.get("blobs_backspace"), evt)) {
+      if (isMatch(keys.blobs_backspace, evt)) {
         blobList.backspace();
         //Stop auto-submit timeout
         if (timer) {
@@ -416,14 +419,14 @@ window.addEventListener(
         return;
       }
       const c = evt.key;
-      if (conf.get("chars").indexOf(c) !== -1) {
+      if (conf.chars.indexOf(c) !== -1) {
         blobList.appendKey(c);
         //Reset auto-submit timeout
         if (timer) {
           clearTimeout(timer);
         }
-        if (0 < conf.get("timer")) {
-          timer = this.setTimeout(blobList.click, conf.get("timer"));
+        if (0 < conf.timer) {
+          timer = this.setTimeout(blobList.click, conf.timer);
         }
         return false;
       }
@@ -432,44 +435,44 @@ window.addEventListener(
     //Deselect element
     if (onWebPage) {
       if (blobList.visible) {
-        if (isMatch(keys.get("blobs_hide"), evt)) {
+        if (isMatch(keys.blobs_hide, evt)) {
           blobList.hideBlobs();
-        } else if (isMatch(keys.get("blobs_click"), evt)) {
+        } else if (isMatch(keys.blobs_click, evt)) {
           blobList.click();
-        } else if (isMatch(keys.get("blobs_click_new_tab"), evt)) {
+        } else if (isMatch(keys.blobs_click_new_tab, evt)) {
           blobList.clickNewTab();
-        } else if (isMatch(keys.get("blobs_click_clipboard"), evt)) {
+        } else if (isMatch(keys.blobs_click_clipboard, evt)) {
           blobList.clickClipboard();
-        } else if (isMatch(keys.get("blobs_focus"), evt)) {
+        } else if (isMatch(keys.blobs_focus, evt)) {
           blobList.focus();
         }
       } else {
-        if (isMatch(keys.get("blobs_show"), evt)) {
+        if (isMatch(keys.blobs_show, evt)) {
           blobList.loadBlobs();
           blobList.needLoadBlobs = false;
           blobList.showBlobs();
-        } else if (isMatch(keys.get("elem_deselect"), evt)) {
+        } else if (isMatch(keys.elem_deselect, evt)) {
           blobList.hideBlobs();
           active.blur();
-        } else if (isMatch(keys.get("scroll_up"), evt)) {
-          scroller.start(-conf.get("scroll_speed"));
-        } else if (isMatch(keys.get("scroll_down"), evt)) {
-          scroller.start(conf.get("scroll_speed"));
-        } else if (isMatch(keys.get("scroll_up_fast"), evt)) {
-          scroller.start(-conf.get("scroll_speed_fast"));
-        } else if (isMatch(keys.get("scroll_down_fast"), evt)) {
-          scroller.start(conf.get("scroll_speed_fast"));
-        } else if (isMatch(keys.get("history_back"), evt)) {
+        } else if (isMatch(keys.scroll_up, evt)) {
+          scroller.start(-conf.scroll_speed);
+        } else if (isMatch(keys.scroll_down, evt)) {
+          scroller.start(conf.scroll_speed);
+        } else if (isMatch(keys.scroll_up_fast, evt)) {
+          scroller.start(-conf.scroll_speed_fast);
+        } else if (isMatch(keys.scroll_down_fast, evt)) {
+          scroller.start(conf.scroll_speed_fast);
+        } else if (isMatch(keys.history_back, evt)) {
           history.back();
-        } else if (isMatch(keys.get("history_forward"), evt)) {
+        } else if (isMatch(keys.history_forward, evt)) {
           history.forward();
-        } else if (isMatch(keys.get("change_tab_left"), evt)) {
+        } else if (isMatch(keys.change_tab_left, evt)) {
           bridge.changeTabLeft();
-        } else if (isMatch(keys.get("change_tab_right"), evt)) {
+        } else if (isMatch(keys.change_tab_right, evt)) {
           bridge.changeTabRight();
-        } else if (isMatch(keys.get("move_tab_left"), evt)) {
+        } else if (isMatch(keys.move_tab_left, evt)) {
           bridge.moveTabLeft();
-        } else if (isMatch(keys.get("move_tab_right"), evt)) {
+        } else if (isMatch(keys.move_tab_right, evt)) {
           bridge.moveTabRight();
         } else {
           //We don't want to stop the event from propagating
@@ -486,10 +489,10 @@ window.addEventListener(
 
 window.onkeyup = (evt) => {
   if (
-    isMatch(keys.get("scroll_up"), evt) ||
-    isMatch(keys.get("scroll_down"), evt) ||
-    isMatch(keys.get("scroll_up_fast"), evt) ||
-    isMatch(keys.get("scroll_down_fast"), evt)
+    isMatch(keys.scroll_up, evt) ||
+    isMatch(keys.scroll_down, evt) ||
+    isMatch(keys.scroll_up_fast, evt) ||
+    isMatch(keys.scroll_down_fast, evt)
   ) {
     scroller.stop();
   }
@@ -515,7 +518,7 @@ const scroller = {
     if (tdiff < 100) {
       scroller.velocity += scroller.acceleration;
       window.scrollBy(0, scroller.velocity * tdiff);
-      scroller.velocity *= conf.get("scroll_friction");
+      scroller.velocity *= conf.scroll_friction;
     }
     if (tdiff < 100 && scroller.velocity > -0.1 && scroller.velocity < 0.1) {
       scroller.velocity = 0;

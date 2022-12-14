@@ -1,6 +1,4 @@
-const presets: {
-  [key: string]: { [key: string]: string | number };
-} = {
+const presets = {
   conf: {
     chars: ";alskdjfiwoe",
     blacklist: "",
@@ -41,7 +39,7 @@ const forEachOption = (
 document.querySelector<HTMLFormElement>("form")!.onsubmit = (ev) => {
   ev.preventDefault();
   forEachOption((section: string, name: string, el: HTMLInputElement) => {
-    presets[section][name] = el.value;
+    (presets as any)[section][name] = el.value;
   });
   browser.storage.sync.set(presets);
 };
@@ -51,6 +49,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const vals = await browser.storage.sync.get(["keys", "conf"]);
   forEachOption((section: string, name: string, el: HTMLInputElement) => {
     const sec = vals[section] || {};
-    el.value = sec[name] ?? presets[section][name];
+    el.value = sec[name] ?? (presets as any)[section][name];
   });
 });

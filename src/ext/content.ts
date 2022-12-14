@@ -131,11 +131,10 @@ browser.storage.sync.get(["keys", "conf"]).then((obj) => {
   }
 });
 
-const interpretKey = (name: string, k: string) => {
-  const key: HotKey = { key: k.replace(/<.*?>/g, "").trim() };
-  k.match(/<[a-zA-Z]+>/g)?.forEach((val) => {
-    const m = val.replace("<", "").replace(">", "").trim().toLowerCase();
-    switch (m) {
+const interpretKey = (name: string, hotkey: string) => {
+  const key: HotKey = { key: hotkey.replace(/<.*?>/g, "").trim() };
+  hotkey.match(/<[a-zA-Z]+>/g)?.forEach((mod) => {
+    switch (mod.substring(1, mod.length - 1).toLowerCase()) {
       case "control":
         key.ctrlKey = true;
         break;
@@ -149,7 +148,7 @@ const interpretKey = (name: string, k: string) => {
         key.metaKey = true;
         break;
       default:
-        console.error("Unknown modifier:", m);
+        console.error("Unknown modifier:", mod);
     }
   });
   (keys as any)[name] = key;

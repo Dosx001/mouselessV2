@@ -122,12 +122,9 @@ browser.storage.sync.get(["keys", "conf"]).then((obj) => {
   Object.entries((obj.conf as typeof conf) ?? conf).forEach(([key, value]) => {
     (conf as any)[key] = value;
   });
-  const rxes = conf.blacklist
-    .split("\n")
-    .filter((s: string) => s.trim() !== "");
-  for (const i in rxes) {
-    const rx = new RegExp(rxes[i].trim());
-    if (rx.test(location.href)) {
+  for (let link of conf.blacklist.split("\n")) {
+    link = link.trim();
+    if (link.length && new RegExp(link).test(location.href)) {
       blacklisted = true;
       break;
     }

@@ -69,7 +69,6 @@ const defaultConf = {
     "image",
   ],
   location_change_check_timeout: 2000,
-  yt_fix_space: true,
 };
 const conf = new Map();
 
@@ -472,14 +471,6 @@ window.addEventListener(
           bridge.moveTabLeft();
         } else if (isMatch(keys.get("move_tab_right"), evt)) {
           bridge.moveTabRight();
-          //Fix youtube space by emulating clicking the player
-        } else if (
-          conf.get("yt_fix_space ") &&
-          /youtube\.com/.test(location.host) &&
-          location.pathname.indexOf("/watch") === 0 &&
-          evt.code === "Space"
-        ) {
-          document.getElementById("movie_player")!.click();
         } else {
           //We don't want to stop the event from propagating
           return true;

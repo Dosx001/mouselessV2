@@ -6,36 +6,11 @@ interface HotKey {
   metaKey?: boolean;
 }
 
-const callBridge = (action: string, href = "") => {
+const sendMessage = (action: string, href = "") => {
   browser.runtime.sendMessage({
     action: action,
     href: href,
   });
-};
-
-const bridge = {
-  changeTabLeft: () => {
-    callBridge("changeTabLeft");
-  },
-  changeTabRight: () => {
-    callBridge("changeTabRight");
-  },
-  moveTabLeft: () => {
-    callBridge("moveTabLeft");
-  },
-  moveTabRight: () => {
-    callBridge("moveTabRight");
-  },
-  openTab: (href: string) => {
-    callBridge("openTab", href);
-  },
-  setClipboard: (txt: string) => {
-    navigator.clipboard.writeText(txt);
-  },
-  pasteClipboard: async (el: HTMLInputElement) => {
-    el.value += await navigator.clipboard.readText();
-    el.focus();
-  },
 };
 
 let enabled = false;
@@ -329,7 +304,7 @@ const blobList = {
       blob.linkElem.tagName === "A" &&
       (blob.linkElem as HTMLAnchorElement).href
     ) {
-      bridge.openTab((blob.linkElem as HTMLAnchorElement).href);
+      sendMessage("openTab", (blob.linkElem as HTMLAnchorElement).href);
     } else {
       blob.linkElem.click();
       blob.linkElem.focus();
@@ -340,14 +315,18 @@ const blobList = {
     const blob = blobList.blobs.get(blobList.currentKey);
     if (!blob) return;
     if (!(blob.linkElem as HTMLAnchorElement).href) return;
-    bridge.setClipboard((blob.linkElem as HTMLAnchorElement).href);
+    // callBridge.setClipboard(txt);
+    navigator.clipboard.writeText((blob.linkElem as HTMLAnchorElement).href);
     blobList.hideBlobs();
   },
-  clickPaste: () => {
+  clickPaste: async () => {
     if (!blobList.visible) return;
     const blob = blobList.blobs.get(blobList.currentKey);
     if (!blob) return;
-    bridge.pasteClipboard(blob.linkElem as HTMLInputElement);
+    // callBridge.pasteClipboard(blob.linkElem as HTMLInputElement);
+    (blob.linkElem as HTMLInputElement).value +=
+      await navigator.clipboard.readText();
+    blob.linkElem.focus();
     blobList.hideBlobs();
   },
   focus: () => {
@@ -481,13 +460,13 @@ window.addEventListener(
         } else if (isMatch(keys.history_forward, evt)) {
           history.forward();
         } else if (isMatch(keys.change_tab_left, evt)) {
-          bridge.changeTabLeft();
+          sendMessage("changeTabLeft");
         } else if (isMatch(keys.change_tab_right, evt)) {
-          bridge.changeTabRight();
+          sendMessage("changeTabRight");
         } else if (isMatch(keys.move_tab_left, evt)) {
-          bridge.moveTabLeft();
+          sendMessage("moveTabLeft");
         } else if (isMatch(keys.move_tab_right, evt)) {
-          bridge.moveTabRight();
+          sendMessage("moveTabRight");
         } else {
           //We don't want to stop the event from propagating
           return true;

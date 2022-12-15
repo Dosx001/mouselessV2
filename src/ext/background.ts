@@ -38,13 +38,13 @@ browser.tabs.onUpdated.addListener((id, evt) => {
 });
 
 const getCurrTabOffset = async (off: number) => {
-  const win = await browser.windows.getCurrent();
-  const tab = (await browser.tabs.query({ active: true, windowId: win.id }))[0];
-  const tabCount = (await browser.tabs.query({ windowId: win.id })).length;
+  const winId = browser.windows.WINDOW_ID_CURRENT;
+  const tab = (await browser.tabs.query({ active: true, windowId: winId }))[0];
+  const tabCount = (await browser.tabs.query({ windowId: winId })).length;
   let idx = tab.index + off;
   if (idx < 0) idx = tabCount - 1;
   else if (idx >= tabCount) idx = 0;
-  return { tabId: tab.id!, winId: win.id!, index: idx! };
+  return { tabId: tab.id!, winId: winId, index: idx! };
 };
 
 browser.runtime.onMessage.addListener(async (msg) => {

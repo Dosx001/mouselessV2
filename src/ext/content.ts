@@ -13,21 +13,7 @@ const sendMessage = (action: string, href = "") => {
   });
 };
 
-let enabled = false;
 let blacklisted = false;
-
-browser.runtime.onMessage.addListener((obj) => {
-  switch (obj.action) {
-    case "enable":
-      enabled = true;
-      break;
-    case "disable":
-      enabled = false;
-      break;
-    default:
-      console.error("Unknown action: " + obj.action);
-  }
-});
 
 const conf = {
   blacklist: "",
@@ -365,15 +351,6 @@ const blobList = {
 };
 blobList.init();
 
-//Reload blobs whenever the URL changes
-let currentUrl = location.href;
-setInterval(() => {
-  if (currentUrl !== location.href) {
-    blobList.loadBlobs();
-  }
-  currentUrl = location.href;
-}, conf.location_change_check_timeout);
-
 const isValidElem = (el: HTMLButtonElement) => {
   switch (el.tagName.toLowerCase()) {
     case "textarea":
@@ -388,8 +365,7 @@ const isValidElem = (el: HTMLButtonElement) => {
 };
 
 window.onkeydown = (evt) => {
-  if (!enabled || blacklisted) return;
-  if (/about:.+/.test(location.href)) return;
+  if (blacklisted) return;
   const active = document.activeElement as HTMLButtonElement;
   //We don't want to do anything if the user is typing in an input field,
   //unless the key is to deselect an input field

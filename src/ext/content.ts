@@ -177,7 +177,6 @@ const blobList = {
   blobs: new Map<string, { blobElem: HTMLDivElement; linkElem: HTMLElement }>(),
   container: document.createElement("div"),
   overview: document.createElement("input"),
-  visible: false,
   needLoadBlobs: true,
   createContainer: () => {
     blobList.overview.type = "text";
@@ -292,17 +291,14 @@ const blobList = {
     }
   },
   showBlobs: () => {
-    blobList.visible = true;
     blobList.container.style.display = "block";
     blobList.overview.focus();
   },
   hideBlobs: () => {
     blobList.overview.value = "";
-    blobList.visible = false;
     blobList.container.style.display = "none";
   },
   click: () => {
-    if (!blobList.visible) return;
     const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
     if (
@@ -320,7 +316,6 @@ const blobList = {
     }
   },
   clickNewTab: () => {
-    if (!blobList.visible) return;
     const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
     blobList.hideBlobs();
@@ -335,40 +330,33 @@ const blobList = {
     }
   },
   clickClipboard: () => {
-    if (!blobList.visible) return;
     const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
     if (!(blob.linkElem as HTMLAnchorElement).href) return;
-    // callBridge.setClipboard(txt);
     navigator.clipboard.writeText((blob.linkElem as HTMLAnchorElement).href);
     blobList.hideBlobs();
   },
   clickPaste: async () => {
-    if (!blobList.visible) return;
     const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
-    // callBridge.pasteClipboard(blob.linkElem as HTMLInputElement);
     (blob.linkElem as HTMLInputElement).value +=
       await navigator.clipboard.readText();
     blob.linkElem.focus();
     blobList.hideBlobs();
   },
   newWindow: async () => {
-    if (!blobList.visible) return;
     const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
     blobList.hideBlobs();
     sendMessage("newWindow", (blob.linkElem as HTMLAnchorElement).href);
   },
   privateWindow: async () => {
-    if (!blobList.visible) return;
     const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
     blobList.hideBlobs();
     sendMessage("privateWindow", (blob.linkElem as HTMLAnchorElement).href);
   },
   focus: () => {
-    if (!blobList.visible) return;
     const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
     blobList.hideBlobs();
@@ -494,5 +482,3 @@ const scroller = {
     }
   },
 };
-
-let timer = 0;

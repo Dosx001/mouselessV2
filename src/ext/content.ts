@@ -70,6 +70,8 @@ const keys = {
   duplicate_tab: { key: "" },
   history_back: { key: "" },
   history_forward: { key: "" },
+  new_window: { key: "" },
+  private_window: { key: "" },
 };
 
 browser.storage.sync.get(["keys", "conf"]).then((obj) => {
@@ -95,6 +97,8 @@ browser.storage.sync.get(["keys", "conf"]).then((obj) => {
     duplicate_tab: "<Alt>u",
     history_back: "<Alt>h",
     history_forward: "<Alt>l",
+    new_window: "<Alt>c",
+    private_window: "<Alt><Shift>C",
   };
   Object.entries((obj.keys as typeof defaultKeys) ?? defaultKeys).forEach(
     ([key, value]) => {
@@ -331,6 +335,20 @@ const blobList = {
     blob.linkElem.focus();
     blobList.hideBlobs();
   },
+  newWindow: async () => {
+    if (!blobList.visible) return;
+    const blob = blobList.blobs.get(blobList.currentKey);
+    if (!blob) return;
+    blobList.hideBlobs();
+    sendMessage("newWindow", (blob.linkElem as HTMLAnchorElement).href);
+  },
+  privateWindow: async () => {
+    if (!blobList.visible) return;
+    const blob = blobList.blobs.get(blobList.currentKey);
+    if (!blob) return;
+    blobList.hideBlobs();
+    sendMessage("privateWindow", (blob.linkElem as HTMLAnchorElement).href);
+  },
   focus: () => {
     if (!blobList.visible) return;
     const blob = blobList.blobs.get(blobList.currentKey);
@@ -440,6 +458,10 @@ window.addEventListener(
           blobList.clickPaste();
         } else if (isMatch(keys.blobs_focus, evt)) {
           blobList.focus();
+        } else if (isMatch(keys.new_window, evt)) {
+          blobList.newWindow();
+        } else if (isMatch(keys.private_window, evt)) {
+          blobList.privateWindow();
         }
       } else {
         if (isMatch(keys.blobs_show, evt)) {

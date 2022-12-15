@@ -91,5 +91,13 @@ browser.runtime.onMessage.addListener(async (msg) => {
       );
       break;
     }
+    case "newWindow": {
+      browser.windows.create({ url: msg.href });
+      break;
+    }
+    case "privateWindow": {
+      browser.windows.create({ url: msg.href, incognito: true });
+      break;
+    }
   }
 });

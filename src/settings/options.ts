@@ -22,6 +22,7 @@ const presets = {
     change_tab_right: "<Alt><Shift>N",
     move_tab_left: "<Alt>p",
     move_tab_right: "<Alt>n",
+    duplicate_tab: "<Alt>u",
     history_back: "<Alt>h",
     history_forward: "<Alt>l",
   },

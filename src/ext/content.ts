@@ -67,6 +67,7 @@ const keys = {
   change_tab_right: { key: "" },
   move_tab_left: { key: "" },
   move_tab_right: { key: "" },
+  duplicate_tab: { key: "" },
   history_back: { key: "" },
   history_forward: { key: "" },
 };
@@ -91,6 +92,7 @@ browser.storage.sync.get(["keys", "conf"]).then((obj) => {
     change_tab_right: "<Alt>n",
     move_tab_left: "<Alt><Shift>P",
     move_tab_right: "<Alt><Shift>N",
+    duplicate_tab: "<Alt>u",
     history_back: "<Alt>h",
     history_forward: "<Alt>l",
   };
@@ -467,6 +469,8 @@ window.addEventListener(
           sendMessage("moveTabLeft");
         } else if (isMatch(keys.move_tab_right, evt)) {
           sendMessage("moveTabRight");
+        } else if (isMatch(keys.duplicate_tab, evt)) {
+          sendMessage("duplicateTab");
         } else {
           //We don't want to stop the event from propagating
           return true;

@@ -80,5 +80,16 @@ browser.runtime.onMessage.addListener(async (msg) => {
     case "openTab":
       browser.tabs.create({ url: msg.href });
       break;
+    case "duplicateTab": {
+      browser.tabs.duplicate(
+        (
+          await browser.tabs.query({
+            active: true,
+            windowId: browser.windows.WINDOW_ID_CURRENT,
+          })
+        )[0].id!
+      );
+      break;
+    }
   }
 });

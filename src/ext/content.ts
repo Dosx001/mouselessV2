@@ -176,13 +176,12 @@ const getElemPos = (el: HTMLElement) => {
 const blobList = {
   blobs: new Map<string, { blobElem: HTMLDivElement; linkElem: HTMLElement }>(),
   container: document.createElement("div"),
-  overview: document.createElement("div"),
+  overview: document.createElement("input"),
   visible: false,
   needLoadBlobs: true,
-  currentKey: "",
   createContainer: () => {
+    blobList.overview.type = "text";
     blobList.container.style.cssText = [
-      "pointer-events: none",
       "display: none",
       "position: absolute;",
       "top: 0px",
@@ -191,6 +190,24 @@ const blobList = {
       "box-sizing: content-box",
       "",
     ].join(" !important;");
+    blobList.overview.onkeydown = (ev) => {
+      if (isMatch(keys.blobs_click, ev)) {
+        blobList.click();
+      } else if (isMatch(keys.blobs_click_new_tab, ev)) {
+        blobList.clickNewTab();
+      } else if (isMatch(keys.blobs_click_clipboard, ev)) {
+        blobList.clickClipboard();
+      } else if (isMatch(keys.blobs_click_paste, ev)) {
+        blobList.clickPaste();
+      } else if (isMatch(keys.blobs_focus, ev)) {
+        ev.preventDefault();
+        blobList.focus();
+      } else if (isMatch(keys.new_window, ev)) {
+        blobList.newWindow();
+      } else if (isMatch(keys.private_window, ev)) {
+        blobList.privateWindow();
+      }
+    };
     document.body.appendChild(blobList.container);
   },
   createOverview: () => {
@@ -277,15 +294,16 @@ const blobList = {
   showBlobs: () => {
     blobList.visible = true;
     blobList.container.style.display = "block";
+    blobList.overview.focus();
   },
   hideBlobs: () => {
-    blobList.currentKey = "";
+    blobList.overview.value = "";
     blobList.visible = false;
     blobList.container.style.display = "none";
   },
   click: () => {
     if (!blobList.visible) return;
-    const blob = blobList.blobs.get(blobList.currentKey);
+    const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
     if (
       blob.linkElem.tagName === "A" &&
@@ -303,7 +321,7 @@ const blobList = {
   },
   clickNewTab: () => {
     if (!blobList.visible) return;
-    const blob = blobList.blobs.get(blobList.currentKey);
+    const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
     blobList.hideBlobs();
     if (
@@ -318,7 +336,7 @@ const blobList = {
   },
   clickClipboard: () => {
     if (!blobList.visible) return;
-    const blob = blobList.blobs.get(blobList.currentKey);
+    const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
     if (!(blob.linkElem as HTMLAnchorElement).href) return;
     // callBridge.setClipboard(txt);
@@ -327,7 +345,7 @@ const blobList = {
   },
   clickPaste: async () => {
     if (!blobList.visible) return;
-    const blob = blobList.blobs.get(blobList.currentKey);
+    const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
     // callBridge.pasteClipboard(blob.linkElem as HTMLInputElement);
     (blob.linkElem as HTMLInputElement).value +=
@@ -337,35 +355,24 @@ const blobList = {
   },
   newWindow: async () => {
     if (!blobList.visible) return;
-    const blob = blobList.blobs.get(blobList.currentKey);
+    const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
     blobList.hideBlobs();
     sendMessage("newWindow", (blob.linkElem as HTMLAnchorElement).href);
   },
   privateWindow: async () => {
     if (!blobList.visible) return;
-    const blob = blobList.blobs.get(blobList.currentKey);
+    const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
     blobList.hideBlobs();
     sendMessage("privateWindow", (blob.linkElem as HTMLAnchorElement).href);
   },
   focus: () => {
     if (!blobList.visible) return;
-    const blob = blobList.blobs.get(blobList.currentKey);
+    const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
     blobList.hideBlobs();
     blob.linkElem.focus();
-  },
-  appendKey: (c: string) => {
-    blobList.currentKey += c;
-    blobList.overview.innerText = blobList.currentKey;
-  },
-  backspace: () => {
-    blobList.currentKey = blobList.currentKey.substring(
-      0,
-      blobList.currentKey.length - 1
-    );
-    blobList.overview.innerText = blobList.currentKey;
   },
 };
 blobList.init();
@@ -392,118 +399,56 @@ const isValidElem = (el: HTMLButtonElement) => {
   return el.contentEditable.toLowerCase() === "true";
 };
 
-window.addEventListener(
-  "keydown",
-  function(evt) {
-    if (!enabled || blacklisted) return;
-    if (/about:.+/.test(location.href)) return;
-    const active = document.activeElement as HTMLButtonElement;
-    //We don't want to do anything if the user is typing in an input field,
-    //unless the key is to deselect an input field
-    if (isValidElem(active)) {
-      if (isMatch(keys.elem_deselect, evt)) {
-        active.blur();
-        setTimeout(() => active.blur(), 50); // In case something tries to refocus
-        blobList.hideBlobs();
-      }
+window.onkeydown = (evt) => {
+  if (!enabled || blacklisted) return;
+  if (/about:.+/.test(location.href)) return;
+  const active = document.activeElement as HTMLButtonElement;
+  //We don't want to do anything if the user is typing in an input field,
+  //unless the key is to deselect an input field
+  if (isValidElem(active)) {
+    if (isMatch(keys.elem_deselect, evt)) {
+      active.blur();
+      setTimeout(() => active.blur(), 50); // In case something tries to refocus
+      blobList.hideBlobs();
+    }
+    return;
+  }
+  if (onWebPage) {
+    if (isMatch(keys.blobs_show, evt)) {
+      blobList.loadBlobs();
+      blobList.needLoadBlobs = false;
+      blobList.showBlobs();
+    } else if (isMatch(keys.elem_deselect, evt)) {
+      blobList.hideBlobs();
+      active.blur();
+    } else if (isMatch(keys.scroll_up, evt)) {
+      scroller.start(-conf.scroll_speed);
+    } else if (isMatch(keys.scroll_down, evt)) {
+      scroller.start(conf.scroll_speed);
+    } else if (isMatch(keys.scroll_up_fast, evt)) {
+      scroller.start(-conf.scroll_speed_fast);
+    } else if (isMatch(keys.scroll_down_fast, evt)) {
+      scroller.start(conf.scroll_speed_fast);
+    } else if (isMatch(keys.history_back, evt)) {
+      history.back();
+    } else if (isMatch(keys.history_forward, evt)) {
+      history.forward();
+    } else if (isMatch(keys.change_tab_left, evt)) {
+      sendMessage("changeTabLeft");
+    } else if (isMatch(keys.change_tab_right, evt)) {
+      sendMessage("changeTabRight");
+    } else if (isMatch(keys.move_tab_left, evt)) {
+      sendMessage("moveTabLeft");
+    } else if (isMatch(keys.move_tab_right, evt)) {
+      sendMessage("moveTabRight");
+    } else if (isMatch(keys.duplicate_tab, evt)) {
+      sendMessage("duplicateTab");
+    } else {
       return;
     }
-    //User is typing a key to a blob
-    if (blobList.visible) {
-      evt.preventDefault();
-      evt.stopPropagation();
-      //Hide blobs if appropriate
-      //Escape key always hides blobs if visible
-      if (evt.code === "Escape" || isMatch(keys.blobs_hide, evt)) {
-        blobList.hideBlobs();
-        return;
-      }
-      //Backspace if appropriate
-      if (isMatch(keys.blobs_backspace, evt)) {
-        blobList.backspace();
-        //Stop auto-submit timeout
-        if (timer) {
-          clearTimeout(timer);
-          timer = 0;
-        }
-        return;
-      }
-      const c = evt.key;
-      if (conf.chars.indexOf(c) !== -1) {
-        blobList.appendKey(c);
-        //Reset auto-submit timeout
-        if (timer) {
-          clearTimeout(timer);
-        }
-        if (0 < conf.timer) {
-          timer = this.setTimeout(blobList.click, conf.timer);
-        }
-        return false;
-      }
-    }
-    //Handle other key presses
-    //Deselect element
-    if (onWebPage) {
-      if (blobList.visible) {
-        if (isMatch(keys.blobs_hide, evt)) {
-          blobList.hideBlobs();
-        } else if (isMatch(keys.blobs_click, evt)) {
-          blobList.click();
-        } else if (isMatch(keys.blobs_click_new_tab, evt)) {
-          blobList.clickNewTab();
-        } else if (isMatch(keys.blobs_click_clipboard, evt)) {
-          blobList.clickClipboard();
-        } else if (isMatch(keys.blobs_click_paste, evt)) {
-          blobList.clickPaste();
-        } else if (isMatch(keys.blobs_focus, evt)) {
-          blobList.focus();
-        } else if (isMatch(keys.new_window, evt)) {
-          blobList.newWindow();
-        } else if (isMatch(keys.private_window, evt)) {
-          blobList.privateWindow();
-        }
-      } else {
-        if (isMatch(keys.blobs_show, evt)) {
-          blobList.loadBlobs();
-          blobList.needLoadBlobs = false;
-          blobList.showBlobs();
-        } else if (isMatch(keys.elem_deselect, evt)) {
-          blobList.hideBlobs();
-          active.blur();
-        } else if (isMatch(keys.scroll_up, evt)) {
-          scroller.start(-conf.scroll_speed);
-        } else if (isMatch(keys.scroll_down, evt)) {
-          scroller.start(conf.scroll_speed);
-        } else if (isMatch(keys.scroll_up_fast, evt)) {
-          scroller.start(-conf.scroll_speed_fast);
-        } else if (isMatch(keys.scroll_down_fast, evt)) {
-          scroller.start(conf.scroll_speed_fast);
-        } else if (isMatch(keys.history_back, evt)) {
-          history.back();
-        } else if (isMatch(keys.history_forward, evt)) {
-          history.forward();
-        } else if (isMatch(keys.change_tab_left, evt)) {
-          sendMessage("changeTabLeft");
-        } else if (isMatch(keys.change_tab_right, evt)) {
-          sendMessage("changeTabRight");
-        } else if (isMatch(keys.move_tab_left, evt)) {
-          sendMessage("moveTabLeft");
-        } else if (isMatch(keys.move_tab_right, evt)) {
-          sendMessage("moveTabRight");
-        } else if (isMatch(keys.duplicate_tab, evt)) {
-          sendMessage("duplicateTab");
-        } else {
-          //We don't want to stop the event from propagating
-          return true;
-        }
-      }
-    }
     evt.preventDefault();
-    evt.stopPropagation();
-    return false;
-  },
-  true
-);
+  }
+};
 
 window.onkeyup = (evt) => {
   if (

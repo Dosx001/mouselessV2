@@ -384,12 +384,12 @@ const isValidElem = (el: HTMLButtonElement) => {
     case "textarea":
     case "select":
     case "canvas":
-      return false;
+      return true;
     case "input":
       if (conf.input_whitelist.indexOf(el.type.toLowerCase()) === -1)
-        return false;
+        return true;
   }
-  return el.contentEditable.toLowerCase() !== "true";
+  return el.contentEditable.toLowerCase() === "true";
 };
 
 window.addEventListener(
@@ -400,8 +400,7 @@ window.addEventListener(
     const active = document.activeElement as HTMLButtonElement;
     //We don't want to do anything if the user is typing in an input field,
     //unless the key is to deselect an input field
-    if (!isValidElem(active)) {
-      keys.scroll_up;
+    if (isValidElem(active)) {
       if (isMatch(keys.elem_deselect, evt)) {
         active.blur();
         setTimeout(() => active.blur(), 50); // In case something tries to refocus

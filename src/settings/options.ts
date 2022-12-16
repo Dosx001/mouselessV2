@@ -25,8 +25,8 @@ const presets = {
     duplicate_tab: "<Alt>u",
     history_back: "<Alt>h",
     history_forward: "<Alt>l",
-    new_window: "<Alt>c",
-    private_window: "<Alt><Shift>C",
+    new_window: "<Alt>w",
+    private_window: "<Alt><Shift>W",
   },
 };
 

@@ -83,8 +83,8 @@ browser.storage.sync.get(["keys", "conf"]).then((obj) => {
     duplicate_tab: "<Alt>u",
     history_back: "<Alt>h",
     history_forward: "<Alt>l",
-    new_window: "<Alt>c",
-    private_window: "<Alt><Shift>C",
+    new_window: "<Alt>w",
+    private_window: "<Alt><Shift>W",
   };
   Object.entries((obj.keys as typeof defaultKeys) ?? defaultKeys).forEach(
     ([key, value]) => {

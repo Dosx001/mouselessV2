@@ -270,11 +270,9 @@ const blobList = {
     const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
     blobList.hideBlobs();
-    if (
-      blob.linkElem.tagName === "A" &&
-      (blob.linkElem as HTMLAnchorElement).href
-    ) {
-      sendMessage("openTab", (blob.linkElem as HTMLAnchorElement).href);
+    const link = (blob.linkElem as HTMLAnchorElement).href;
+    if (blob.linkElem.tagName === "A" && link) {
+      sendMessage("openTab", link);
     } else {
       blob.linkElem.click();
       blob.linkElem.focus();
@@ -283,8 +281,9 @@ const blobList = {
   clickClipboard: () => {
     const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
-    if (!(blob.linkElem as HTMLAnchorElement).href) return;
-    navigator.clipboard.writeText((blob.linkElem as HTMLAnchorElement).href);
+    const link = (blob.linkElem as HTMLAnchorElement).href;
+    if (!link) return;
+    navigator.clipboard.writeText(link);
     blobList.hideBlobs();
   },
   clickPaste: async () => {
@@ -295,17 +294,20 @@ const blobList = {
     blob.linkElem.focus();
     blobList.hideBlobs();
   },
-  newWindow: async () => {
+  newWindow: () => {
     const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
     blobList.hideBlobs();
-    sendMessage("newWindow", (blob.linkElem as HTMLAnchorElement).href);
+    const link = (blob.linkElem as HTMLAnchorElement).href;
+    if (blob.linkElem.tagName === "A" && link) sendMessage("newWindow", link);
   },
-  privateWindow: async () => {
+  privateWindow: () => {
     const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
     blobList.hideBlobs();
-    sendMessage("privateWindow", (blob.linkElem as HTMLAnchorElement).href);
+    const link = (blob.linkElem as HTMLAnchorElement).href;
+    if (blob.linkElem.tagName === "A" && link)
+      sendMessage("privateWindow", link);
   },
   focus: () => {
     const blob = blobList.blobs.get(blobList.overview.value);

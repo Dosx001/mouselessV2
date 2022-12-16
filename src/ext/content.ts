@@ -161,7 +161,6 @@ const blobList = {
   blobs: new Map<string, { blobElem: HTMLDivElement; linkElem: HTMLElement }>(),
   container: document.createElement("div"),
   overview: document.createElement("input"),
-  needLoadBlobs: true,
   createContainer: () => {
     blobList.overview.type = "text";
     blobList.container.className = "mlv2Container";
@@ -192,9 +191,6 @@ const blobList = {
   init: () => {
     if (!onWebPage) return;
     blobList.createContainer();
-    window.onscroll = () => {
-      blobList.needLoadBlobs = true;
-    };
   },
   loadBlobs: () => {
     if (!onWebPage) return;
@@ -345,7 +341,6 @@ window.onkeydown = (evt) => {
   if (onWebPage) {
     if (isMatch(keys.blobs_show, evt)) {
       blobList.loadBlobs();
-      blobList.needLoadBlobs = false;
       blobList.showBlobs();
     } else if (isMatch(keys.elem_deselect, evt)) {
       blobList.hideBlobs();

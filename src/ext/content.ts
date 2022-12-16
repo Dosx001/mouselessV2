@@ -161,7 +161,8 @@ const blobList = {
   blobs: new Map<string, { blobElem: HTMLDivElement; linkElem: HTMLElement }>(),
   container: document.createElement("div"),
   overview: document.createElement("input"),
-  createContainer: () => {
+  init: () => {
+    if (!onWebPage) return;
     blobList.overview.type = "text";
     blobList.container.className = "mlv2Container";
     blobList.overview.onkeydown = (ev) => {
@@ -184,14 +185,6 @@ const blobList = {
     };
     document.body.appendChild(blobList.container);
   },
-  createOverview: () => {
-    blobList.overview.className = "mlv2Overview";
-    blobList.container.appendChild(blobList.overview);
-  },
-  init: () => {
-    if (!onWebPage) return;
-    blobList.createContainer();
-  },
   loadBlobs: () => {
     if (!onWebPage) return;
     const linkElems = document.querySelectorAll<HTMLElement>(
@@ -199,7 +192,8 @@ const blobList = {
     );
     //Remove old container contents
     blobList.container.innerText = "";
-    blobList.createOverview();
+    blobList.overview.className = "mlv2Overview";
+    blobList.container.appendChild(blobList.overview);
     //Remove old blobs
     blobList.blobs.clear();
     let nRealBlobs = 0;

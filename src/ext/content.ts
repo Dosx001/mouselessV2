@@ -43,11 +43,10 @@ const keys = {
   blobs_show: { key: "" },
   blobs_hide: { key: "" },
   blobs_click: { key: "" },
-  blobs_click_new_tab: { key: "" },
-  blobs_click_clipboard: { key: "" },
-  blobs_click_paste: { key: "" },
+  new_tab: { key: "" },
+  clipboard_copy: { key: "" },
+  clipboard_paste: { key: "" },
   blobs_focus: { key: "" },
-  blobs_backspace: { key: "" },
   elem_deselect: { key: "" },
   change_tab_left: { key: "" },
   change_tab_right: { key: "" },
@@ -70,11 +69,10 @@ browser.storage.sync.get(["keys", "conf"]).then((obj) => {
     blobs_show: ";",
     blobs_hide: "Escape",
     blobs_click: "Enter",
-    blobs_click_new_tab: "<Control>Enter",
-    blobs_click_clipboard: "<Shift>Enter",
-    blobs_click_paste: "<Alt>p",
+    new_tab: "<Control>Enter",
+    clipboard_copy: "<Shift>Enter",
+    clipboard_paste: "<Alt>p",
     blobs_focus: "Tab",
-    blobs_backspace: "Backspace",
     elem_deselect: "Escape",
     change_tab_left: "<Alt>p",
     change_tab_right: "<Alt>n",
@@ -170,12 +168,12 @@ const blobList = {
     blobList.overview.onkeydown = (ev) => {
       if (isMatch(keys.blobs_click, ev)) {
         blobList.click();
-      } else if (isMatch(keys.blobs_click_new_tab, ev)) {
+      } else if (isMatch(keys.new_tab, ev)) {
         blobList.clickNewTab();
-      } else if (isMatch(keys.blobs_click_clipboard, ev)) {
-        blobList.clickClipboard();
-      } else if (isMatch(keys.blobs_click_paste, ev)) {
-        blobList.clickPaste();
+      } else if (isMatch(keys.clipboard_copy, ev)) {
+        blobList.clipboardCopy();
+      } else if (isMatch(keys.clipboard_paste, ev)) {
+        blobList.clipboardPaste();
       } else if (isMatch(keys.blobs_focus, ev)) {
         ev.preventDefault();
         blobList.focus();
@@ -278,7 +276,7 @@ const blobList = {
       blob.linkElem.focus();
     }
   },
-  clickClipboard: () => {
+  clipboardCopy: () => {
     const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
     const link = (blob.linkElem as HTMLAnchorElement).href;
@@ -286,7 +284,7 @@ const blobList = {
     navigator.clipboard.writeText(link);
     blobList.hideBlobs();
   },
-  clickPaste: async () => {
+  clipboardPaste: async () => {
     const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
     (blob.linkElem as HTMLInputElement).value +=

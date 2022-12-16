@@ -292,6 +292,7 @@ const blobList = {
     const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
     blobList.hideBlobs();
+    blobList.overview.blur();
     const link = (blob.linkElem as HTMLAnchorElement).href;
     if (blob.linkElem.tagName === "A" && link) sendMessage("newWindow", link);
   },
@@ -299,6 +300,7 @@ const blobList = {
     const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
     blobList.hideBlobs();
+    blobList.overview.blur();
     const link = (blob.linkElem as HTMLAnchorElement).href;
     if (blob.linkElem.tagName === "A" && link)
       sendMessage("privateWindow", link);

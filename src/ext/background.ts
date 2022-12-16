@@ -8,6 +8,10 @@ const getCurrTabOffset = async (off: number) => {
   return { tabId: tab.id!, winId: winId, index: idx! };
 };
 
+browser.tabs.onUpdated.addListener((_, info) => {
+  if (info.url) browser.tabs.insertCSS({ file: "./ext/styles.css" });
+});
+
 browser.runtime.onMessage.addListener(async (msg) => {
   switch (msg.action) {
     case "changeTabLeft": {

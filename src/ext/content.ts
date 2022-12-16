@@ -166,15 +166,7 @@ const blobList = {
   needLoadBlobs: true,
   createContainer: () => {
     blobList.overview.type = "text";
-    blobList.container.style.cssText = [
-      "display: none",
-      "position: absolute;",
-      "top: 0px",
-      "left: 0px",
-      "z-index: 2147483647",
-      "box-sizing: content-box",
-      "",
-    ].join(" !important;");
+    blobList.container.className = "mlv2Container";
     blobList.overview.onkeydown = (ev) => {
       if (isMatch(keys.blobs_click, ev)) {
         blobList.click();
@@ -196,22 +188,7 @@ const blobList = {
     document.body.appendChild(blobList.container);
   },
   createOverview: () => {
-    blobList.overview.style.cssText = [
-      "position: fixed",
-      "top: 0px",
-      "left: 0px",
-      "background-color: white",
-      "border-bottom: 2px solid black",
-      "border-right: 2px solid black",
-      "color: black",
-      "font: 12px sans-serif",
-      "padding: 3px",
-      "height: 15px",
-      "line-height: 15px",
-      "z-index: 2147483647",
-      "box-sizing: content-box",
-      "",
-    ].join(" !important;");
+    blobList.overview.className = "mlv2Overview";
     blobList.container.appendChild(blobList.overview);
   },
   init: () => {
@@ -254,21 +231,9 @@ const blobList = {
       nRealBlobs += 1;
       const blobElem = document.createElement("div");
       blobElem.innerText = key.toUpperCase();
-      blobElem.style.cssText = [
-        "position: absolute",
-        "background-color: yellow",
-        "border: 1px solid black",
-        "border-radius: 10px",
-        "padding-left: 3px",
-        "padding-right: 3px",
-        "color: black",
-        "font: 12px sans-serif",
-        "top: " + pos.top + "px",
-        "left: " + pos.left + "px",
-        "line-height: 13px",
-        "font-size: 12px",
-        "",
-      ].join(" !important;");
+      blobElem.className = "mlv2Blob";
+      blobElem.style.top = `${pos.top}px`;
+      blobElem.style.left = `${pos.left}px`;
       blobList.container.appendChild(blobElem);
       blobList.blobs.set(key, {
         blobElem: blobElem,

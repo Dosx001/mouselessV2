@@ -1,0 +1,35 @@
+.mlv2Container {
+  box-sizing: content-box;
+  display: none;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  z-index: 2147483647;
+}
+.mlv2Overview {
+  background-color: white;
+  border-bottom: 2px solid black;
+  border-right: 2px solid black;
+  box-sizing: content-box;
+  color: black;
+  font: 12px sans-serif;
+  height: 15px;
+  left: 0px;
+  line-height: 15px;
+  padding: 3px;
+  position: fixed;
+  top: 0px;
+  z-index: 2147483647;
+}
+.mlv2Blob {
+  background-color: yellow;
+  border-radius: 10px;
+  border: 1px solid black;
+  color: black;
+  font-size: 12px;
+  font: 12px sans-serif;
+  line-height: 13px;
+  padding-left: 3px;
+  padding-right: 3px;
+  position: absolute;
+}

@@ -41,6 +41,7 @@
     }
   },
   "permissions": [
+    "<all_urls>",
     "clipboardRead",
     "clipboardWrite",
     "storage",

@@ -164,7 +164,7 @@ const blobList = {
   init: () => {
     if (!onWebPage) return;
     blobList.overview.type = "text";
-    blobList.container.className = "mlv2Container";
+    blobList.overview.className = "mlv2Overview";
     blobList.overview.onkeydown = (ev) => {
       if (isMatch(keys.blobs_click, ev)) {
         blobList.click();
@@ -183,7 +183,8 @@ const blobList = {
         blobList.privateWindow();
       }
     };
-    document.body.appendChild(blobList.container);
+    blobList.container.className = "mlv2Container";
+    document.body.append(blobList.container);
   },
   loadBlobs: () => {
     if (!onWebPage) return;
@@ -191,11 +192,7 @@ const blobList = {
       "a, button, input, select, textarea, summary, [role='button'], [tabindex='0']"
     );
     //Remove old container contents
-    blobList.container.innerText = "";
-    blobList.overview.className = "mlv2Overview";
-    blobList.container.appendChild(blobList.overview);
-    //Remove old blobs
-    blobList.blobs.clear();
+    blobList.container.replaceChildren(blobList.overview);
     let nRealBlobs = 0;
     for (let i = 0; i < linkElems.length; i++) {
       const linkElem = linkElems[i];
@@ -222,7 +219,7 @@ const blobList = {
       blobElem.className = "mlv2Blob";
       blobElem.style.top = `${pos.top}px`;
       blobElem.style.left = `${pos.left}px`;
-      blobList.container.appendChild(blobElem);
+      blobList.container.append(blobElem);
       blobList.blobs.set(key, {
         blobElem: blobElem,
         linkElem: linkElem,
@@ -236,6 +233,7 @@ const blobList = {
   hideBlobs: () => {
     blobList.overview.value = "";
     blobList.container.style.display = "none";
+    blobList.blobs.clear();
   },
   click: () => {
     const blob = blobList.blobs.get(blobList.overview.value);

@@ -1,35 +1,33 @@
 .mlv2Container {
-  box-sizing: content-box;
+  box-sizing: content-box !important;
   display: none;
-  left: 0px;
-  position: absolute;
-  top: 0px;
-  z-index: 2147483647;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif !important;
+  font-size: 12px !important;
+  left: 0px !important;
+  position: absolute !important;
+  top: 0px !important;
+  z-index: 2147483647 !important;
 }
 .mlv2Overview {
-  background-color: white;
-  border-bottom: 2px solid black;
-  border-right: 2px solid black;
-  box-sizing: content-box;
-  color: black;
-  font: 12px sans-serif;
-  height: 15px;
-  left: 0px;
-  line-height: 15px;
-  padding: 3px;
-  position: fixed;
-  top: 0px;
-  z-index: 2147483647;
+  background: black !important;
+  border-radius: 1% !important;
+  border: 1px solid #484848 !important;
+  box-sizing: content-box !important;
+  color: darkgray !important;
+  height: 15px !important;
+  line-height: 15px !important;
+  padding: 3px !important;
+  position: fixed !important;
+  &:focus {
+    outline: transparent !important;
+  }
 }
 .mlv2Blob {
-  background-color: yellow;
-  border-radius: 10px;
-  border: 1px solid black;
-  color: black;
-  font-size: 12px;
-  font: 12px sans-serif;
-  line-height: 13px;
-  padding-left: 3px;
-  padding-right: 3px;
-  position: absolute;
+  background-color: yellow !important;
+  border-radius: 10px !important;
+  border: 1px solid black !important;
+  color: black !important;
+  line-height: 13px !important;
+  padding: 0 3px !important;
+  position: absolute !important;
 }

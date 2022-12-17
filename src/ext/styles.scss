@@ -18,6 +18,8 @@
   line-height: 15px !important;
   padding: 3px !important;
   position: fixed !important;
+  min-width: 4ch !important;
+  width: 4ch !important;
   &:focus {
     outline: transparent !important;
   }

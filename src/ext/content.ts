@@ -165,6 +165,10 @@ const blobList = {
     if (!onWebPage) return;
     blobList.overview.type = "text";
     blobList.overview.className = "mlv2Overview";
+    blobList.overview.oninput = (ev) => {
+      (ev.target as HTMLElement).style.width = `${(ev.target as HTMLInputElement).value.length + 1
+        }ch !important`;
+    };
     blobList.overview.onkeydown = (ev) => {
       if (isMatch(keys.blobs_click, ev)) {
         blobList.click();

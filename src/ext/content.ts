@@ -193,7 +193,6 @@ const blobList = {
     );
     //Remove old container contents
     blobList.container.replaceChildren(blobList.overview);
-    let nRealBlobs = 0;
     for (let i = 0; i < linkElems.length; i++) {
       const linkElem = linkElems[i];
       //We don't want hidden elements
@@ -212,8 +211,7 @@ const blobList = {
       //We don't need things below our scroll position either
       if (pos.top - 100 > window.scrollY + window.innerHeight) continue;
       //Create the blob's key
-      const key = createKey(nRealBlobs);
-      nRealBlobs += 1;
+      const key = createKey(i);
       const blobElem = document.createElement("div");
       blobElem.innerText = key.toUpperCase();
       blobElem.className = "mlv2Blob";

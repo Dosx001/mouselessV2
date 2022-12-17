@@ -53,8 +53,10 @@ const keys = {
   new_tab: { key: "" },
   new_window: { key: "" },
   private_window: { key: "" },
+  scroll_bottom: { key: "" },
   scroll_down: { key: "" },
   scroll_down_fast: { key: "" },
+  scroll_top: { key: "" },
   scroll_up: { key: "" },
   scroll_up_fast: { key: "" },
 };
@@ -79,8 +81,10 @@ browser.storage.sync.get(["keys", "conf"]).then((obj) => {
     new_tab: "<Control>Enter",
     new_window: "<Alt>w",
     private_window: "<Alt><Shift>W",
+    scroll_bottom: "<Alt><Shift>G",
     scroll_down: "<Alt>j",
     scroll_down_fast: "<Alt><Shift>J",
+    scroll_top: "<Alt>g",
     scroll_up: "<Alt>k",
     scroll_up_fast: "<Alt><Shift>K",
   };
@@ -351,6 +355,10 @@ window.onkeydown = (evt) => {
       scroller.start(conf.scroll_speed_fast);
     } else if (isMatch(keys.history_back, evt)) {
       history.back();
+    } else if (isMatch(keys.scroll_top, evt)) {
+      window.scroll(0, 0);
+    } else if (isMatch(keys.scroll_bottom, evt)) {
+      window.scroll(0, document.body.getBoundingClientRect().height);
     } else if (isMatch(keys.history_forward, evt)) {
       history.forward();
     } else if (isMatch(keys.change_tab_left, evt)) {

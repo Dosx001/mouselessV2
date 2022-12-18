@@ -209,8 +209,7 @@ const blobList = {
         rect.right <=
         (window.innerWidth || document.documentElement.clientWidth)
       ) {
-        const key = createKey(count);
-        count++;
+        const key = createKey(count++);
         const blobElem = document.createElement("div");
         blobElem.innerText = key.toUpperCase();
         blobElem.className = "mlv2Blob";

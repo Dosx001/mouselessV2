@@ -2,7 +2,6 @@ const presets = {
   conf: {
     chars: ";alskdjfiwoe",
     blacklist: "",
-    timer: 0,
   },
   keys: {
     blobs_click: "Enter",

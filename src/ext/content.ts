@@ -21,7 +21,6 @@ const conf = {
   scroll_speed_fast: 1.1,
   scroll_friction: 0.8,
   chars: ";alskdjfiwoe",
-  timer: 0,
   input_whitelist: [
     "checkbox",
     "radio",

@@ -189,6 +189,8 @@ const blobList = {
     );
     //Remove old container contents
     blobList.container.replaceChildren(blobList.overview);
+    blobList.container.style.display = "block";
+    blobList.overview.focus();
     let count = 0;
     for (let i = 0; i < linkElems.length; i++) {
       const linkElem = linkElems[i];
@@ -221,10 +223,6 @@ const blobList = {
         });
       }
     }
-  },
-  showBlobs: () => {
-    blobList.container.style.display = "block";
-    blobList.overview.focus();
   },
   hideBlobs: () => {
     blobList.overview.value = "";
@@ -331,7 +329,6 @@ window.onkeydown = (evt) => {
   if (onWebPage) {
     if (isMatch(keys.blobs_show, evt)) {
       blobList.loadBlobs();
-      blobList.showBlobs();
     } else if (isMatch(keys.elem_deselect, evt)) {
       blobList.hideBlobs();
       active.blur();

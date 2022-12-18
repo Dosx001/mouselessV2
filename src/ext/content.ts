@@ -32,7 +32,6 @@ const conf = {
     "file",
     "image",
   ],
-  location_change_check_timeout: 2000,
 };
 
 const keys = {

@@ -8,6 +8,14 @@ const getCurrTabOffset = async (off: number) => {
   return { tabId: tab.id!, winId: winId, index: idx! };
 };
 
+browser.tabs
+  .query({})
+  .then((res) =>
+    res.forEach((tab) =>
+      browser.tabs.insertCSS(tab.id!, { file: "./ext/styles.css" })
+    )
+  );
+
 browser.tabs.onUpdated.addListener((_, info) => {
   if (info.url) browser.tabs.insertCSS({ file: "./ext/styles.css" });
 });

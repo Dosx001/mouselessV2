@@ -143,9 +143,8 @@ const createKey = (n: number) => {
   if (n === 0) return conf.chars[0];
   let str = "";
   const base = conf.chars.length;
-  while (0 < n) {
-    str += conf.chars[n % base];
-    n = Math.floor(n / base);
+  for (let i = n; 0 < i; i = Math.floor(i / base)) {
+    str += conf.chars[i % base];
   }
   return str;
 };

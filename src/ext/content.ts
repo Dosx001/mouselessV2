@@ -151,16 +151,6 @@ const createKey = (n: number) => {
   return str;
 };
 
-const getElemPos = (el: HTMLElement) => {
-  let curtop = 0;
-  let curleft = 0;
-  do {
-    curtop += el.offsetTop;
-    curleft += el.offsetLeft;
-  } while ((el = el.offsetParent as HTMLElement));
-  return { top: curtop, left: curleft };
-};
-
 const blobList = {
   blobs: new Map<string, { blobElem: HTMLDivElement; linkElem: HTMLElement }>(),
   container: document.createElement("div"),
@@ -201,35 +191,37 @@ const blobList = {
     );
     //Remove old container contents
     blobList.container.replaceChildren(blobList.overview);
+    let count = 0;
     for (let i = 0; i < linkElems.length; i++) {
       const linkElem = linkElems[i];
-      //We don't want hidden elements
       if (
         linkElem === undefined ||
         linkElem.style.display === "none" ||
         linkElem.style.visibility === "hidden"
       )
         continue;
-      //Get element's absolute position
-      const pos = getElemPos(linkElem);
-      //Lots of things which don't really exist have an X and Y value of 0
-      if (pos.top === 0 && pos.left === 0) continue;
-      //We don't need to get things far above our current scroll position
-      if (pos.top < window.scrollY - 100) continue;
-      //We don't need things below our scroll position either
-      if (pos.top - 100 > window.scrollY + window.innerHeight) continue;
-      //Create the blob's key
-      const key = createKey(i);
-      const blobElem = document.createElement("div");
-      blobElem.innerText = key.toUpperCase();
-      blobElem.className = "mlv2Blob";
-      blobElem.style.top = `${pos.top}px`;
-      blobElem.style.left = `${pos.left}px`;
-      blobList.container.append(blobElem);
-      blobList.blobs.set(key, {
-        blobElem: blobElem,
-        linkElem: linkElem,
-      });
+      const rect = linkElem.getBoundingClientRect();
+      if (
+        0 < rect.top &&
+        0 < rect.left &&
+        rect.bottom <=
+        (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <=
+        (window.innerWidth || document.documentElement.clientWidth)
+      ) {
+        const key = createKey(count);
+        count++;
+        const blobElem = document.createElement("div");
+        blobElem.innerText = key.toUpperCase();
+        blobElem.className = "mlv2Blob";
+        blobElem.style.top = `${rect.top}px`;
+        blobElem.style.left = `${rect.left}px`;
+        blobList.container.append(blobElem);
+        blobList.blobs.set(key, {
+          blobElem: blobElem,
+          linkElem: linkElem,
+        });
+      }
     }
   },
   showBlobs: () => {

@@ -238,10 +238,17 @@ const blobList = {
   click: () => {
     const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
-    blobList.hideBlobs();
-    blob.linkElem.focus();
-    blob.linkElem.click();
-    blob.linkElem.blur();
+    if (
+      location.host === "www.reddit.com" &&
+      blob.linkElem.getAttribute("data-click-id") === "comments"
+    ) {
+      location.href = (blob.linkElem as HTMLAnchorElement).href;
+    } else {
+      blobList.hideBlobs();
+      blob.linkElem.focus();
+      blob.linkElem.click();
+      blob.linkElem.blur();
+    }
   },
   clickNewTab: () => {
     const blob = blobList.blobs.get(blobList.overview.value);

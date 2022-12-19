@@ -59,49 +59,56 @@ const keys = {
   scroll_up_fast: { key: "" },
 };
 
-browser.storage.sync.get(["keys", "conf"]).then((obj) => {
-  // Get keys
-  const defaultKeys = {
-    blobs_click: "Enter",
-    blobs_focus: "Tab",
-    blobs_hide: "Escape",
-    blobs_show: ";",
-    change_tab_left: "<Alt>p",
-    change_tab_right: "<Alt>n",
-    clipboard_copy: "<Shift>Enter",
-    clipboard_paste: "<Alt>p",
-    duplicate_tab: "<Alt>u",
-    elem_deselect: "Escape",
-    history_back: "<Alt>h",
-    history_forward: "<Alt>l",
-    move_tab_left: "<Alt><Shift>P",
-    move_tab_right: "<Alt><Shift>N",
-    new_tab: "<Control>Enter",
-    new_window: "<Alt>w",
-    private_window: "<Alt><Shift>W",
-    scroll_bottom: "<Alt><Shift>G",
-    scroll_down: "<Alt>j",
-    scroll_down_fast: "<Alt><Shift>J",
-    scroll_top: "<Alt>g",
-    scroll_up: "<Alt>k",
-    scroll_up_fast: "<Alt><Shift>K",
-  };
-  Object.entries((obj.keys as typeof defaultKeys) ?? defaultKeys).forEach(
-    ([key, value]) => {
-      interpretKey(key, value);
+const bindKeys = () =>
+  browser.storage.sync.get(["keys", "conf"]).then((obj) => {
+    // Get keys
+    const defaultKeys = {
+      blobs_click: "Enter",
+      blobs_focus: "Tab",
+      blobs_hide: "Escape",
+      blobs_show: ";",
+      change_tab_left: "<Alt>p",
+      change_tab_right: "<Alt>n",
+      clipboard_copy: "<Shift>Enter",
+      clipboard_paste: "<Alt>p",
+      duplicate_tab: "<Alt>u",
+      elem_deselect: "Escape",
+      history_back: "<Alt>h",
+      history_forward: "<Alt>l",
+      move_tab_left: "<Alt><Shift>P",
+      move_tab_right: "<Alt><Shift>N",
+      new_tab: "<Control>Enter",
+      new_window: "<Alt>w",
+      private_window: "<Alt><Shift>W",
+      scroll_bottom: "<Alt><Shift>G",
+      scroll_down: "<Alt>j",
+      scroll_down_fast: "<Alt><Shift>J",
+      scroll_top: "<Alt>g",
+      scroll_up: "<Alt>k",
+      scroll_up_fast: "<Alt><Shift>K",
+    };
+    Object.entries((obj.keys as typeof defaultKeys) ?? defaultKeys).forEach(
+      ([key, value]) => {
+        interpretKey(key, value);
+      }
+    );
+    // Get conf
+    Object.entries((obj.conf as typeof conf) ?? conf).forEach(
+      ([key, value]) => {
+        (conf as any)[key] = value;
+      }
+    );
+    for (let link of conf.blacklist.split("\n")) {
+      link = link.trim();
+      if (link.length && new RegExp(link).test(location.href)) {
+        blacklisted = true;
+        break;
+      }
     }
-  );
-  // Get conf
-  Object.entries((obj.conf as typeof conf) ?? conf).forEach(([key, value]) => {
-    (conf as any)[key] = value;
   });
-  for (let link of conf.blacklist.split("\n")) {
-    link = link.trim();
-    if (link.length && new RegExp(link).test(location.href)) {
-      blacklisted = true;
-      break;
-    }
-  }
+bindKeys();
+browser.runtime.onMessage.addListener(() => {
+  bindKeys();
 });
 
 const interpretKey = (name: string, hotkey: string) => {

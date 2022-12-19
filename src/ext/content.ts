@@ -238,19 +238,10 @@ const blobList = {
   click: () => {
     const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
-    if (
-      blob.linkElem.tagName === "A" &&
-      (blob.linkElem as HTMLAnchorElement).href &&
-      (blob.linkElem as HTMLAnchorElement).href.indexOf("javascript") != 0
-    ) {
-      blobList.hideBlobs();
-      blob.linkElem.focus();
-      location.href = (blob.linkElem as HTMLAnchorElement).href;
-    } else {
-      blobList.hideBlobs();
-      blob.linkElem.click();
-      blob.linkElem.focus();
-    }
+    blobList.hideBlobs();
+    blob.linkElem.focus();
+    blob.linkElem.click();
+    blob.linkElem.blur();
   },
   clickNewTab: () => {
     const blob = blobList.blobs.get(blobList.overview.value);

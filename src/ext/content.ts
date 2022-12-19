@@ -325,7 +325,7 @@ window.onkeydown = (evt) => {
     } else if (isMatch(keys.scroll_top, evt)) {
       window.scroll(0, 0);
     } else if (isMatch(keys.scroll_bottom, evt)) {
-      window.scroll(0, document.body.getBoundingClientRect().height);
+      window.scroll(0, (window as any).scrollMaxY);
     } else if (isMatch(keys.history_forward, evt)) {
       history.forward();
     } else if (isMatch(keys.change_tab_left, evt)) {

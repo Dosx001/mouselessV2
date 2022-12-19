@@ -6,7 +6,6 @@ const presets = {
   keys: {
     blobs_click: "Enter",
     blobs_focus: "Tab",
-    blobs_hide: "Escape",
     blobs_show: ";",
     change_tab_left: "<Alt>p",
     change_tab_right: "<Alt>n",

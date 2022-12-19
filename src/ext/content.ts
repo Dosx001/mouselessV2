@@ -183,6 +183,9 @@ const blobList = {
         blobList.privateWindow();
       }
     };
+    blobList.overview.onblur = () => {
+      blobList.hideBlobs();
+    };
     blobList.container.className = "mlv2Container";
     document.body.append(blobList.container);
   },
@@ -302,38 +305,13 @@ const blobList = {
 };
 blobList.init();
 
-const isValidElem = (el: HTMLButtonElement) => {
-  switch (el.tagName.toLowerCase()) {
-    case "textarea":
-    case "select":
-    case "canvas":
-      return true;
-    case "input":
-      if (conf.input_whitelist.indexOf(el.type.toLowerCase()) === -1)
-        return true;
-  }
-  return el.contentEditable.toLowerCase() === "true";
-};
-
 window.onkeydown = (evt) => {
   if (blacklisted) return;
-  const active = document.activeElement as HTMLButtonElement;
-  //We don't want to do anything if the user is typing in an input field,
-  //unless the key is to deselect an input field
-  if (isValidElem(active)) {
-    if (isMatch(keys.elem_deselect, evt)) {
-      active.blur();
-      setTimeout(() => active.blur(), 50); // In case something tries to refocus
-      blobList.hideBlobs();
-    }
-    return;
-  }
   if (onWebPage) {
     if (isMatch(keys.blobs_show, evt)) {
       blobList.loadBlobs();
     } else if (isMatch(keys.elem_deselect, evt)) {
-      blobList.hideBlobs();
-      active.blur();
+      (document.activeElement as HTMLElement).blur();
     } else if (isMatch(keys.scroll_up, evt)) {
       scroller.start(-conf.scroll_speed);
     } else if (isMatch(keys.scroll_down, evt)) {

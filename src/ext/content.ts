@@ -241,7 +241,9 @@ const blobList = {
     if (!blob) return;
     if (
       location.host === "www.reddit.com" &&
-      blob.linkElem.getAttribute("data-click-id") === "comments"
+      ["comments", "body"].includes(
+        blob.linkElem.getAttribute("data-click-id")!
+      )
     ) {
       location.href = (blob.linkElem as HTMLAnchorElement).href;
     } else {

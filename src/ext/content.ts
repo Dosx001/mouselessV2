@@ -307,13 +307,35 @@ const blobList = {
 };
 blobList.init();
 
+const isValidElem = (el: HTMLInputElement) => {
+  switch (el.tagName) {
+    case "TEXTAREA":
+    case "SELECT":
+    case "CANVAS":
+      return true;
+    case "INPUT":
+      if (conf.input_whitelist.indexOf(el.type.toLowerCase()) === -1)
+        return true;
+  }
+  return el.contentEditable.toLowerCase() === "true";
+};
+
 window.onkeydown = (evt) => {
   if (blacklisted) return;
+  const active = document.activeElement as HTMLInputElement;
+  //We don't want to do anything if the user is typing in an input field,
+  //unless the key is to deselect an input field
+  if (isValidElem(active)) {
+    if (isMatch(keys.elem_deselect, evt)) {
+      active.blur();
+    }
+    return;
+  }
   if (onWebPage) {
     if (isMatch(keys.blobs_show, evt)) {
       blobList.loadBlobs();
     } else if (isMatch(keys.elem_deselect, evt)) {
-      (document.activeElement as HTMLElement).blur();
+      active.blur();
     } else if (isMatch(keys.scroll_up, evt)) {
       scroller.start(-conf.scroll_speed);
     } else if (isMatch(keys.scroll_down, evt)) {

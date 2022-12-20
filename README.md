@@ -29,7 +29,7 @@ _\*See [Improvements and Fixes](#improvements-and-fixes) section for more inform
 | \<Control>Enter | Open tab to link                      |
 | \<Alt>u         | Duplicate tab                         |
 | \<Shift>Enter   | Save link from element into clipboard |
-| \<Alt>v         | Paste from clipboard to element       |
+| \<Alt>p         | Paste from clipboard to element       |
 | Tab             | Focus on element                      |
 | Escape          | Unfocus current element               |
 | \<Alt>w         | Open a new window from link           |

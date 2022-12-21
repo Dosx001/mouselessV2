@@ -82,10 +82,3 @@ Plus, the reomve has made the code much simpler without presets.
 mouselessv2 allows you use multiple modifiers for key bindings
 
 e.g. `<Crtl><Alt><Shift>U` `<Crtl>u` `<Crtl><Shift>U` `<Crtl><Alt>u`
-
-### YouTube
-
-When using mouseless you will noticed videos were sometimes push up, covering up part of the video.
-mouseless has always had problems with the space bar on YouTube as you can see
-[here](https://github.com/mortie/mouseless-plugin/blob/master/ext/content.js#L578). That's fixed
-for mouselessV2.

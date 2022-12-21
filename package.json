@@ -4,7 +4,7 @@
   "description": "Quick keyboard access to links and other interactive elements",
   "scripts": {
     "build": "web-ext build -s dist -i '**/*.css.map' '**/*.kra' '**/*.sh' --overwrite-dest",
-    "tar": "tar czvf QuickShot.tar.gz src dist build.sh package.json tsconfig.json yarn.lock README_FIREFOX.md",
+    "tar": "tar czvf mouselessV2.tar.gz src dist build.sh package.json tsconfig.json yarn.lock README_FIREFOX.md",
     "sass": "sass --update src:dist"
   },
   "devDependencies": {

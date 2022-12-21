@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Mouseless V2",
-  "version": "0.12.1",
-  "description": "Quick keyboard access to links and other interactive elements",
+  "name": "mouselessV2",
+  "version": "1.0.0",
+  "description": "Browse the web, mouse not required.",
   "content_scripts": [
     {
       "matches": [
@@ -35,7 +35,7 @@
       "128": "assets/icon-128.png"
     }
   },
-  "applications": {
+  "browser_specific_settings": {
     "gecko": {
       "id": "@mouselessV2"
     }

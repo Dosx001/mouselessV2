@@ -1,4 +1,4 @@
-# mouselessV2
+# ![logo](dist/assets/icon-32.png) mouselessV2
 
 mouselessV2 is a fork of
 [mortie/mouseless-plugin](https://github.com/mortie/mouseless-plugin),
@@ -10,8 +10,8 @@ with extra features and bug fixes.
 | ----------------------------- | ---------------------------- | ----------------------------- |
 | User Settings                 | Sync to your Firefox account | Saved locally to your machine |
 | Key Bindings                  | Orignal key bindings         | Vim like key bindings         |
-| Presets                       | :x:\*                        | :heavy_check_mark:            |
-| On and Off Switch             | :x:\*                        | :heavy_check_mark:            |
+| Presets                       | :x:<sup>\*</sup>             | :heavy_check_mark:            |
+| On and Off Switch             | :x:<sup>\*</sup>             | :heavy_check_mark:            |
 | Clipboard Paste               | :heavy_check_mark:           | :x:                           |
 | Duplicate Tab                 | :heavy_check_mark:           | :x:                           |
 | Open New Window from link     | :heavy_check_mark:           | :x:                           |
@@ -19,7 +19,7 @@ with extra features and bug fixes.
 | Scroll to Top of Page         | :heavy_check_mark:           | :x:                           |
 | Scroll to Bottom of Page      | :heavy_check_mark:           | :x:                           |
 
-_\*See [Improvements and Fixes](#improvements-and-fixes) section for more information_
+<sup>\*</sup>_See [Improvements and Fixes](#improvements-and-fixes) section for more information_
 
 ## Key Bindings
 

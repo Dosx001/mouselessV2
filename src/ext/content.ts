@@ -175,13 +175,15 @@ const blobList = {
       } else if (isMatch(keys.clipboard_paste, ev)) {
         blobList.clipboardPaste();
       } else if (isMatch(keys.blobs_focus, ev)) {
-        ev.preventDefault();
         blobList.focus();
       } else if (isMatch(keys.new_window, ev)) {
         blobList.newWindow();
       } else if (isMatch(keys.private_window, ev)) {
         blobList.privateWindow();
+      } else {
+        return;
       }
+      ev.preventDefault();
     };
     blobList.overview.onblur = () => {
       blobList.hideBlobs();

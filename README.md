@@ -1,7 +1,8 @@
 # mouselessV2
 
 mouselessV2 is a fork of
-[mortie/mouseless-plugin](https://github.com/mortie/mouseless-plugin).
+[mortie/mouseless-plugin](https://github.com/mortie/mouseless-plugin),
+with extra features and bug fixes.
 
 ## mouselessV2 vs mouseless
 
@@ -9,7 +10,7 @@ mouselessV2 is a fork of
 | ----------------------------- | ---------------------------- | ----------------------------- |
 | User Settings                 | Sync to your Firefox account | Saved locally to your machine |
 | Key Bindings                  | Orignal key bindings         | Vim like key bindings         |
-| Presents                      | :x:\*                        | :heavy_check_mark:            |
+| Presets                       | :x:\*                        | :heavy_check_mark:            |
 | On and Off Switch             | :x:\*                        | :heavy_check_mark:            |
 | Clipboard Paste               | :heavy_check_mark:           | :x:                           |
 | Duplicate Tab                 | :heavy_check_mark:           | :x:                           |
@@ -49,10 +50,42 @@ _\*See [Improvements and Fixes](#improvements-and-fixes) section for more inform
 
 ## Improvements and Fixes
 
-### On and Off Switch
+### Improve Element Location Seeker
 
-### Presents
+When using mouseless you'll notice as you scroll through a page some elements are not selectable,
+such elements in a top bar, sidebar, or popup. mouseless finds every element's absolute location
+based on document and checks if the element is within scrolling distance. While mouselessV2
+finds every element's relative position to the viewport and checks if the element inside the
+viewport.
+
+| mouselessV2                          | mouseless                        |
+| ------------------------------------ | -------------------------------- |
+| ![mouselessV2](imgs/mouselessV2.png) | ![mouseless](imgs/mouseless.png) |
+
+### mouseless Randomly Stops Working
+
+This has been fixed with the reomval of On and Off Switch feature. mouselessV2 can still be turn
+on and off in the about:addons settings.
+
+### Presets
+
+Presets were removed from mouselessV2. However, User Settings are now sync to your Firefox
+account so you can make any changes to key binding and those changes will persist in all instances
+of Firefox where you are login.
+
+The reasoning of the removal was I need to come up with new key bindings for each present for
+the new actions I added. That was be difficult work since I don't use any of other keyboard layouts.
+Plus, the reomve has made the code much simpler without presets.
 
 ### Modifiers
 
+mouselessv2 allows you use multiple modifiers for key bindings
+
+e.g. `<Crtl><Alt><Shift>U` `<Crtl>u` `<Crtl><Shift>U` `<Crtl><Alt>u`
+
 ### YouTube
+
+When using mouseless you will noticed videos were sometimes push up, covering up part of the video.
+mouseless has always had problems with the space bar on YouTube as you can see
+[here](https://github.com/mortie/mouseless-plugin/blob/master/ext/content.js#L578). That's fixed
+for mouselessV2.

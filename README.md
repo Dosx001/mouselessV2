@@ -1,5 +1,9 @@
 # ![logo](dist/assets/icon-32.png) mouselessV2
 
+<a href="https://addons.mozilla.org/en-US/firefox/addon/mouselessv2">
+  <img src="https://user-images.githubusercontent.com/585534/107280546-7b9b2a00-6a26-11eb-8f9f-f95932f4bfec.png"/>
+</a>
+
 mouselessV2 is a fork of
 [mortie/mouseless-plugin](https://github.com/mortie/mouseless-plugin),
 with extra features and bug fixes.

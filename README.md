@@ -9,7 +9,7 @@ with extra features and bug fixes.
 | Features                      | mouselessV2                  | mouseless                     |
 | ----------------------------- | ---------------------------- | ----------------------------- |
 | User Settings                 | Sync to your Firefox account | Saved locally to your machine |
-| Key Bindings                  | Orignal key bindings         | Vim like key bindings         |
+| Key Bindings                  | Vim like key bindings        | Orignal key bindings          |
 | Presets                       | :x:<sup>\*</sup>             | :heavy_check_mark:            |
 | On and Off Switch             | :x:<sup>\*</sup>             | :heavy_check_mark:            |
 | Clipboard Paste               | :heavy_check_mark:           | :x:                           |
@@ -53,8 +53,8 @@ with extra features and bug fixes.
 ### Improve Element Location Seeker
 
 When using mouseless you'll notice as you scroll through a page some elements are not selectable,
-such elements in a top bar, sidebar, or popup. mouseless finds every element's absolute location
-based on document and checks if the element is within scrolling distance. While mouselessV2
+such elements in a top bar, sidebar, or popup. mouseless finds every element's absolute position
+based on the document and checks if the element is inside your scroll view. While mouselessV2
 finds every element's relative position to the viewport and checks if the element inside the
 viewport.
 
@@ -65,7 +65,7 @@ viewport.
 ### mouseless Randomly Stops Working
 
 This has been fixed with the reomval of On and Off Switch feature. mouselessV2 can still be turn
-on and off in the about:addons settings.
+on and off in the about:addons settings page.
 
 ### Presets
 

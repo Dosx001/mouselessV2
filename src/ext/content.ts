@@ -252,7 +252,6 @@ const blobList = {
       blobList.hideBlobs();
       blob.linkElem.focus();
       blob.linkElem.click();
-      blob.linkElem.blur();
     }
   },
   clickNewTab: () => {

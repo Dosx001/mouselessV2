@@ -250,8 +250,25 @@ const blobList = {
       location.href = (blob.linkElem as HTMLAnchorElement).href;
     } else {
       blobList.hideBlobs();
-      blob.linkElem.focus();
-      blob.linkElem.click();
+      if (
+        blob.linkElem.tagName === "INPUT" &&
+        ![
+          "button",
+          "checkbox",
+          "color",
+          "file",
+          "hidden",
+          "image",
+          "radio",
+          "reset",
+          "submit",
+        ].includes((blob.linkElem as HTMLInputElement).type)
+      ) {
+        blob.linkElem.focus();
+      } else {
+        blob.linkElem.click();
+        (document.activeElement as HTMLElement).blur();
+      }
     }
   },
   clickNewTab: () => {

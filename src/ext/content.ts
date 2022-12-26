@@ -276,12 +276,9 @@ const blobList = {
     if (!blob) return;
     blobList.hideBlobs();
     const link = (blob.linkElem as HTMLAnchorElement).href;
-    if (blob.linkElem.tagName === "A" && link) {
-      sendMessage("openTab", link);
-    } else {
-      blob.linkElem.click();
-      blob.linkElem.focus();
-    }
+    blob.linkElem.tagName === "A" && link
+      ? sendMessage("openTab", link)
+      : blobList.click();
   },
   clipboardCopy: () => {
     const blob = blobList.blobs.get(blobList.overview.value);

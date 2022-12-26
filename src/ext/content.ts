@@ -251,8 +251,7 @@ const blobList = {
       location.href = (blob.linkElem as HTMLAnchorElement).href;
     } else {
       blobList.hideBlobs();
-      if (
-        blob.linkElem.tagName === "INPUT" &&
+      blob.linkElem.tagName === "INPUT" &&
         ![
           "button",
           "checkbox",
@@ -264,11 +263,8 @@ const blobList = {
           "reset",
           "submit",
         ].includes((blob.linkElem as HTMLInputElement).type)
-      ) {
-        blob.linkElem.focus();
-      } else {
-        blob.linkElem.click();
-      }
+        ? blob.linkElem.focus()
+        : blob.linkElem.click();
     }
   },
   clickNewTab: () => {

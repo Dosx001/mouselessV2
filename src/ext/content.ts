@@ -235,6 +235,7 @@ const blobList = {
   },
   hideBlobs: () => {
     blobList.overview.value = "";
+    blobList.overview.blur();
     blobList.container.style.display = "none";
     blobList.blobs.clear();
   },
@@ -267,7 +268,6 @@ const blobList = {
         blob.linkElem.focus();
       } else {
         blob.linkElem.click();
-        (document.activeElement as HTMLElement).blur();
       }
     }
   },
@@ -300,7 +300,6 @@ const blobList = {
     const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
     blobList.hideBlobs();
-    blobList.overview.blur();
     const link = (blob.linkElem as HTMLAnchorElement).href;
     if (blob.linkElem.tagName === "A" && link) sendMessage("newWindow", link);
   },
@@ -308,7 +307,6 @@ const blobList = {
     const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
     blobList.hideBlobs();
-    blobList.overview.blur();
     const link = (blob.linkElem as HTMLAnchorElement).href;
     if (blob.linkElem.tagName === "A" && link)
       sendMessage("privateWindow", link);

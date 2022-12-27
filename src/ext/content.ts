@@ -139,10 +139,6 @@ const isMatch = (k: HotKey, evt: KeyboardEvent) =>
   !!k.altKey === evt.altKey &&
   !!k.metaKey === evt.metaKey;
 
-//There's a lot we don't want to do if we're not on an actual webpage, but on
-//the "speed dial"-ish pages.
-const onWebPage = document.body !== undefined;
-
 const createKey = (n: number) => {
   if (n === 0) return conf.chars[0];
   let str = "";
@@ -158,7 +154,6 @@ const blobList = {
   container: document.createElement("div"),
   overview: document.createElement("input"),
   init: () => {
-    if (!onWebPage) return;
     blobList.overview.type = "text";
     blobList.overview.className = "mlv2Overview";
     blobList.overview.oninput = (ev) => {
@@ -192,7 +187,6 @@ const blobList = {
     document.body.append(blobList.container);
   },
   loadBlobs: () => {
-    if (!onWebPage) return;
     const linkElems = document.querySelectorAll<HTMLElement>(
       "a, button, input, select, textarea, summary, [role='button'], [tabindex='0']"
     );
@@ -340,42 +334,40 @@ window.onkeydown = (evt) => {
     }
     return;
   }
-  if (onWebPage) {
-    if (isMatch(keys.blobs_show, evt)) {
-      blobList.loadBlobs();
-    } else if (isMatch(keys.elem_deselect, evt)) {
-      active.blur();
-    } else if (isMatch(keys.scroll_up, evt)) {
-      scroller.start(-conf.scroll_speed);
-    } else if (isMatch(keys.scroll_down, evt)) {
-      scroller.start(conf.scroll_speed);
-    } else if (isMatch(keys.scroll_up_fast, evt)) {
-      scroller.start(-conf.scroll_speed_fast);
-    } else if (isMatch(keys.scroll_down_fast, evt)) {
-      scroller.start(conf.scroll_speed_fast);
-    } else if (isMatch(keys.history_back, evt)) {
-      history.back();
-    } else if (isMatch(keys.scroll_top, evt)) {
-      window.scroll(0, 0);
-    } else if (isMatch(keys.scroll_bottom, evt)) {
-      window.scroll(0, (window as any).scrollMaxY);
-    } else if (isMatch(keys.history_forward, evt)) {
-      history.forward();
-    } else if (isMatch(keys.change_tab_left, evt)) {
-      sendMessage("changeTabLeft");
-    } else if (isMatch(keys.change_tab_right, evt)) {
-      sendMessage("changeTabRight");
-    } else if (isMatch(keys.move_tab_left, evt)) {
-      sendMessage("moveTabLeft");
-    } else if (isMatch(keys.move_tab_right, evt)) {
-      sendMessage("moveTabRight");
-    } else if (isMatch(keys.duplicate_tab, evt)) {
-      sendMessage("duplicateTab");
-    } else {
-      return;
-    }
-    evt.preventDefault();
+  if (isMatch(keys.blobs_show, evt)) {
+    blobList.loadBlobs();
+  } else if (isMatch(keys.elem_deselect, evt)) {
+    active.blur();
+  } else if (isMatch(keys.scroll_up, evt)) {
+    scroller.start(-conf.scroll_speed);
+  } else if (isMatch(keys.scroll_down, evt)) {
+    scroller.start(conf.scroll_speed);
+  } else if (isMatch(keys.scroll_up_fast, evt)) {
+    scroller.start(-conf.scroll_speed_fast);
+  } else if (isMatch(keys.scroll_down_fast, evt)) {
+    scroller.start(conf.scroll_speed_fast);
+  } else if (isMatch(keys.history_back, evt)) {
+    history.back();
+  } else if (isMatch(keys.scroll_top, evt)) {
+    window.scroll(0, 0);
+  } else if (isMatch(keys.scroll_bottom, evt)) {
+    window.scroll(0, (window as any).scrollMaxY);
+  } else if (isMatch(keys.history_forward, evt)) {
+    history.forward();
+  } else if (isMatch(keys.change_tab_left, evt)) {
+    sendMessage("changeTabLeft");
+  } else if (isMatch(keys.change_tab_right, evt)) {
+    sendMessage("changeTabRight");
+  } else if (isMatch(keys.move_tab_left, evt)) {
+    sendMessage("moveTabLeft");
+  } else if (isMatch(keys.move_tab_right, evt)) {
+    sendMessage("moveTabRight");
+  } else if (isMatch(keys.duplicate_tab, evt)) {
+    sendMessage("duplicateTab");
+  } else {
+    return;
   }
+  evt.preventDefault();
 };
 
 window.onkeyup = (evt) => {

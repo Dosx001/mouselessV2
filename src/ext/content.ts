@@ -1,11 +1,3 @@
-interface HotKey {
-  key: string;
-  ctrlKey?: boolean;
-  shiftKey?: boolean;
-  altKey?: boolean;
-  metaKey?: boolean;
-}
-
 const sendMessage = (action: string, href = "") => {
   browser.runtime.sendMessage({
     action: action,
@@ -34,28 +26,28 @@ const conf = {
 };
 
 const keys = {
-  blobs_click: { key: "" },
-  blobs_focus: { key: "" },
-  blobs_show: { key: "" },
-  change_tab_left: { key: "" },
-  change_tab_right: { key: "" },
-  clipboard_copy: { key: "" },
-  clipboard_paste: { key: "" },
-  duplicate_tab: { key: "" },
-  elem_deselect: { key: "" },
-  history_back: { key: "" },
-  history_forward: { key: "" },
-  move_tab_left: { key: "" },
-  move_tab_right: { key: "" },
-  new_tab: { key: "" },
-  new_window: { key: "" },
-  private_window: { key: "" },
-  scroll_bottom: { key: "" },
-  scroll_down: { key: "" },
-  scroll_down_fast: { key: "" },
-  scroll_top: { key: "" },
-  scroll_up: { key: "" },
-  scroll_up_fast: { key: "" },
+  blobs_click: "",
+  blobs_focus: "",
+  blobs_show: "",
+  change_tab_left: "",
+  change_tab_right: "",
+  clipboard_copy: "",
+  clipboard_paste: "",
+  duplicate_tab: "",
+  elem_deselect: "",
+  history_back: "",
+  history_forward: "",
+  move_tab_left: "",
+  move_tab_right: "",
+  new_tab: "",
+  new_window: "",
+  private_window: "",
+  scroll_bottom: "",
+  scroll_down: "",
+  scroll_down_fast: "",
+  scroll_top: "",
+  scroll_up: "",
+  scroll_up_fast: "",
 };
 
 const bindKeys = () =>
@@ -86,8 +78,25 @@ const bindKeys = () =>
       scroll_up_fast: "<Alt><Shift>K",
     };
     Object.entries((obj.keys as typeof defaultKeys) ?? defaultKeys).forEach(
-      ([key, value]) => {
-        interpretKey(key, value);
+      ([name, hotkey]) => {
+        let sum = 0;
+        hotkey.match(/<[a-zA-Z]+>/g)?.forEach((mod) => {
+          switch (mod.substring(1, mod.length - 1).toLowerCase()) {
+            case "shift":
+              sum++;
+              break;
+            case "control":
+              sum += 2;
+              break;
+            case "alt":
+              sum += 4;
+              break;
+            case "meta":
+              sum += 8;
+              break;
+          }
+        });
+        (keys as any)[name] = `${hotkey.replace(/<.*?>/g, "").trim()}${sum}`;
       }
     );
     // Get conf
@@ -109,35 +118,14 @@ browser.runtime.onMessage.addListener(() => {
   bindKeys();
 });
 
-const interpretKey = (name: string, hotkey: string) => {
-  const key: HotKey = { key: hotkey.replace(/<.*?>/g, "").trim() };
-  hotkey.match(/<[a-zA-Z]+>/g)?.forEach((mod) => {
-    switch (mod.substring(1, mod.length - 1).toLowerCase()) {
-      case "control":
-        key.ctrlKey = true;
-        break;
-      case "shift":
-        key.shiftKey = true;
-        break;
-      case "alt":
-        key.altKey = true;
-        break;
-      case "meta":
-        key.metaKey = true;
-        break;
-      default:
-        console.error("Unknown modifier:", mod);
-    }
-  });
-  (keys as any)[name] = key;
+const interpretKey = (ev: KeyboardEvent) => {
+  let sum = 0;
+  if (ev.shiftKey) sum++;
+  if (ev.ctrlKey) sum += 2;
+  if (ev.altKey) sum += 4;
+  if (ev.metaKey) sum += 8;
+  return `${ev.key}${sum}`;
 };
-
-const isMatch = (k: HotKey, evt: KeyboardEvent) =>
-  k.key === evt.key &&
-  !!k.ctrlKey === evt.ctrlKey &&
-  !!k.shiftKey === evt.shiftKey &&
-  !!k.altKey === evt.altKey &&
-  !!k.metaKey === evt.metaKey;
 
 const createKey = (n: number) => {
   if (n === 0) return conf.chars[0];
@@ -161,22 +149,30 @@ const blobList = {
         }ch !important`;
     };
     blobList.overview.onkeydown = (ev) => {
-      if (isMatch(keys.blobs_click, ev)) {
-        blobList.click();
-      } else if (isMatch(keys.new_tab, ev)) {
-        blobList.clickNewTab();
-      } else if (isMatch(keys.clipboard_copy, ev)) {
-        blobList.clipboardCopy();
-      } else if (isMatch(keys.clipboard_paste, ev)) {
-        blobList.clipboardPaste();
-      } else if (isMatch(keys.blobs_focus, ev)) {
-        blobList.focus();
-      } else if (isMatch(keys.new_window, ev)) {
-        blobList.newWindow();
-      } else if (isMatch(keys.private_window, ev)) {
-        blobList.privateWindow();
-      } else {
-        return;
+      switch (interpretKey(ev)) {
+        case keys.blobs_click:
+          blobList.click();
+          break;
+        case keys.blobs_focus:
+          blobList.focus();
+          break;
+        case keys.clipboard_copy:
+          blobList.clipboardCopy();
+          break;
+        case keys.clipboard_paste:
+          blobList.clipboardPaste();
+          break;
+        case keys.new_tab:
+          blobList.clickNewTab();
+          break;
+        case keys.new_window:
+          blobList.newWindow();
+          break;
+        case keys.private_window:
+          blobList.privateWindow();
+          break;
+        default:
+          return;
       }
       ev.preventDefault();
     };
@@ -316,61 +312,75 @@ const isValidElem = (el: HTMLInputElement) => {
   return el.contentEditable.toLowerCase() === "true";
 };
 
-window.onkeydown = (evt) => {
+window.onkeydown = (ev) => {
   if (blacklisted) return;
   const active = document.activeElement as HTMLInputElement;
+  const hotkey = interpretKey(ev);
   //We don't want to do anything if the user is typing in an input field,
   //unless the key is to deselect an input field
   if (isValidElem(active)) {
-    if (isMatch(keys.elem_deselect, evt)) {
+    if (hotkey === keys.elem_deselect) active.blur();
+    return;
+  }
+  switch (hotkey) {
+    case keys.blobs_show:
+      blobList.loadBlobs();
+      break;
+    case keys.elem_deselect:
       active.blur();
-    }
-    return;
+      break;
+    case keys.scroll_up:
+      scroller.start(-conf.scroll_speed);
+      break;
+    case keys.scroll_down:
+      scroller.start(conf.scroll_speed);
+      break;
+    case keys.scroll_up_fast:
+      scroller.start(-conf.scroll_speed_fast);
+      break;
+    case keys.scroll_down_fast:
+      scroller.start(conf.scroll_speed_fast);
+      break;
+    case keys.scroll_top:
+      window.scroll(0, 0);
+      break;
+    case keys.scroll_bottom:
+      window.scroll(0, (window as any).scrollMaxY);
+      break;
+    case keys.history_forward:
+      history.forward();
+      break;
+    case keys.history_back:
+      history.back();
+      break;
+    case keys.change_tab_left:
+      sendMessage("changeTabLeft");
+      break;
+    case keys.change_tab_right:
+      sendMessage("changeTabRight");
+      break;
+    case keys.move_tab_left:
+      sendMessage("moveTabLeft");
+      break;
+    case keys.move_tab_right:
+      sendMessage("moveTabRight");
+      break;
+    case keys.duplicate_tab:
+      sendMessage("duplicateTab");
+      break;
+    default:
+      return;
   }
-  if (isMatch(keys.blobs_show, evt)) {
-    blobList.loadBlobs();
-  } else if (isMatch(keys.elem_deselect, evt)) {
-    active.blur();
-  } else if (isMatch(keys.scroll_up, evt)) {
-    scroller.start(-conf.scroll_speed);
-  } else if (isMatch(keys.scroll_down, evt)) {
-    scroller.start(conf.scroll_speed);
-  } else if (isMatch(keys.scroll_up_fast, evt)) {
-    scroller.start(-conf.scroll_speed_fast);
-  } else if (isMatch(keys.scroll_down_fast, evt)) {
-    scroller.start(conf.scroll_speed_fast);
-  } else if (isMatch(keys.history_back, evt)) {
-    history.back();
-  } else if (isMatch(keys.scroll_top, evt)) {
-    window.scroll(0, 0);
-  } else if (isMatch(keys.scroll_bottom, evt)) {
-    window.scroll(0, (window as any).scrollMaxY);
-  } else if (isMatch(keys.history_forward, evt)) {
-    history.forward();
-  } else if (isMatch(keys.change_tab_left, evt)) {
-    sendMessage("changeTabLeft");
-  } else if (isMatch(keys.change_tab_right, evt)) {
-    sendMessage("changeTabRight");
-  } else if (isMatch(keys.move_tab_left, evt)) {
-    sendMessage("moveTabLeft");
-  } else if (isMatch(keys.move_tab_right, evt)) {
-    sendMessage("moveTabRight");
-  } else if (isMatch(keys.duplicate_tab, evt)) {
-    sendMessage("duplicateTab");
-  } else {
-    return;
-  }
-  evt.preventDefault();
+  ev.preventDefault();
 };
 
-window.onkeyup = (evt) => {
-  if (
-    isMatch(keys.scroll_up, evt) ||
-    isMatch(keys.scroll_down, evt) ||
-    isMatch(keys.scroll_up_fast, evt) ||
-    isMatch(keys.scroll_down_fast, evt)
-  ) {
-    scroller.stop();
+window.onkeyup = (ev) => {
+  switch (interpretKey(ev)) {
+    case keys.scroll_up:
+    case keys.scroll_down:
+    case keys.scroll_up_fast:
+    case keys.scroll_down_fast:
+      scroller.stop();
   }
 };
 
@@ -397,7 +407,7 @@ const scroller = {
       window.scrollBy(0, scroller.velocity * tdiff);
       scroller.velocity *= conf.scroll_friction;
     }
-    if (tdiff < 100 && scroller.velocity > -0.1 && scroller.velocity < 0.1) {
+    if (tdiff < 100 && -0.1 < scroller.velocity && scroller.velocity < 0.1) {
       scroller.velocity = 0;
       cancelAnimationFrame(scroller.raf);
       scroller.raf = 0;

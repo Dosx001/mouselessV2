@@ -60,7 +60,7 @@ browser.runtime.onMessage.addListener(async (msg) => {
     case "openTab":
       browser.tabs.create({ url: msg.href });
       break;
-    case "duplicateTab": {
+    case "duplicateTab":
       browser.tabs.duplicate(
         (
           await browser.tabs.query({
@@ -70,14 +70,11 @@ browser.runtime.onMessage.addListener(async (msg) => {
         )[0].id!
       );
       break;
-    }
-    case "newWindow": {
+    case "newWindow":
       browser.windows.create({ url: msg.href });
       break;
-    }
-    case "privateWindow": {
+    case "privateWindow":
       browser.windows.create({ url: msg.href, incognito: true });
       break;
-    }
   }
 });

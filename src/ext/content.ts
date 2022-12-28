@@ -388,8 +388,6 @@ const scroller = {
   raf: 0,
   acceleration: 0,
   velocity: 0,
-  startDate: 0,
-  endDate: 0,
   startTime: 0,
   endTime: 0,
   start: (acceleration: number) => {

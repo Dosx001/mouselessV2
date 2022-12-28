@@ -380,7 +380,7 @@ window.onkeyup = (ev) => {
     case keys.scroll_down:
     case keys.scroll_up_fast:
     case keys.scroll_down_fast:
-      scroller.stop();
+      scroller.acceleration = 0;
   }
 };
 
@@ -396,9 +396,6 @@ const scroller = {
     scroller.acceleration = acceleration;
     if (location.host === "developer.mozilla.org") scroller.acceleration *= 15;
     if (scroller.raf === 0) scroller.update();
-  },
-  stop: () => {
-    scroller.acceleration = 0;
   },
   update: () => {
     const tdiff = scroller.endTime - scroller.startTime;

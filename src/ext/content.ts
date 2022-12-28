@@ -26,58 +26,34 @@ const conf = {
 };
 
 const keys = {
-  blobs_click: "",
-  blobs_focus: "",
-  blobs_show: "",
-  change_tab_left: "",
-  change_tab_right: "",
-  clipboard_copy: "",
-  clipboard_paste: "",
-  duplicate_tab: "",
-  elem_deselect: "",
-  history_back: "",
-  history_forward: "",
-  move_tab_left: "",
-  move_tab_right: "",
-  new_tab: "",
-  new_window: "",
-  private_window: "",
-  scroll_bottom: "",
-  scroll_down: "",
-  scroll_down_fast: "",
-  scroll_top: "",
-  scroll_up: "",
-  scroll_up_fast: "",
+  blobs_click: "Enter",
+  blobs_focus: "Tab",
+  blobs_show: ";",
+  change_tab_left: "<Alt>p",
+  change_tab_right: "<Alt>n",
+  clipboard_copy: "<Shift>Enter",
+  clipboard_paste: "<Alt>p",
+  duplicate_tab: "<Alt>u",
+  elem_deselect: "Escape",
+  history_back: "<Alt>h",
+  history_forward: "<Alt>l",
+  move_tab_left: "<Alt><Shift>P",
+  move_tab_right: "<Alt><Shift>N",
+  new_tab: "<Control>Enter",
+  new_window: "<Alt>w",
+  private_window: "<Alt><Shift>W",
+  scroll_bottom: "<Alt><Shift>G",
+  scroll_down: "<Alt>j",
+  scroll_down_fast: "<Alt><Shift>J",
+  scroll_top: "<Alt>g",
+  scroll_up: "<Alt>k",
+  scroll_up_fast: "<Alt><Shift>K",
 };
 
 const bindKeys = () =>
   browser.storage.sync.get(["keys", "conf"]).then((obj) => {
     // Get keys
-    const defaultKeys = {
-      blobs_click: "Enter",
-      blobs_focus: "Tab",
-      blobs_show: ";",
-      change_tab_left: "<Alt>p",
-      change_tab_right: "<Alt>n",
-      clipboard_copy: "<Shift>Enter",
-      clipboard_paste: "<Alt>p",
-      duplicate_tab: "<Alt>u",
-      elem_deselect: "Escape",
-      history_back: "<Alt>h",
-      history_forward: "<Alt>l",
-      move_tab_left: "<Alt><Shift>P",
-      move_tab_right: "<Alt><Shift>N",
-      new_tab: "<Control>Enter",
-      new_window: "<Alt>w",
-      private_window: "<Alt><Shift>W",
-      scroll_bottom: "<Alt><Shift>G",
-      scroll_down: "<Alt>j",
-      scroll_down_fast: "<Alt><Shift>J",
-      scroll_top: "<Alt>g",
-      scroll_up: "<Alt>k",
-      scroll_up_fast: "<Alt><Shift>K",
-    };
-    Object.entries((obj.keys as typeof defaultKeys) ?? defaultKeys).forEach(
+    Object.entries((obj.keys as typeof keys) ?? keys).forEach(
       ([name, hotkey]) => {
         let sum = 0;
         hotkey.match(/<[a-zA-Z]+>/g)?.forEach((mod) => {

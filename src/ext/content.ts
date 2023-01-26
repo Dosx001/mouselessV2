@@ -90,9 +90,7 @@ const bindKeys = () =>
     }
   });
 bindKeys();
-browser.runtime.onMessage.addListener(() => {
-  bindKeys();
-});
+browser.storage.onChanged.addListener(bindKeys);
 
 const interpretKey = (ev: KeyboardEvent) => {
   let sum = 0;

@@ -45,7 +45,6 @@ document.querySelector<HTMLFormElement>("form")!.onsubmit = (ev) => {
     (presets as any)[section][name] = el.value;
   });
   browser.storage.sync.set(presets);
-  browser.runtime.sendMessage({ action: "rebine" });
 };
 
 // Load options

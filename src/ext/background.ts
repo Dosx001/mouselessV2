@@ -22,13 +22,6 @@ browser.tabs.onUpdated.addListener((_, info) => {
 
 browser.runtime.onMessage.addListener(async (msg) => {
   switch (msg.action) {
-    case "rebind":
-      browser.tabs
-        .query({})
-        .then((res) =>
-          res.forEach((tab) => browser.tabs.sendMessage(tab.id!, {}))
-        );
-      break;
     case "changeTabLeft": {
       const loc = await getCurrTabOffset(-1);
       browser.tabs.update(

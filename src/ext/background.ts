@@ -1,4 +1,4 @@
-const getCurrTabOffset = async (off: number) => {
+const getIndex = async (off: number) => {
   const tab = (
     await browser.tabs.query({ active: true, currentWindow: true })
   )[0];
@@ -6,7 +6,7 @@ const getCurrTabOffset = async (off: number) => {
   let idx = tab.index + off;
   if (idx < 0) idx = tabCount - 1;
   else if (idx >= tabCount) idx = 0;
-  return { tabId: tab.id!, index: idx! };
+  return idx;
 };
 
 const file = { file: "ext/styles.css" };
@@ -24,31 +24,29 @@ browser.runtime.onMessage.addListener(async (msg, sender) => {
       browser.tabs.insertCSS(file);
       break;
     case "changeTabLeft": {
-      const loc = await getCurrTabOffset(-1);
+      const idx = await getIndex(-1);
       browser.tabs.update(
-        (await browser.tabs.query({ currentWindow: true, index: loc.index }))[0]
-          .id!,
+        (await browser.tabs.query({ currentWindow: true, index: idx }))[0].id!,
         { active: true }
       );
       break;
     }
     case "changeTabRight": {
-      const loc = await getCurrTabOffset(1);
+      const idx = await getIndex(1);
       browser.tabs.update(
-        (await browser.tabs.query({ currentWindow: true, index: loc.index }))[0]
-          .id!,
+        (await browser.tabs.query({ currentWindow: true, index: idx }))[0].id!,
         { active: true }
       );
       break;
     }
     case "moveTabLeft": {
-      const loc = await getCurrTabOffset(-1);
-      browser.tabs.move(sender.tab!.id!, { index: loc.index });
+      const idx = await getIndex(-1);
+      browser.tabs.move(sender.tab!.id!, { index: idx });
       break;
     }
     case "moveTabRight": {
-      const loc = await getCurrTabOffset(1);
-      browser.tabs.move(sender.tab!.id!, { index: loc.index });
+      const idx = await getIndex(1);
+      browser.tabs.move(sender.tab!.id!, { index: idx });
       break;
     }
     case "openTab":

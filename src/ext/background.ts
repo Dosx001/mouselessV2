@@ -8,17 +8,20 @@ const getCurrTabOffset = async (off: number) => {
   return { tabId: tab.id!, winId: winId, index: idx! };
 };
 
+const file = { file: "ext/styles.css" };
 browser.tabs.query({}).then((res) => {
-  for (const tab of res)
-    browser.tabs.insertCSS(tab.id!, { file: "./ext/styles.css" });
+  for (const tab of res) browser.tabs.insertCSS(tab.id!, file);
 });
 
 browser.tabs.onUpdated.addListener((_, info) => {
-  if (info.url) browser.tabs.insertCSS({ file: "./ext/styles.css" });
+  if (info.url) browser.tabs.insertCSS(file);
 });
 
 browser.runtime.onMessage.addListener(async (msg) => {
   switch (msg.action) {
+    case "css":
+      browser.tabs.insertCSS(file);
+      break;
     case "changeTabLeft": {
       const loc = await getCurrTabOffset(-1);
       browser.tabs.update(

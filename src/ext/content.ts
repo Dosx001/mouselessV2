@@ -4,6 +4,7 @@ const sendMessage = (action: string, href = "") => {
     href: href,
   });
 };
+sendMessage("css");
 
 let blacklisted = false;
 

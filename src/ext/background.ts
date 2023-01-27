@@ -1,11 +1,12 @@
 const getCurrTabOffset = async (off: number) => {
-  const winId = browser.windows.WINDOW_ID_CURRENT;
-  const tab = (await browser.tabs.query({ active: true, windowId: winId }))[0];
-  const tabCount = (await browser.tabs.query({ windowId: winId })).length;
+  const tab = (
+    await browser.tabs.query({ active: true, currentWindow: true })
+  )[0];
+  const tabCount = (await browser.tabs.query({ currentWindow: true })).length;
   let idx = tab.index + off;
   if (idx < 0) idx = tabCount - 1;
   else if (idx >= tabCount) idx = 0;
-  return { tabId: tab.id!, winId: winId, index: idx! };
+  return { tabId: tab.id!, index: idx! };
 };
 
 const file = { file: "ext/styles.css" };
@@ -25,7 +26,7 @@ browser.runtime.onMessage.addListener(async (msg) => {
     case "changeTabLeft": {
       const loc = await getCurrTabOffset(-1);
       browser.tabs.update(
-        (await browser.tabs.query({ windowId: loc.winId, index: loc.index }))[0]
+        (await browser.tabs.query({ currentWindow: true, index: loc.index }))[0]
           .id!,
         { active: true }
       );
@@ -34,7 +35,7 @@ browser.runtime.onMessage.addListener(async (msg) => {
     case "changeTabRight": {
       const loc = await getCurrTabOffset(1);
       browser.tabs.update(
-        (await browser.tabs.query({ windowId: loc.winId, index: loc.index }))[0]
+        (await browser.tabs.query({ currentWindow: true, index: loc.index }))[0]
           .id!,
         { active: true }
       );
@@ -55,12 +56,7 @@ browser.runtime.onMessage.addListener(async (msg) => {
       break;
     case "duplicateTab":
       browser.tabs.duplicate(
-        (
-          await browser.tabs.query({
-            active: true,
-            windowId: browser.windows.WINDOW_ID_CURRENT,
-          })
-        )[0].id!
+        (await browser.tabs.query({ active: true, currentWindow: true }))[0].id!
       );
       break;
     case "newWindow":

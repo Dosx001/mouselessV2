@@ -18,7 +18,7 @@ browser.tabs.onUpdated.addListener((_, info) => {
   if (info.url) browser.tabs.insertCSS(file);
 });
 
-browser.runtime.onMessage.addListener(async (msg) => {
+browser.runtime.onMessage.addListener(async (msg, sender) => {
   switch (msg.action) {
     case "css":
       browser.tabs.insertCSS(file);
@@ -43,12 +43,12 @@ browser.runtime.onMessage.addListener(async (msg) => {
     }
     case "moveTabLeft": {
       const loc = await getCurrTabOffset(-1);
-      browser.tabs.move(loc.tabId, { index: loc.index });
+      browser.tabs.move(sender.tab!.id!, { index: loc.index });
       break;
     }
     case "moveTabRight": {
       const loc = await getCurrTabOffset(1);
-      browser.tabs.move(loc.tabId, { index: loc.index });
+      browser.tabs.move(sender.tab!.id!, { index: loc.index });
       break;
     }
     case "openTab":

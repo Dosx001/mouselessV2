@@ -29,29 +29,20 @@ const presets = {
   },
 };
 
-const forEachOption = (
-  fn: (section: string, name: string, el: HTMLInputElement) => void
-) => {
-  document.querySelectorAll<HTMLInputElement>(".current").forEach((el) => {
+browser.storage.sync.get().then((sync) => {
+  for (const el of document.querySelectorAll("input, textarea")) {
     const [section, name] = el.getAttribute("data-value")!.split(".");
-    fn(section as string, name, el);
-  });
-};
+    const sec = sync[section] || {};
+    (el as HTMLInputElement).value =
+      sec[name] ?? (presets as any)[section][name];
+  }
+});
 
-// Save options
-document.querySelector<HTMLFormElement>("form")!.onsubmit = (ev) => {
+document.querySelector("form")!.onsubmit = (ev) => {
   ev.preventDefault();
-  forEachOption((section: string, name: string, el: HTMLInputElement) => {
-    (presets as any)[section][name] = el.value;
-  });
+  for (const el of document.querySelectorAll("input, textarea")) {
+    const [section, name] = el.getAttribute("data-value")!.split(".");
+    (presets as any)[section][name] = (el as HTMLInputElement).value;
+  }
   browser.storage.sync.set(presets);
 };
-
-// Load options
-document.addEventListener("DOMContentLoaded", async () => {
-  const vals = await browser.storage.sync.get(["keys", "conf"]);
-  forEachOption((section: string, name: string, el: HTMLInputElement) => {
-    const sec = vals[section] || {};
-    el.value = sec[name] ?? (presets as any)[section][name];
-  });
-});

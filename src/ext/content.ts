@@ -51,45 +51,40 @@ const keys = {
   scroll_up_fast: "<Alt><Shift>K",
 };
 
-const bindKeys = () =>
-  browser.storage.sync.get(["keys", "conf"]).then((obj) => {
-    // Get keys
-    Object.entries((obj.keys as typeof keys) ?? keys).forEach(
-      ([name, hotkey]) => {
-        let sum = 0;
-        hotkey.match(/<[a-zA-Z]+>/g)?.forEach((mod) => {
-          switch (mod.substring(1, mod.length - 1).toLowerCase()) {
-            case "shift":
-              sum++;
-              break;
-            case "control":
-              sum += 2;
-              break;
-            case "alt":
-              sum += 4;
-              break;
-            case "meta":
-              sum += 8;
-              break;
-          }
-        });
-        (keys as any)[name] = `${hotkey.replace(/<.*?>/g, "").trim()}${sum}`;
-      }
-    );
-    // Get conf
-    Object.entries((obj.conf as typeof conf) ?? conf).forEach(
-      ([key, value]) => {
-        (conf as any)[key] = value;
-      }
-    );
-    for (let link of conf.blacklist.split("\n")) {
-      link = link.trim();
-      if (link.length && new RegExp(link).test(location.href)) {
-        blacklisted = true;
-        break;
+const bindKeys = async () => {
+  const sync = await browser.storage.sync.get(["keys", "conf"]);
+  for (const [name, hotkey] of Object.entries(
+    (sync.keys as typeof keys) ?? keys
+  )) {
+    let sum = 0;
+    for (const mod of hotkey.match(/<[a-zA-Z]+>/g) ?? []) {
+      switch (mod.substring(1, mod.length - 1).toLowerCase()) {
+        case "shift":
+          sum++;
+          break;
+        case "control":
+          sum += 2;
+          break;
+        case "alt":
+          sum += 4;
+          break;
+        case "meta":
+          sum += 8;
+          break;
       }
     }
-  });
+    (keys as any)[name] = `${hotkey.replace(/<.*?>/g, "").trim()}${sum}`;
+  }
+  for (const [key, value] of Object.entries((sync.conf as typeof conf) ?? conf))
+    (conf as any)[key] = value;
+  for (let link of conf.blacklist.split("\n")) {
+    link = link.trim();
+    if (link.length && new RegExp(link).test(location.href)) {
+      blacklisted = true;
+      break;
+    }
+  }
+};
 bindKeys();
 browser.storage.onChanged.addListener(bindKeys);
 
@@ -207,9 +202,9 @@ const blobList = {
     if (
       location.host === "www.reddit.com" &&
       ["comments", "body"].includes(blob.getAttribute("data-click-id")!)
-    ) {
+    )
       location.href = (blob as HTMLAnchorElement).href;
-    } else {
+    else {
       blobList.hideBlobs();
       blob.tagName === "INPUT" &&
         ![

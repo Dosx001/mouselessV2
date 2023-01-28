@@ -52,7 +52,7 @@ const keys = {
 };
 
 const bindKeys = async () => {
-  const sync = await browser.storage.sync.get(["keys", "conf"]);
+  const sync = await browser.storage.sync.get();
   for (const [name, hotkey] of Object.entries(
     (sync.keys as typeof keys) ?? keys
   )) {
@@ -153,18 +153,14 @@ const blobList = {
     document.body.append(blobList.container);
   },
   loadBlobs: () => {
-    const linkElems = document.querySelectorAll<HTMLElement>(
-      "a, button, input, select, textarea, summary, [role='button'], [tabindex='0']"
-    );
-    //Remove old container contents
     blobList.container.replaceChildren(blobList.overview);
     blobList.container.style.display = "block";
     blobList.overview.focus();
     let count = 0;
-    for (let i = 0; i < linkElems.length; i++) {
-      const linkElem = linkElems[i];
+    for (const linkElem of document.querySelectorAll<HTMLElement>(
+      "a, button, input, select, textarea, summary, [role='button']"
+    )) {
       if (
-        linkElem === undefined ||
         linkElem.style.display === "none" ||
         linkElem.style.visibility === "hidden"
       )
@@ -174,10 +170,8 @@ const blobList = {
       if (
         0 <= rect.top &&
         0 <= rect.left &&
-        rect.bottom <=
-        (window.innerHeight || document.documentElement.clientHeight) &&
-        rect.right <=
-        (window.innerWidth || document.documentElement.clientWidth)
+        rect.bottom <= (innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (innerWidth || document.documentElement.clientWidth)
       ) {
         const key = createKey(count++);
         const blobElem = document.createElement("div");
@@ -312,10 +306,10 @@ window.onkeydown = (ev) => {
       scroller.start(conf.scroll_speed_fast);
       break;
     case keys.scroll_top:
-      window.scroll(0, 0);
+      scroll(0, 0);
       break;
     case keys.scroll_bottom:
-      window.scroll(0, (window as any).scrollMaxY);
+      scroll(0, (window as any).scrollMaxY);
       break;
     case keys.history_forward:
       history.forward();
@@ -369,7 +363,7 @@ const scroller = {
     const tdiff = scroller.endTime - scroller.startTime;
     if (tdiff < 100) {
       scroller.velocity += scroller.acceleration;
-      window.scrollBy(0, scroller.velocity * tdiff);
+      scrollBy(0, scroller.velocity * tdiff);
       scroller.velocity *= conf.scroll_friction;
     }
     if (tdiff < 100 && -0.1 < scroller.velocity && scroller.velocity < 0.1) {

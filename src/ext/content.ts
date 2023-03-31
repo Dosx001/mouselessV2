@@ -40,7 +40,7 @@ const keys = {
   history_forward: "<Alt>l",
   move_tab_left: "<Alt><Shift>P",
   move_tab_right: "<Alt><Shift>N",
-  new_tab: "<Control>Enter",
+  new_tab: "<Ctrl>Enter",
   new_window: "<Alt>w",
   private_window: "<Alt><Shift>W",
   scroll_bottom: "<Alt><Shift>G",
@@ -62,7 +62,7 @@ const bindKeys = async () => {
         case "shift":
           sum++;
           break;
-        case "control":
+        case "ctrl":
           sum += 2;
           break;
         case "alt":

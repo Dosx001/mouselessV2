@@ -7,6 +7,7 @@ const presets = {
     blobs_click: "Enter",
     blobs_focus: "Tab",
     blobs_show: ";",
+    reload: "<Ctrl>;",
     change_tab_left: "<Alt>p",
     change_tab_right: "<Alt>n",
     clipboard_copy: "<Shift>Enter",

@@ -8,8 +8,8 @@ body {
   overflow: hidden auto;
   width: 100%;
 }
-div label {
-  width: 100%;
+div {
+  padding-left: 1rem;
 }
 input {
   display: block;
@@ -21,7 +21,7 @@ textarea {
   resize: vertical;
   width: 95%;
 }
-label {
+label:not(:first-child) {
   display: inline-block;
   margin-left: 0px;
   margin: 12px;

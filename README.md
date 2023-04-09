@@ -25,30 +25,24 @@ with extra features and bug fixes.
 
 ## Key Bindings
 
-| Key Binding     | Action                                |
-| --------------- | ------------------------------------- |
-| ;               | Show blobs                            |
-| Enter           | Click on element                      |
-| \<Control>Enter | Open tab to link                      |
-| \<Alt>u         | Duplicate tab                         |
-| \<Shift>Enter   | Save link from element into clipboard |
-| \<Alt>p         | Paste from clipboard to element       |
-| Tab             | Focus on element                      |
-| Escape          | Unfocus current element               |
-| \<Alt>w         | Open a new window from link           |
-| \<Alt>\<Shift>W | Open a private window from link       |
-| \<Alt>j         | Scroll down                           |
-| \<Alt>\<Shift>J | Scroll down fast                      |
-| \<Alt>k         | Scroll up                             |
-| \<Alt>\<Shift>K | Scroll up fast                        |
-| \<Alt>g         | Scroll to the top of the page         |
-| \<Alt>\<Shift>G | Scroll to the bottom of the page      |
-| \<Alt>p         | Switch to the left tab                |
-| \<Alt>n         | Switch to the right tab               |
-| \<Alt>\<Shift>P | Move current tab to the left          |
-| \<Alt>\<Shift>N | Move current tab to the right         |
-| \<Alt>h         | Go one page back in history           |
-| \<Alt>l         | Go one page forward in history        |
+| Key Binding               | Action                                |
+| ------------------------- | ------------------------------------- |
+| ;                         | Show blobs                            |
+| Ctrl+;                    | Reload blobs                          |
+| Enter                     | Click on element                      |
+| Ctrl+Enter                | Open tab to link                      |
+| Alt+u                     | Duplicate tab                         |
+| Shift+Enter               | Save link from element into clipboard |
+| Alt+p                     | Paste from clipboard to element       |
+| Tab                       | Focus on element                      |
+| Escape                    | Unfocus current element               |
+| Alt+w / Alt+Shift+W       | Open a new/private window from link   |
+| Alt+j / Alt+k             | Scroll down/up                        |
+| Alt+Shift+J / Alt+Shift+K | Scroll down/up fast                   |
+| Alt+g / Alt+Shift+G       | Scroll to the top/bottom of the page  |
+| Alt+p / Alt+n             | Switch to the left/right tab          |
+| Alt+Shift+P / Alt+Shift+N | Move current tab to the left/right    |
+| Alt+l / Alt+h             | Go one page forward/back in history   |
 
 ## Improvements and Fixes
 

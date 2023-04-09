@@ -56,7 +56,7 @@ with extra features and bug fixes.
 
 ### Improve Element Location Seeker
 
-When using mouseless you'll notice as you scroll through a page some elements are not selectable,
+When using mouseless, you'll notice as you scroll through a page some elements are not selectable,
 such elements in a top bar, sidebar, or popup. mouseless finds every element's absolute position
 based on the document and checks if the element is inside your scroll view. While mouselessV2
 finds every element's relative position to the viewport and checks if the element inside the
@@ -68,21 +68,21 @@ viewport.
 
 ### mouseless Randomly Stops Working
 
-This has been fixed with the reomval of On and Off Switch feature. mouselessV2 can still be turn
+This has been fixed with the removal of On and Off Switch feature. mouselessV2 can still be turned
 on and off in the about:addons settings page.
 
 ### Presets
 
 Presets were removed from mouselessV2. However, User Settings are now sync to your Firefox
-account so you can make any changes to key binding and those changes will persist in all instances
+account, so you can make any changes to key binding and those changes will persist in all instances
 of Firefox where you are login.
 
 The reasoning of the removal was I need to come up with new key bindings for each present for
-the new actions I added. That was be difficult work since I don't use any of other keyboard layouts.
-Plus, the reomve has made the code much simpler without presets.
+the new actions I added. That would be difficult work since I don't use any other keyboard layouts.
+Plus, the removal has made the code much simpler without presets.
 
 ### Modifiers
 
-mouselessv2 allows you use multiple modifiers for key bindings
+mouselessv2 allows you to use multiple modifiers for key bindings
 
 e.g. `<Crtl><Alt><Shift>U` `<Crtl>u` `<Crtl><Shift>U` `<Crtl><Alt>u`

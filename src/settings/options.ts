@@ -19,6 +19,7 @@ const presets = {
     move_tab_left: "<Alt><Shift>P",
     move_tab_right: "<Alt><Shift>N",
     new_tab: "<Ctrl>Enter",
+    middle_click: "<Alt>Enter",
     new_window: "<Alt>w",
     private_window: "<Alt><Shift>W",
     scroll_bottom: "<Alt><Shift>G",

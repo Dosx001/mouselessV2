@@ -38,8 +38,11 @@ browser.runtime.onMessage.addListener(async (msg, sender) => {
     case "moveTabRight":
       browser.tabs.move(sender.tab!.id!, { index: await getIndex(sender, 1) });
       break;
-    case "openTab":
+    case "openTabActive":
       browser.tabs.create({ url: msg.href });
+      break;
+    case "openTab":
+      browser.tabs.create({ active: false, url: msg.href });
       break;
     case "duplicateTab":
       browser.tabs.duplicate(

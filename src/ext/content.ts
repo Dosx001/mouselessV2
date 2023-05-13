@@ -42,6 +42,7 @@ const keys = {
   move_tab_left: "<Alt><Shift>P",
   move_tab_right: "<Alt><Shift>N",
   new_tab: "<Ctrl>Enter",
+  middle_click: "<Alt>Enter",
   new_window: "<Alt>w",
   private_window: "<Alt><Shift>W",
   scroll_bottom: "<Alt><Shift>G",
@@ -133,7 +134,10 @@ const blobList = {
           blobList.clipboardPaste();
           break;
         case keys.new_tab:
-          blobList.clickNewTab();
+          blobList.clickNewTab(true);
+          break;
+        case keys.middle_click:
+          blobList.clickNewTab(false);
           break;
         case keys.new_window:
           blobList.newWindow();
@@ -216,13 +220,13 @@ const blobList = {
         : blob.click();
     }
   },
-  clickNewTab: () => {
+  clickNewTab: (active: boolean) => {
     const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
     blobList.hideBlobs();
     const link = (blob as HTMLAnchorElement).href;
     blob.tagName === "A" && link
-      ? sendMessage("openTab", link)
+      ? sendMessage(active ? "openTabActive" : "openTab", link)
       : blobList.click();
   },
   clipboardCopy: () => {

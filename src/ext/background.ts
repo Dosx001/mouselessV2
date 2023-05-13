@@ -43,7 +43,9 @@ browser.runtime.onMessage.addListener(async (msg, sender) => {
       break;
     case "duplicateTab":
       browser.tabs.duplicate(
-        (await browser.tabs.query({ active: true, currentWindow: true }))[0].id!
+        (await browser.tabs.query({ active: true, currentWindow: true }))[0]
+          .id!,
+        { active: false }
       );
       break;
     case "newWindow":

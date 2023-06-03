@@ -10,9 +10,6 @@ let blacklisted = false;
 
 const conf = {
   blacklist: "",
-  scroll_speed: 0.3,
-  scroll_speed_fast: 1.1,
-  scroll_friction: 0.8,
   chars: ";alskdjfiwoe",
   input_whitelist: [
     "checkbox",
@@ -24,13 +21,15 @@ const conf = {
     "file",
     "image",
   ],
+  scroll_friction: 0.8,
+  scroll_speed: 0.3,
+  scroll_speed_fast: 1.1,
 };
 
 const keys = {
   blobs_click: "Enter",
   blobs_focus: "Tab",
   blobs_show: ";",
-  reload: "<Ctrl>;",
   change_tab_left: "<Alt>p",
   change_tab_right: "<Alt>n",
   clipboard_copy: "<Shift>Enter",
@@ -39,12 +38,13 @@ const keys = {
   elem_deselect: "Escape",
   history_back: "<Alt>h",
   history_forward: "<Alt>l",
+  middle_click: "<Alt>Enter",
   move_tab_left: "<Alt><Shift>P",
   move_tab_right: "<Alt><Shift>N",
   new_tab: "<Ctrl>Enter",
-  middle_click: "<Alt>Enter",
   new_window: "<Alt>w",
   private_window: "<Alt><Shift>W",
+  reload: "<Ctrl>;",
   scroll_bottom: "<Alt><Shift>G",
   scroll_down: "<Alt>j",
   scroll_down_fast: "<Alt><Shift>J",

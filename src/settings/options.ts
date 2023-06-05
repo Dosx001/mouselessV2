@@ -28,6 +28,7 @@ const presets = {
     scroll_top: "<Alt>g",
     scroll_up: "<Alt>k",
     scroll_up_fast: "<Alt><Shift>K",
+    search: "<Alt>s",
   },
 };
 

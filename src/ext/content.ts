@@ -41,6 +41,7 @@ const keys = {
   scroll_top: "<Alt>g",
   scroll_up: "<Alt>k",
   scroll_up_fast: "<Alt><Shift>K",
+  search: "<Alt>s",
 };
 
 const bindKeys = async () => {
@@ -238,6 +239,10 @@ const blobList = {
     blob.focus();
     blobList.hideBlobs();
   },
+  search: () => {
+    const text = document.getSelection()!.toString();
+    if (text) window.open(`http://google.com/search?q=${text}`);
+  },
   newWindow: () => {
     const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
@@ -312,6 +317,9 @@ window.onkeydown = (ev) => {
       break;
     case keys.history_back:
       history.back();
+      break;
+    case keys.search:
+      blobList.search();
       break;
     case keys.change_tab_left:
       sendMessage("changeTabLeft");

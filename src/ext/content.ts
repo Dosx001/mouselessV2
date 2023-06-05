@@ -152,7 +152,11 @@ const blobList = {
     blobList.overview.focus();
     let count = 0;
     for (const linkElem of document.querySelectorAll<HTMLElement>(
-      "a, button, input, select, textarea, summary, tp-yt-paper-tab, [role='button']"
+      `a, button, input, select, textarea, summary, [role='button']
+      ${location.host === "www.youtube.com"
+        ? ", tp-yt-paper-tab, yt-chip-cloud-chip-renderer"
+        : ""
+      }`
     )) {
       if (
         linkElem.style.display === "none" ||

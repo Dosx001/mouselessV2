@@ -32,10 +32,10 @@ const presets = {
 };
 
 browser.storage.sync.get().then((sync) => {
-  const set = Object.keys(sync).length ? sync : presets;
   for (const el of document.querySelectorAll("input, textarea")) {
     const [section, name] = el.getAttribute("data-value")!.split(".");
-    (el as HTMLInputElement).value = (set as any)[section][name] ?? "";
+    (el as HTMLInputElement).value =
+      (sync as any)[section][name] ?? (presets as any)[section][name];
   }
 });
 

@@ -11,16 +11,6 @@ let blacklisted = false;
 const conf = {
   blacklist: "",
   chars: ";alskdjfiwoe",
-  input_whitelist: [
-    "checkbox",
-    "radio",
-    "hidden",
-    "submit",
-    "reset",
-    "button",
-    "file",
-    "image",
-  ],
   scroll_friction: 0.8,
   scroll_speed: 0.3,
   scroll_speed_fast: 1.1,
@@ -267,15 +257,13 @@ const blobList = {
 };
 blobList.init();
 
-const isValidElem = (el: HTMLInputElement) => {
+const isValidElem = (el: HTMLElement) => {
   switch (el.tagName) {
     case "TEXTAREA":
     case "SELECT":
     case "CANVAS":
-      return true;
     case "INPUT":
-      if (conf.input_whitelist.indexOf(el.type.toLowerCase()) === -1)
-        return true;
+      return true;
   }
   return el.contentEditable.toLowerCase() === "true";
 };

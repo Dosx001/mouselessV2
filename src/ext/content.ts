@@ -35,6 +35,8 @@ const keys = {
   scroll_bottom: "<Alt><Shift>G",
   scroll_down: "<Alt>j",
   scroll_down_fast: "<Alt><Shift>J",
+  scroll_left: "<Alt><Shift>H",
+  scroll_right: "<Alt><Shift>L",
   scroll_top: "<Alt>g",
   scroll_up: "<Alt>k",
   scroll_up_fast: "<Alt><Shift>K",
@@ -260,10 +262,11 @@ const blobList = {
     blobList.hideBlobs();
     blob.focus();
   },
-  scroll: (speed: number) => {
+  scroll: (speed: number, top: boolean) => {
     window.scrollBy({
-      top: speed,
       behavior: "smooth",
+      left: top ? 0 : speed,
+      top: top ? speed : 0,
     });
   },
 };
@@ -298,16 +301,22 @@ window.onkeydown = (ev) => {
       active.blur();
       break;
     case keys.scroll_up:
-      blobList.scroll(-100);
+      blobList.scroll(-100, true);
       break;
     case keys.scroll_down:
-      blobList.scroll(100);
+      blobList.scroll(100, true);
       break;
     case keys.scroll_up_fast:
-      blobList.scroll(-500);
+      blobList.scroll(-500, true);
       break;
     case keys.scroll_down_fast:
-      blobList.scroll(500);
+      blobList.scroll(500, true);
+      break;
+    case keys.scroll_left:
+      blobList.scroll(-100, false);
+      break;
+    case keys.scroll_right:
+      blobList.scroll(100, false);
       break;
     case keys.scroll_top:
       scroll(0, 0);

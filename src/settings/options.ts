@@ -25,6 +25,8 @@ const presets = {
     scroll_bottom: "<Alt><Shift>G",
     scroll_down: "<Alt>j",
     scroll_down_fast: "<Alt><Shift>J",
+    scroll_left: "<Alt><Shift>H",
+    scroll_right: "<Alt><Shift>L",
     scroll_top: "<Alt>g",
     scroll_up: "<Alt>k",
     scroll_up_fast: "<Alt><Shift>K",

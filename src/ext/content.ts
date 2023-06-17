@@ -11,9 +11,6 @@ let blacklisted = false;
 const conf = {
   blacklist: "",
   chars: ";alskdjfiwoe",
-  scroll_friction: 0.8,
-  scroll_speed: 0.3,
-  scroll_speed_fast: 1.1,
 };
 
 const keys = {
@@ -263,6 +260,12 @@ const blobList = {
     blobList.hideBlobs();
     blob.focus();
   },
+  scroll: (speed: number) => {
+    window.scrollBy({
+      top: speed,
+      behavior: "smooth",
+    });
+  },
 };
 blobList.init();
 
@@ -295,16 +298,16 @@ window.onkeydown = (ev) => {
       active.blur();
       break;
     case keys.scroll_up:
-      scroller.start(-conf.scroll_speed);
+      blobList.scroll(-100);
       break;
     case keys.scroll_down:
-      scroller.start(conf.scroll_speed);
+      blobList.scroll(100);
       break;
     case keys.scroll_up_fast:
-      scroller.start(-conf.scroll_speed_fast);
+      blobList.scroll(-500);
       break;
     case keys.scroll_down_fast:
-      scroller.start(conf.scroll_speed_fast);
+      blobList.scroll(500);
       break;
     case keys.scroll_top:
       scroll(0, 0);
@@ -343,44 +346,4 @@ window.onkeydown = (ev) => {
       return;
   }
   ev.preventDefault();
-};
-
-window.onkeyup = (ev) => {
-  switch (interpretKey(ev)) {
-    case keys.scroll_up:
-    case keys.scroll_down:
-    case keys.scroll_up_fast:
-    case keys.scroll_down_fast:
-      scroller.acceleration = 0;
-  }
-};
-
-const scroller = {
-  raf: 0,
-  acceleration: 0,
-  velocity: 0,
-  startTime: 0,
-  endTime: 0,
-  start: (acceleration: number) => {
-    scroller.acceleration = acceleration;
-    if (location.host === "developer.mozilla.org") scroller.acceleration *= 15;
-    if (scroller.raf === 0) scroller.update();
-  },
-  update: () => {
-    const tdiff = scroller.endTime - scroller.startTime;
-    if (tdiff < 100) {
-      scroller.velocity += scroller.acceleration;
-      scrollBy(0, scroller.velocity * tdiff);
-      scroller.velocity *= conf.scroll_friction;
-    }
-    if (tdiff < 100 && -0.1 < scroller.velocity && scroller.velocity < 0.1) {
-      scroller.velocity = 0;
-      cancelAnimationFrame(scroller.raf);
-      scroller.raf = 0;
-    } else {
-      scroller.startTime = scroller.endTime;
-      scroller.endTime = new Date().getTime();
-      scroller.raf = requestAnimationFrame(scroller.update);
-    }
-  },
 };

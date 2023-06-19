@@ -28,21 +28,21 @@ with extra features and bug fixes.
 | Key Binding               | Action                                |
 | ------------------------- | ------------------------------------- |
 | ;                         | Show blobs                            |
-| Ctrl+;                    | Reload blobs                          |
 | Enter                     | Click on element                      |
+| Ctrl+;                    | Reload blobs                          |
 | Ctrl+Enter                | Open tab to link                      |
-| Alt+u                     | Duplicate tab                         |
 | Shift+Enter               | Save link from element into clipboard |
 | Alt+p                     | Paste from clipboard to element       |
 | Tab                       | Focus on element                      |
 | Escape                    | Unfocus current element               |
 | Alt+w / Alt+Shift+W       | Open a new/private window from link   |
+| Alt+u                     | Duplicate tab                         |
+| Alt+l / Alt+h             | Go one page forward/back in history   |
 | Alt+j / Alt+k             | Scroll down/up                        |
 | Alt+Shift+J / Alt+Shift+K | Scroll down/up fast                   |
 | Alt+g / Alt+Shift+G       | Scroll to the top/bottom of the page  |
 | Alt+p / Alt+n             | Switch to the left/right tab          |
 | Alt+Shift+P / Alt+Shift+N | Move current tab to the left/right    |
-| Alt+l / Alt+h             | Go one page forward/back in history   |
 
 ## Improvements and Fixes
 

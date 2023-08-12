@@ -38,7 +38,7 @@ browser.storage.sync.get().then((sync) => {
   for (const el of document.querySelectorAll("input, textarea")) {
     const [section, name] = el.getAttribute("data-value")!.split(".");
     (el as HTMLInputElement).value =
-      (sync as any)[section][name] ?? (presets as any)[section][name];
+      (sync as any)[section]?.[name] ?? (presets as any)[section][name];
   }
 });
 

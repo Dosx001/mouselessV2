@@ -46,7 +46,7 @@ const keys = {
 const bindKeys = async () => {
   const sync = await browser.storage.sync.get();
   for (const name of Object.keys(keys)) {
-    const hotkey = sync[name] ?? keys[name as keyof typeof keys];
+    const hotkey = sync.keys?.[name] ?? keys[name as keyof typeof keys];
     let sum = 0;
     for (const mod of hotkey.match(/<[a-zA-Z]+>/g) ?? []) {
       switch (mod.substring(1, mod.length - 1).toLowerCase()) {

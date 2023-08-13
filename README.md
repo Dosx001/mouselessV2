@@ -52,9 +52,9 @@ with extra features and bug fixes.
 ### Improve Element Location Seeker
 
 When using mouseless, you'll notice as you scroll through a page some elements are not selectable,
-such elements in a top bar, sidebar, or popup. mouseless finds every element's absolute position
+such as elements in a top bar, sidebar, or popup. mouseless finds every element's absolute position
 based on the document and checks if the element is inside your scroll view. While mouselessV2
-finds every element's relative position to the viewport and checks if the element inside the
+finds every element's relative position to the viewport and checks if the element is inside the
 viewport.
 
 | mouselessV2                          | mouseless                        |
@@ -68,11 +68,11 @@ on and off in the about:addons settings page.
 
 ### Presets
 
-Presets were removed from mouselessV2. However, User Settings are now sync to your Firefox
+Presets were removed from mouselessV2. However, User Settings now syncs to your Firefox
 account, so you can make any changes to key binding and those changes will persist in all instances
 of Firefox where you are login.
 
-The reasoning of the removal was I need to come up with new key bindings for each present for
+The reasoning for the removal was I need to come up with new key bindings for each present for
 the new actions I added. That would be difficult work since I don't use any other keyboard layouts.
 Plus, the removal has made the code much simpler without presets.
 

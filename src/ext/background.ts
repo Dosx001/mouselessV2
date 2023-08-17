@@ -4,7 +4,7 @@ const getIndex = async (sender: browser.runtime.MessageSender, off: number) => {
   return idx === -1 ? tabCount - 1 : tabCount === idx ? 0 : idx;
 };
 
-const file = { file: "ext/styles.css" };
+const file = { file: "content.css" };
 browser.tabs.query({}).then((tabs) => {
   for (const tab of tabs) browser.tabs.insertCSS(tab.id!, file);
 });
@@ -48,7 +48,7 @@ browser.runtime.onMessage.addListener(async (msg, sender) => {
       browser.tabs.duplicate(
         (await browser.tabs.query({ active: true, currentWindow: true }))[0]
           .id!,
-        { active: false }
+        { active: false },
       );
       break;
     case "newWindow":

@@ -9,17 +9,17 @@
         "<all_urls>"
       ],
       "js": [
-        "ext/content.js"
+        "content.js"
       ]
     }
   ],
   "background": {
     "scripts": [
-      "ext/background.js"
+      "background.js"
     ]
   },
   "options_ui": {
-    "page": "settings/options.html"
+    "page": "src/settings/options.html"
   },
   "icons": {
     "32": "assets/icon-32.png",
@@ -34,7 +34,7 @@
       "64": "assets/icon-64.png",
       "128": "assets/icon-128.png"
     },
-    "default_popup": "./popup/index.html",
+    "default_popup": "src/popup/index.html",
     "browser_style": true
   },
   "browser_specific_settings": {

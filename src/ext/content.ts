@@ -1,3 +1,5 @@
+import "./styles.scss";
+
 const sendMessage = (action: string, href = "") => {
   browser.runtime.sendMessage({
     action: action,
@@ -106,8 +108,9 @@ const blobList = {
     blobList.overview.type = "text";
     blobList.overview.className = "mlv2Overview";
     blobList.overview.oninput = (ev) => {
-      (ev.target as HTMLElement).style.width = `${(ev.target as HTMLInputElement).value.length + 1
-        }ch !important`;
+      (ev.target as HTMLElement).style.width = `${
+        (ev.target as HTMLInputElement).value.length + 1
+      }ch !important`;
     };
     blobList.overview.onkeydown = (ev) => {
       switch (interpretKey(ev)) {
@@ -153,10 +156,11 @@ const blobList = {
     let count = 0;
     for (const linkElem of document.querySelectorAll<HTMLElement>(
       `a, button, input, select, textarea, summary, [role='button']
-      ${location.host === "www.youtube.com"
-        ? ", tp-yt-paper-tab, yt-chip-cloud-chip-renderer"
-        : ""
-      }`
+      ${
+        location.host === "www.youtube.com"
+          ? ", tp-yt-paper-tab, yt-chip-cloud-chip-renderer"
+          : ""
+      }`,
     )) {
       if (
         linkElem.style.display === "none" ||
@@ -199,17 +203,17 @@ const blobList = {
     else {
       blobList.hideBlobs();
       blob.tagName === "INPUT" &&
-        ![
-          "button",
-          "checkbox",
-          "color",
-          "file",
-          "hidden",
-          "image",
-          "radio",
-          "reset",
-          "submit",
-        ].includes((blob as HTMLInputElement).type)
+      ![
+        "button",
+        "checkbox",
+        "color",
+        "file",
+        "hidden",
+        "image",
+        "radio",
+        "reset",
+        "submit",
+      ].includes((blob as HTMLInputElement).type)
         ? blob.focus()
         : blob.click();
     }

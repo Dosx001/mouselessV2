@@ -22,17 +22,17 @@
     "page": "src/settings/options.html"
   },
   "icons": {
-    "32": "assets/icon-32.png",
-    "48": "assets/icon-48.png",
-    "64": "assets/icon-64.png",
-    "128": "assets/icon-128.png"
+    "32": "icon-32.png",
+    "48": "icon-48.png",
+    "64": "icon-64.png",
+    "128": "icon-128.png"
   },
   "browser_action": {
     "default_icon": {
-      "32": "assets/icon-32.png",
-      "48": "assets/icon-48.png",
-      "64": "assets/icon-64.png",
-      "128": "assets/icon-128.png"
+      "32": "icon-32.png",
+      "48": "icon-48.png",
+      "64": "icon-64.png",
+      "128": "icon-128.png"
     },
     "default_popup": "src/popup/index.html",
     "browser_style": true

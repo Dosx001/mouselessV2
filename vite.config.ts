@@ -12,9 +12,8 @@ export default defineConfig({
         options: "./src/settings/options.html",
       },
       output: {
-        entryFileNames: "[name].js",
-        chunkFileNames: "[name].js",
         assetFileNames: "[name][extname]",
+        entryFileNames: "[name].js",
       },
     },
   },

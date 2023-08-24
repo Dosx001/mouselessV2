@@ -1,13 +1,14 @@
 {
   "name": "mouselessV2",
-  "version": "1.0.0",
-  "description": "Quick keyboard access to links and other interactive elements",
+  "version": "2.5.1",
+  "description": "Browse the web, mouse not required.",
   "scripts": {
     "build": "vite build",
     "tar": "tar czvf mouselessV2.tar.gz vite.config.ts src build.sh package.json tsconfig.json yarn.lock README_FIREFOX.md",
     "zip": "web-ext build -s dist --overwrite-dest"
   },
   "devDependencies": {
+    "@samrum/vite-plugin-web-extension": "^5.0.0",
     "@types/firefox-webext-browser": "^111.0.1",
     "@typescript-eslint/eslint-plugin": "^6.2.0",
     "@typescript-eslint/parser": "^6.2.0",

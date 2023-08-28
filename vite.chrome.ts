@@ -19,7 +19,7 @@ export default defineConfig({
         name: pkg.name,
         version: pkg.version,
         description: pkg.description,
-        manifest_version: 2,
+        manifest_version: 3,
         content_scripts: [
           {
             matches: ["<all_urls>"],
@@ -27,7 +27,7 @@ export default defineConfig({
           },
         ],
         background: {
-          scripts: ["src/ext/background.ts"],
+          service_worker: "src/ext/service-worker.ts",
         },
         options_ui: {
           page: "src/settings/options.html",
@@ -38,7 +38,7 @@ export default defineConfig({
           "64": "icon-64.png",
           "128": "icon-128.png",
         },
-        browser_action: {
+        action: {
           default_icon: {
             "32": "icon-32.png",
             "48": "icon-48.png",
@@ -47,19 +47,12 @@ export default defineConfig({
           },
           default_popup: "src/popup/index.html",
         },
-        browser_specific_settings: {
-          gecko: {
-            id: "@mouselessV2",
-          },
-        },
         permissions: [
-          "<all_urls>",
-          "activeTab",
-          "clipboardRead",
-          "clipboardWrite",
+          "scripting",
           "storage",
           "tabs",
         ],
+        host_permissions: ["*://*/*"]
       },
     }),
   ],

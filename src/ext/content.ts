@@ -1,7 +1,7 @@
 import "./styles.scss";
 
 const sendMessage = (action: string, href = "") => {
-  browser.runtime.sendMessage({
+  chrome.runtime.sendMessage({
     action: action,
     href: href,
   });
@@ -46,7 +46,7 @@ const keys = {
 };
 
 const bindKeys = async () => {
-  const sync = await browser.storage.sync.get();
+  const sync = await chrome.storage.sync.get();
   for (const name of Object.keys(keys)) {
     const hotkey = sync.keys?.[name] ?? keys[name as keyof typeof keys];
     let sum = 0;
@@ -79,7 +79,7 @@ const bindKeys = async () => {
   }
 };
 bindKeys();
-browser.storage.onChanged.addListener(bindKeys);
+chrome.storage.onChanged.addListener(bindKeys);
 
 const interpretKey = (ev: KeyboardEvent) => {
   let sum = 0;

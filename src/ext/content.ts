@@ -1,7 +1,8 @@
+import * as browser from "/node_modules/webextension-polyfill/dist/browser-polyfill.min.js"
 import "./styles.scss";
 
 const sendMessage = (action: string, href = "") => {
-  chrome.runtime.sendMessage({
+  browser.runtime.sendMessage({
     action: action,
     href: href,
   });
@@ -46,7 +47,7 @@ const keys = {
 };
 
 const bindKeys = async () => {
-  const sync = await chrome.storage.sync.get();
+  const sync = await browser.storage.sync.get();
   for (const name of Object.keys(keys)) {
     const hotkey = sync.keys?.[name] ?? keys[name as keyof typeof keys];
     let sum = 0;
@@ -79,7 +80,7 @@ const bindKeys = async () => {
   }
 };
 bindKeys();
-chrome.storage.onChanged.addListener(bindKeys);
+browser.storage.onChanged.addListener(bindKeys);
 
 const interpretKey = (ev: KeyboardEvent) => {
   let sum = 0;

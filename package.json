@@ -11,11 +11,13 @@
   "devDependencies": {
     "@samrum/vite-plugin-web-extension": "^5.0.0",
     "@types/firefox-webext-browser": "^111.0.1",
+    "@types/webextension-polyfill": "^0.10.2",
     "@typescript-eslint/eslint-plugin": "^6.2.0",
     "@typescript-eslint/parser": "^6.2.0",
     "eslint": "^8.45.0",
     "sass": "^1.65.1",
     "typescript": "^5.1.6",
-    "vite": "^4.4.9"
+    "vite": "^4.4.9",
+    "webextension-polyfill": "^0.10.0"
   }
 }

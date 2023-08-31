@@ -259,6 +259,11 @@
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.5.0.tgz#591c1ce3a702c45ee15f47a42ade72c2fd78978a"
   integrity sha512-G8hZ6XJiHnuhQKR7ZmysCeJWE08o8T0AXtk5darsCaTVsYZhhgUrq53jizaR2FvsoeCwJhlmwTjkXBY5Pn/ZHw==
 
+"@types/webextension-polyfill@^0.10.2":
+  version "0.10.2"
+  resolved "https://registry.yarnpkg.com/@types/webextension-polyfill/-/webextension-polyfill-0.10.2.tgz#14175d96d76339fce4d2b9b7837846148296cb5a"
+  integrity sha512-L+T72DVTi/1azY6gw7PRmL49kvobLKQQWfOmHDBRSCkAvaCV4wk222J3ZODYA9Gf/UqUvtItu8FPJgWX5ktO9g==
+
 "@typescript-eslint/eslint-plugin@^6.2.0":
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-6.2.0.tgz#57047c400be0632d4797ac081af8d399db3ebc3b"
@@ -1209,6 +1214,11 @@ vite@^4.3.2, vite@^4.4.9:
     rollup "^3.27.1"
   optionalDependencies:
     fsevents "~2.3.2"
+
+webextension-polyfill@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/webextension-polyfill/-/webextension-polyfill-0.10.0.tgz#ccb28101c910ba8cf955f7e6a263e662d744dbb8"
+  integrity sha512-c5s35LgVa5tFaHhrZDnr3FpQpjj1BB+RXhLTYUxGqBVN460HkbM8TBtEqdXWbpTKfzwCcjAZVF7zXCYSKtcp9g==
 
 which@^2.0.1:
   version "2.0.2"

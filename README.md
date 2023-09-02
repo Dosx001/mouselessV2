@@ -1,4 +1,4 @@
-# ![logo](public/assets/icon-32.png) mouselessV2
+# ![logo](public/icon-32.png) mouselessV2
 
 [![Firefox add-on](https://user-images.githubusercontent.com/585534/107280546-7b9b2a00-6a26-11eb-8f9f-f95932f4bfec.png)](https://addons.mozilla.org/en-US/firefox/addon/mouselessv2)
 

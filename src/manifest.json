@@ -1,0 +1,42 @@
+{
+  "{{chrome}}.manifest_version": 3,
+  "{{firefox}}.manifest_version": 2,
+  "icons": {
+    "32": "icon-32.png",
+    "48": "icon-48.png",
+    "64": "icon-64.png",
+    "128": "icon-128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/ext/content.ts"]
+    }
+  ],
+  "{{chrome}}.action": {
+    "default_popup": "src/popup/index.html"
+  },
+  "{{firefox}}.browser_action": {
+    "default_popup": "src/popup/index.html"
+  },
+  "background": {
+    "{{chrome}}.service_worker": "src/ext/service-worker.ts",
+    "{{firefox}}.scripts": ["src/ext/background.ts"]
+  },
+  "options_ui": { "page": "src/settings/options.html" },
+  "{{chrome}}.permissions": ["scripting", "storage", "tabs"],
+  "{{firefox}}.permissions": [
+    "<all_urls>", 
+    "activeTab",
+    "clipboardRead",
+    "clipboardWrite",
+    "storage",
+    "tabs"
+  ],
+  "{{chrome}}.host_permissions": ["<all_urls>"],
+  "{{firefox}}.browser_specific_settings": {
+    "gecko": {
+      "id": "@mouselessV2"
+    }
+  }
+}

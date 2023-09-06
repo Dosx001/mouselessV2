@@ -5,7 +5,7 @@ const target = process.env.TARGET || "firefox";
 
 function generateManifest() {
   // readJsonFile instead of import() to avoid caching while development
-  const manifest = readJsonFile("manifest.json");
+  const manifest = readJsonFile("src/manifest.json");
   const pkg = readJsonFile("package.json");
   return {
     ...manifest,

@@ -2,8 +2,14 @@
   "name": "mouselessV2",
   "version": "2.5.1",
   "description": "Browse the web, mouse not required.",
+  "type": "module",
   "scripts": {
     "build": "vite build",
+    "build:chrome": "TARGET=chrome npm run build",
+    "watch": "vite build --watch --mode development",
+    "watch:chrome": "TARGET=chrome npm run watch",
+    "dev": "vite dev",
+    "dev:chrome": "TARGET=chrome npm run dev",
     "zip": "web-ext build -s dist --overwrite-dest"
   },
   "devDependencies": {

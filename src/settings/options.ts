@@ -1,4 +1,5 @@
 import "./styles.scss";
+import browser from "webextension-polyfill";
 
 const presets = {
   conf: {

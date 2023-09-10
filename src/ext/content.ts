@@ -1,3 +1,4 @@
+import browser from "webextension-polyfill";
 import "./styles.scss";
 
 const sendMessage = (action: string, href = "") => {
@@ -6,7 +7,6 @@ const sendMessage = (action: string, href = "") => {
     href: href,
   });
 };
-sendMessage("css");
 
 let blacklisted = false;
 
@@ -158,7 +158,7 @@ const blobList = {
       `a, button, input, select, textarea, summary, [role='button']
       ${
         location.host === "www.youtube.com"
-          ? ", tp-yt-paper-tab, yt-chip-cloud-chip-renderer"
+          ? ", yt-tab-shape, yt-chip-cloud-chip-renderer"
           : ""
       }`,
     )) {
@@ -202,18 +202,20 @@ const blobList = {
       location.href = (blob as HTMLAnchorElement).href;
     else {
       blobList.hideBlobs();
-      blob.tagName === "INPUT" &&
-      ![
-        "button",
-        "checkbox",
-        "color",
-        "file",
-        "hidden",
-        "image",
-        "radio",
-        "reset",
-        "submit",
-      ].includes((blob as HTMLInputElement).type)
+      blob.tagName === "TEXTAREA" ||
+      (blob.tagName === "INPUT" &&
+        ![
+          "button",
+          "textarea",
+          "checkbox",
+          "color",
+          "file",
+          "hidden",
+          "image",
+          "radio",
+          "reset",
+          "submit",
+        ].includes((blob as HTMLInputElement).type))
         ? blob.focus()
         : blob.click();
     }
@@ -326,7 +328,11 @@ window.onkeydown = (ev) => {
       scroll(0, 0);
       break;
     case keys.scroll_bottom:
-      scroll(0, (window as any).scrollMaxY);
+      scroll(
+        0,
+        (window as any).scrollMaxY ??
+          document.body.scrollHeight - window.innerHeight,
+      );
       break;
     case keys.history_forward:
       history.forward();

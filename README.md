@@ -80,4 +80,4 @@ Plus, the removal has made the code much simpler without presets.
 
 mouselessv2 allows you to use multiple modifiers for key bindings
 
-e.g. `<Crtl><Alt><Shift>U` `<Crtl>u` `<Crtl><Shift>U` `<Crtl><Alt>u`
+e.g. `<Ctrl><Alt><Shift>U` `<Ctrl>u` `<Ctrl><Shift>U` `<Ctrl><Alt>u`

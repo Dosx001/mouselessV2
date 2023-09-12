@@ -23,10 +23,12 @@
     "{{chrome}}.service_worker": "src/ext/service-worker.ts",
     "{{firefox}}.scripts": ["src/ext/background.ts"]
   },
-  "options_ui": { "page": "src/settings/options.html" },
+  "options_ui": {
+    "page": "src/settings/options.html"
+  },
   "{{chrome}}.permissions": ["scripting", "storage", "tabs"],
   "{{firefox}}.permissions": [
-    "<all_urls>", 
+    "<all_urls>",
     "activeTab",
     "clipboardRead",
     "clipboardWrite",

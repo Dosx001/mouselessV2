@@ -327,7 +327,11 @@ window.onkeydown = (ev) => {
       scroll(0, 0);
       break;
     case keys.scroll_bottom:
-      scroll(0, (window as any).scrollMaxY ?? document.body.scrollHeight - window.innerHeight);
+      scroll(
+        0,
+        (window as any).scrollMaxY ??
+          document.body.scrollHeight - window.innerHeight,
+      );
       break;
     case keys.history_forward:
       history.forward();
@@ -361,4 +365,3 @@ window.onkeydown = (ev) => {
   }
   ev.preventDefault();
 };
-

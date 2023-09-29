@@ -6,6 +6,11 @@ body {
 h1 {
   margin: 0;
   text-align: center;
+  font-size: 28px;
+}
+.btn-container {
+  display: flex;
+  flex-direction: column;
 }
 .btn {
   background: black;
@@ -13,9 +18,9 @@ h1 {
   border: 1px solid darkgray;
   color: darkgray;
   cursor: pointer;
-  font-size: 1.25rem;
-  margin-top: 5px;
-  padding: 2px;
+  font-size: 1.1rem;
+  margin-top: 8px;
+  padding: 4px;
   text-align: center;
   text-decoration: none;
 }

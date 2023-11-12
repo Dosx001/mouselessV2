@@ -156,7 +156,7 @@ const blobList = {
       `a, button, input, select, textarea, summary, [role='button']
       ${
         location.host === "www.youtube.com"
-          ? ", tp-yt-paper-tab, yt-chip-cloud-chip-renderer"
+          ? ", yt-tab-shape, yt-chip-cloud-chip-renderer"
           : ""
       }`,
     )) {

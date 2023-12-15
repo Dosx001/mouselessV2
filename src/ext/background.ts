@@ -13,6 +13,15 @@ browser.tabs.onUpdated.addListener((_, info) => {
   if (info.url) browser.tabs.insertCSS(file);
 });
 
+browser.tabs.onCreated.addListener((tab) => {
+  const id = setInterval(() => {
+    if (tab.url) {
+      browser.tabs.insertCSS(tab.id!, file);
+      clearInterval(id);
+    }
+  }, 250);
+});
+
 browser.runtime.onMessage.addListener(async (msg, sender) => {
   switch (msg.action) {
     case "css":
@@ -42,18 +51,14 @@ browser.runtime.onMessage.addListener(async (msg, sender) => {
       browser.tabs.create({ url: msg.href });
       break;
     case "openTab":
-      browser.tabs
-        .create({ active: false, url: msg.href })
-        .then((tab) => browser.tabs.insertCSS(tab.id!, file));
+      browser.tabs.create({ active: false, url: msg.href });
       break;
     case "duplicateTab":
-      browser.tabs
-        .duplicate(
-          (await browser.tabs.query({ active: true, currentWindow: true }))[0]
-            .id!,
-          { active: false },
-        )
-        .then((tab) => browser.tabs.insertCSS(tab.id!, file));
+      browser.tabs.duplicate(
+        (await browser.tabs.query({ active: true, currentWindow: true }))[0]
+          .id!,
+        { active: false },
+      );
       break;
     case "newWindow":
       browser.windows.create({ url: msg.href });

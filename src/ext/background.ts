@@ -15,10 +15,8 @@ browser.tabs.onUpdated.addListener((_, info) => {
 
 browser.tabs.onCreated.addListener((tab) => {
   const id = setInterval(() => {
-    if (tab.url) {
-      browser.tabs.insertCSS(tab.id!, file);
-      clearInterval(id);
-    }
+    if (tab.url)
+      browser.tabs.insertCSS(tab.id!, file).then(() => clearInterval(id));
   }, 250);
 });
 

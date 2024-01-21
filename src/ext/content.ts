@@ -199,18 +199,20 @@ const blobList = {
       location.href = (blob as HTMLAnchorElement).href;
     else {
       blobList.hideBlobs();
-      blob.tagName === "INPUT" &&
-      ![
-        "button",
-        "checkbox",
-        "color",
-        "file",
-        "hidden",
-        "image",
-        "radio",
-        "reset",
-        "submit",
-      ].includes((blob as HTMLInputElement).type)
+      blob.tagName === "TEXTAREA" ||
+      (blob.tagName === "INPUT" &&
+        ![
+          "button",
+          "textarea",
+          "checkbox",
+          "color",
+          "file",
+          "hidden",
+          "image",
+          "radio",
+          "reset",
+          "submit",
+        ].includes((blob as HTMLInputElement).type))
         ? blob.focus()
         : blob.click();
     }

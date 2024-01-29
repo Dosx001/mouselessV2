@@ -7,7 +7,6 @@ const sendMessage = (action: string, href = "") => {
     href: href,
   });
 };
-sendMessage("css");
 
 let blacklisted = false;
 
@@ -159,7 +158,7 @@ const blobList = {
       `a, button, input, select, textarea, summary, [role='button']
       ${
         location.host === "www.youtube.com"
-          ? ", tp-yt-paper-tab, yt-chip-cloud-chip-renderer"
+          ? ", yt-tab-shape, yt-chip-cloud-chip-renderer"
           : ""
       }`,
     )) {
@@ -203,18 +202,20 @@ const blobList = {
       location.href = (blob as HTMLAnchorElement).href;
     else {
       blobList.hideBlobs();
-      blob.tagName === "INPUT" &&
-      ![
-        "button",
-        "checkbox",
-        "color",
-        "file",
-        "hidden",
-        "image",
-        "radio",
-        "reset",
-        "submit",
-      ].includes((blob as HTMLInputElement).type)
+      blob.tagName === "TEXTAREA" ||
+      (blob.tagName === "INPUT" &&
+        ![
+          "button",
+          "textarea",
+          "checkbox",
+          "color",
+          "file",
+          "hidden",
+          "image",
+          "radio",
+          "reset",
+          "submit",
+        ].includes((blob as HTMLInputElement).type))
         ? blob.focus()
         : blob.click();
     }

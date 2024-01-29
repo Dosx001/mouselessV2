@@ -4,38 +4,25 @@ const getIndex = async (sender: chrome.runtime.MessageSender, off: number) => {
   return idx === -1 ? tabCount - 1 : tabCount === idx ? 0 : idx;
 };
 
-const file = "index.css";
+const loadCss = (tab: chrome.tabs.Tab) => {
+  const id = setInterval(() => {
+    if (tab.url)
+      chrome.tabs
+        .insertCSS(tab.id!, { file: "ext/styles.css" })
+        .finally(() => clearInterval(id));
+  }, 250);
+};
 
 chrome.tabs.query({}).then((tabs) => {
-  for (const tab of tabs) {
-    if (tab.url === undefined) continue;
-    chrome.scripting
-      .insertCSS({ files: [file], target: { tabId: tab.id! } })
-      .catch((err) =>
-        console.log("error: " + err + " In " + new URL(tab.url!).hostname),
-      );
-  }
+  for (const tab of tabs) loadCss(tab);
 });
 
-chrome.tabs.onUpdated.addListener((tabId, info, tab) => {
-  if (tab.url === undefined) return;
-  chrome.scripting
-    .insertCSS({ files: [file], target: { tabId: tabId } })
-    .catch((err) =>
-      console.log("error: " + err + " In " + new URL(tab.url!).hostname),
-    );
-});
+chrome.tabs.onUpdated.addListener((tabId, info, tab) => loadCss(tab));
 
 chrome.runtime.onMessage.addListener(async (message, sender) => {
   switch (message.action) {
     case "css":
-      if (sender.tab!.url === undefined) break;
-      chrome.scripting
-        .insertCSS({
-          files: [file],
-          target: { tabId: sender.tab!.id! },
-        })
-        .catch((err) => console.log("error: " + err));
+      loadCss(sender.tab!);
       break;
     case "changeTabLeft": {
       const query = { currentWindow: true, index: await getIndex(sender, -1) };

@@ -7,7 +7,7 @@ const getIndex = async (sender: chrome.runtime.MessageSender, off: number) => {
 const loadCss = (tab: chrome.tabs.Tab) => {
   const id = setInterval(() => {
     if (tab.url)
-      chrome.tabs
+      chrome.scripting
         .insertCSS(tab.id!, { file: "ext/styles.css" })
         .finally(() => clearInterval(id));
   }, 250);
@@ -18,6 +18,7 @@ chrome.tabs.query({}).then((tabs) => {
 });
 
 chrome.tabs.onUpdated.addListener((tabId, info, tab) => loadCss(tab));
+
 
 chrome.runtime.onMessage.addListener(async (message, sender) => {
   switch (message.action) {

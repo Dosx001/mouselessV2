@@ -13,6 +13,7 @@ const conf = {
 };
 
 const keys = {
+  attach_tab: "<Alt><Shift>D",
   blobs_click: "Enter",
   blobs_focus: "Tab",
   blobs_show: ";",
@@ -20,6 +21,7 @@ const keys = {
   change_tab_right: "<Alt>n",
   clipboard_copy: "<Shift>Enter",
   clipboard_paste: "<Alt>p",
+  detach_tab: "<Alt>d",
   duplicate_tab: "<Alt>u",
   elem_deselect: "Escape",
   history_back: "<Alt>h",
@@ -350,6 +352,12 @@ window.onkeydown = (ev) => {
       break;
     case keys.duplicate_tab:
       sendMessage("duplicateTab");
+      break;
+    case keys.attach_tab:
+      sendMessage("attachTab");
+      break;
+    case keys.detach_tab:
+      sendMessage("detachTab");
       break;
     case keys.reload:
       sendMessage("css");

@@ -21,8 +21,23 @@ browser.tabs.onUpdated.addListener((_, __, tab) => loadCss(tab));
 
 browser.tabs.onCreated.addListener(loadCss);
 
+const tabWin = new Map<number, number>();
+browser.tabs.onRemoved.addListener((id) => tabWin.delete(id));
+
 browser.runtime.onMessage.addListener(async (msg, sender) => {
   switch (msg.action) {
+    case "attachTab": {
+      const winId = tabWin.get(sender.tab!.id!);
+      if (winId) {
+        browser.tabs.move(sender.tab!.id!, {
+          windowId: winId!,
+          index: -1,
+        });
+        browser.tabs.update(sender.tab!.id!, { active: true });
+        tabWin.delete(sender.tab!.id!);
+      }
+      break;
+    }
     case "css":
       loadCss(sender.tab!);
       break;
@@ -38,6 +53,13 @@ browser.runtime.onMessage.addListener(async (msg, sender) => {
       browser.tabs.update((await browser.tabs.query(query))[0].id!, {
         active: true,
       });
+      break;
+    }
+    case "detachTab": {
+      await browser.windows.create({ tabId: sender.tab!.id });
+      const tab = await browser.tabs.create({ url: "about:blank" });
+      browser.tabs.remove(tab.id!);
+      tabWin.set(sender.tab!.id!, sender.tab!.windowId!);
       break;
     }
     case "moveTabLeft":

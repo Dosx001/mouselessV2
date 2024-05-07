@@ -4,6 +4,7 @@ const presets = {
     chars: ";alskdjfiwoe",
   },
   keys: {
+    attach_tab: "<Alt><Shift>D",
     blobs_click: "Enter",
     blobs_focus: "Tab",
     blobs_show: ";",
@@ -11,6 +12,7 @@ const presets = {
     change_tab_right: "<Alt>n",
     clipboard_copy: "<Shift>Enter",
     clipboard_paste: "<Alt>p",
+    detach_tab: "<Alt>d",
     duplicate_tab: "<Alt>u",
     elem_deselect: "Escape",
     history_back: "<Alt>h",

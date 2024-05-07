@@ -39,6 +39,7 @@ with extra features and bug fixes.
 | Escape                    | Unfocus current element               |
 | Alt+w / Alt+Shift+W       | Open a new/private window from link   |
 | Alt+s                     | Google search highlighted text        |
+| Alt+d / Alt+Shift+D       | Detach/reattach tab                   |
 | Alt+u                     | Duplicate tab                         |
 | Alt+l / Alt+h             | Go one page forward/back in history   |
 | Alt+j / Alt+k             | Scroll down/up                        |

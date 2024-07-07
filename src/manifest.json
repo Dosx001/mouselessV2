@@ -1,40 +1,37 @@
 {
   "manifest_version": 2,
-  "name": "mouselessV2",
-  "version": "2.9.0",
-  "description": "Browse the web, mouse not required.",
   "content_scripts": [
     {
       "matches": [
         "<all_urls>"
       ],
       "js": [
-        "ext/content.js"
+        "src/ext/content.ts"
       ]
     }
   ],
   "background": {
     "scripts": [
-      "ext/background.js"
+      "src/ext/background.ts"
     ]
   },
   "options_ui": {
-    "page": "settings/options.html"
+    "page": "src/settings/options.html"
   },
   "icons": {
-    "32": "assets/icon-32.png",
-    "48": "assets/icon-48.png",
-    "64": "assets/icon-64.png",
-    "128": "assets/icon-128.png"
+    "32": "icon-32.png",
+    "48": "icon-48.png",
+    "64": "icon-64.png",
+    "128": "icon-128.png"
   },
   "browser_action": {
     "default_icon": {
-      "32": "assets/icon-32.png",
-      "48": "assets/icon-48.png",
-      "64": "assets/icon-64.png",
-      "128": "assets/icon-128.png"
+      "32": "icon-32.png",
+      "48": "icon-48.png",
+      "64": "icon-64.png",
+      "128": "icon-128.png"
     },
-    "default_popup": "./popup/index.html",
+    "default_popup": "src/popup/index.html",
     "browser_style": true
   },
   "browser_specific_settings": {

@@ -1,8 +1,6 @@
+/dist
 /node_modules
 /web-ext-artifacts
-*.js
-*.css
-*.css.map
 *.tar.gz
 yarn-debug.log*
 yarn-error.log*

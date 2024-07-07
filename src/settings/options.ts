@@ -1,3 +1,5 @@
+import "./styles.scss";
+
 const presets = {
   conf: {
     blacklist: "",

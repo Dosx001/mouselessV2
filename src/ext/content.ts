@@ -1,3 +1,5 @@
+import "./styles.scss";
+
 const sendMessage = (action: string, href = "") => {
   browser.runtime.sendMessage({
     action: action,

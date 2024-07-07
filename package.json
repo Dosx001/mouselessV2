@@ -8,10 +8,11 @@
     "sass": "sass --update src:dist"
   },
   "devDependencies": {
-    "@types/firefox-webext-browser": "^111.0.1",
-    "@typescript-eslint/eslint-plugin": "^6.2.0",
-    "@typescript-eslint/parser": "^6.2.0",
-    "eslint": "^8.45.0",
-    "typescript": "^5.1.6"
+    "@types/firefox-webext-browser": "^120.0.4",
+    "@typescript-eslint/eslint-plugin": "^7.15.0",
+    "@typescript-eslint/parser": "^7.15.0",
+    "eslint": "^9.6.0",
+    "globals": "^15.8.0",
+    "typescript": "^5.5.3"
   }
 }

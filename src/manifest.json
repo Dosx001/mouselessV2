@@ -45,5 +45,49 @@
     "clipboardWrite",
     "storage",
     "tabs"
-  ]
+  ],
+  "commands": {
+    "changeTabLeft": {
+      "description": "Change to tab left",
+      "suggested_key": {
+        "default": "Alt+N"
+      }
+    },
+    "changeTabRight": {
+      "description": "Change to tab right",
+      "suggested_key": {
+        "default": "Alt+P"
+      }
+    },
+    "duplicateTab": {
+      "description": "Duplicate current tab",
+      "suggested_key": {
+        "default": "Alt+U"
+      }
+    },
+    "moveTabLeft": {
+      "description": "Move tab left",
+      "suggested_key": {
+        "default": "Alt+Shift+N"
+      }
+    },
+    "moveTabRight": {
+      "description": "Move tab right",
+      "suggested_key": {
+        "default": "Alt+Shift+P"
+      }
+    },
+    "tabAttach": {
+      "description": "Attach current tab",
+      "suggested_key": {
+        "default": "Alt+Shift+A"
+      }
+    },
+    "tabDetach": {
+      "description": "Detach current tab",
+      "suggested_key": {
+        "default": "Alt+A"
+      }
+    }
+  }
 }

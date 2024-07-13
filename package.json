@@ -1,6 +1,6 @@
 {
   "name": "mouselessV2",
-  "version": "2.9.0",
+  "version": "3.0.0",
   "description": "Browse the web, mouse not required.",
   "scripts": {
     "build": "vite build",

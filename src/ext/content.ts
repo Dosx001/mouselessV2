@@ -15,22 +15,15 @@ const conf = {
 };
 
 const keys = {
-  attach_tab: "<Alt><Shift>D",
   blobs_click: "Enter",
   blobs_focus: "Tab",
   blobs_show: ";",
-  change_tab_left: "<Alt>p",
-  change_tab_right: "<Alt>n",
   clipboard_copy: "<Shift>Enter",
   clipboard_paste: "<Alt>p",
-  detach_tab: "<Alt>d",
-  duplicate_tab: "<Alt>u",
   elem_deselect: "Escape",
   history_back: "<Alt>h",
   history_forward: "<Alt>l",
   middle_click: "<Alt>Enter",
-  move_tab_left: "<Alt><Shift>P",
-  move_tab_right: "<Alt><Shift>N",
   new_tab: "<Ctrl>Enter",
   new_window: "<Alt>w",
   private_window: "<Alt><Shift>W",
@@ -38,8 +31,8 @@ const keys = {
   scroll_bottom: "<Alt><Shift>G",
   scroll_down: "<Alt>j",
   scroll_down_fast: "<Alt><Shift>J",
-  scroll_left: "<Alt><Shift>H",
-  scroll_right: "<Alt><Shift>L",
+  scroll_left: "<Alt>h",
+  scroll_right: "<Alt>l",
   scroll_top: "<Alt>g",
   scroll_up: "<Alt>k",
   scroll_up_fast: "<Alt><Shift>K",
@@ -307,6 +300,12 @@ window.onkeydown = (ev) => {
     case keys.elem_deselect:
       active.blur();
       break;
+    case keys.history_forward:
+      history.forward();
+      break;
+    case keys.history_back:
+      history.back();
+      break;
     case keys.scroll_up:
       blobList.scroll(-100, true);
       break;
@@ -331,35 +330,8 @@ window.onkeydown = (ev) => {
     case keys.scroll_bottom:
       scroll(0, (window as any).scrollMaxY);
       break;
-    case keys.history_forward:
-      history.forward();
-      break;
-    case keys.history_back:
-      history.back();
-      break;
     case keys.search:
       blobList.search();
-      break;
-    case keys.change_tab_left:
-      sendMessage("changeTabLeft");
-      break;
-    case keys.change_tab_right:
-      sendMessage("changeTabRight");
-      break;
-    case keys.move_tab_left:
-      sendMessage("moveTabLeft");
-      break;
-    case keys.move_tab_right:
-      sendMessage("moveTabRight");
-      break;
-    case keys.duplicate_tab:
-      sendMessage("duplicateTab");
-      break;
-    case keys.attach_tab:
-      sendMessage("attachTab");
-      break;
-    case keys.detach_tab:
-      sendMessage("detachTab");
       break;
     case keys.reload:
       sendMessage("css");

@@ -1,4 +1,4 @@
-# ![logo](dist/assets/icon-32.png) mouselessV2
+# ![logo](public/icon-32.png) mouselessV2
 
 [![Firefox add-on](https://user-images.githubusercontent.com/585534/107280546-7b9b2a00-6a26-11eb-8f9f-f95932f4bfec.png)
 ](https://addons.mozilla.org/en-US/firefox/addon/mouselessv2)
@@ -39,7 +39,7 @@ with extra features and bug fixes.
 | Escape                    | Unfocus current element               |
 | Alt+w / Alt+Shift+W       | Open a new/private window from link   |
 | Alt+s                     | Google search highlighted text        |
-| Alt+d / Alt+Shift+D       | Detach/reattach tab                   |
+| Alt+a / Alt+Shift+A       | Detach/reattach tab                   |
 | Alt+u                     | Duplicate tab                         |
 | Alt+l / Alt+h             | Go one page forward/back in history   |
 | Alt+j / Alt+k             | Scroll down/up                        |

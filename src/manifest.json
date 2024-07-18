@@ -88,6 +88,12 @@
       "suggested_key": {
         "default": "Alt+A"
       }
+    },
+    "search": {
+      "description": "Search",
+      "suggested_key": {
+        "default": "Alt+W"
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "mouselessV2",
-  "version": "3.0.0",
+  "version": "3.0.2",
   "description": "Browse the web, mouse not required.",
   "scripts": {
     "build": "vite build",
@@ -10,13 +10,13 @@
   },
   "devDependencies": {
     "@types/firefox-webext-browser": "^120.0.4",
-    "@typescript-eslint/eslint-plugin": "^7.15.0",
-    "@typescript-eslint/parser": "^7.15.0",
-    "eslint": "^9.6.0",
+    "@typescript-eslint/eslint-plugin": "^7.16.1",
+    "@typescript-eslint/parser": "^7.16.1",
+    "eslint": "^9.7.0",
     "globals": "^15.8.0",
-    "sass": "^1.77.6",
+    "sass": "^1.77.8",
     "typescript": "^5.5.3",
-    "vite": "^5.3.3",
+    "vite": "^5.3.4",
     "vite-plugin-web-extension": "^4.1.6"
   }
 }

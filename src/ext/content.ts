@@ -141,6 +141,7 @@ const blobList = {
       blobList.hideBlobs();
     };
     blobList.container.className = "mlv2Container";
+    document.querySelector(".mlv2Container")?.remove();
     document.body.append(blobList.container);
   },
   loadBlobs: () => {

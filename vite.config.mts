@@ -2,6 +2,9 @@ import { defineConfig } from "vite";
 import webExtension, { readJsonFile } from "vite-plugin-web-extension";
 
 export default defineConfig({
+  build: {
+    modulePreload: false,
+  },
   plugins: [
     webExtension({
       browser: "firefox",

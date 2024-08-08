@@ -18,7 +18,6 @@ const presets = {
     new_tab: "<Ctrl>Enter",
     new_window: "<Alt>w",
     private_window: "<Alt><Shift>W",
-    reload: "<Ctrl>;",
     scroll_bottom: "<Alt><Shift>G",
     scroll_down: "<Alt>j",
     scroll_down_fast: "<Alt><Shift>J",

@@ -4,23 +4,6 @@ async function getIndex(tab: browser.tabs.Tab, off: number) {
   return idx === -1 ? tabCount - 1 : tabCount === idx ? 0 : idx;
 }
 
-function loadCss(tab: browser.tabs.Tab) {
-  const id = setInterval(() => {
-    if (tab.url)
-      browser.tabs
-        .insertCSS(tab.id!, { file: "ext/styles.css" })
-        .finally(() => clearInterval(id));
-  }, 250);
-}
-
-browser.tabs.query({}).then((tabs) => {
-  for (const tab of tabs) loadCss(tab);
-});
-
-browser.tabs.onUpdated.addListener((_, __, tab) => loadCss(tab));
-
-browser.tabs.onCreated.addListener(loadCss);
-
 const tabWin = new Map<number, number>();
 browser.tabs.onRemoved.addListener((id) => tabWin.delete(id));
 
@@ -33,7 +16,7 @@ browser.commands.onCommand.addListener(async (cmd) => {
   )[0];
   switch (cmd) {
     case "duplicateTab":
-      browser.tabs.duplicate(tab.id!, { active: false }).then(loadCss);
+      browser.tabs.duplicate(tab.id!, { active: false });
       break;
     case "changeTabLeft": {
       const query = {
@@ -95,22 +78,15 @@ browser.commands.onCommand.addListener(async (cmd) => {
 
 browser.runtime.onMessage.addListener(async (msg, sender) => {
   switch (msg.action) {
-    case "css":
-      loadCss(sender.tab!);
-      break;
     case "openTabActive":
-      browser.tabs
-        .create({ url: msg.href, index: sender.tab!.index + 1 })
-        .then(loadCss);
+      browser.tabs.create({ url: msg.href, index: sender.tab!.index + 1 });
       break;
     case "openTab":
-      browser.tabs
-        .create({
-          active: false,
-          url: msg.href,
-          index: sender.tab!.index + 1,
-        })
-        .then(loadCss);
+      browser.tabs.create({
+        active: false,
+        url: msg.href,
+        index: sender.tab!.index + 1,
+      });
       break;
     case "newWindow":
       browser.windows.create({ url: msg.href });

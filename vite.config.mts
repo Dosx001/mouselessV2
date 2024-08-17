@@ -5,6 +5,11 @@ export default defineConfig({
   build: {
     modulePreload: false,
   },
+  resolve: {
+    alias: {
+      mappings: "src/mappings.ts",
+    },
+  },
   plugins: [
     webExtension({
       browser: "firefox",

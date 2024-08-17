@@ -1,3 +1,4 @@
+import { conf, keys } from "mappings";
 import "./styles.scss";
 
 const sendMessage = (action: string, href = "") => {
@@ -8,35 +9,6 @@ const sendMessage = (action: string, href = "") => {
 };
 
 let blacklisted = false;
-
-const conf = {
-  blacklist: "",
-  chars: ";alskdjfiwoe",
-};
-
-const keys = {
-  blobs_click: "Enter",
-  blobs_focus: "Tab",
-  blobs_show: ";",
-  clipboard_copy: "<Shift>Enter",
-  clipboard_paste: "<Alt>p",
-  elem_deselect: "Escape",
-  history_back: "<Alt>h",
-  history_forward: "<Alt>l",
-  middle_click: "<Alt>Enter",
-  new_tab: "<Ctrl>Enter",
-  new_window: "<Alt>w",
-  private_window: "<Alt><Shift>W",
-  scroll_bottom: "<Alt><Shift>G",
-  scroll_down: "<Alt>j",
-  scroll_down_fast: "<Alt><Shift>J",
-  scroll_left: "<Alt>h",
-  scroll_right: "<Alt>l",
-  scroll_top: "<Alt>g",
-  scroll_up: "<Alt>k",
-  scroll_up_fast: "<Alt><Shift>K",
-  search: "<Alt>s",
-};
 
 const bindKeys = async () => {
   const sync = await browser.storage.sync.get();

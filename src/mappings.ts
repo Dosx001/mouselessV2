@@ -24,4 +24,6 @@ export const keys = {
   scroll_up: "<Alt>k",
   scroll_up_fast: "<Alt><Shift>K",
   search: "<Alt>s",
+  search_current: "<Alt><Shift>S",
+  search_window: "<Ctrl><Alt>s",
 };

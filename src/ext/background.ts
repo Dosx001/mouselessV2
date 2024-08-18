@@ -94,5 +94,12 @@ browser.runtime.onMessage.addListener(async (msg, sender) => {
     case "privateWindow":
       browser.windows.create({ url: msg.href, incognito: true });
       break;
+    case "search": {
+      browser.search.search({
+        query: msg.text,
+        disposition: msg.display,
+      });
+      break;
+    }
   }
 });

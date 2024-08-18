@@ -210,10 +210,6 @@ const blobList = {
     blob.focus();
     blobList.hideBlobs();
   },
-  search: () => {
-    const text = document.getSelection()!.toString();
-    if (text) window.open(`http://google.com/search?q=${text}`);
-  },
   newWindow: () => {
     const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
@@ -254,6 +250,16 @@ const isValidElem = (el: HTMLElement) => {
   }
   return el.contentEditable.toLowerCase() === "true";
 };
+
+function search(display: browser.search.Disposition) {
+  const text = document.getSelection()!.toString();
+  if (text)
+    browser.runtime.sendMessage({
+      action: "search",
+      text: text,
+      display: display,
+    });
+}
 
 window.onkeydown = (ev) => {
   if (blacklisted) return;
@@ -303,7 +309,13 @@ window.onkeydown = (ev) => {
       scroll(0, (window as any).scrollMaxY);
       break;
     case keys.search:
-      blobList.search();
+      search("NEW_TAB");
+      break;
+    case keys.search_current:
+      search("CURRENT_TAB");
+      break;
+    case keys.search_window:
+      search("NEW_WINDOW");
       break;
     default:
       return;

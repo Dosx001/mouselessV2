@@ -43,6 +43,7 @@
     "<all_urls>",
     "clipboardRead",
     "clipboardWrite",
+    "search",
     "storage",
     "tabs"
   ],

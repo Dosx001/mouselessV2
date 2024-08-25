@@ -1,13 +1,6 @@
 import { conf, keys } from "mappings";
 import "./styles.scss";
 
-const sendMessage = (action: string, href = "") => {
-  browser.runtime.sendMessage({
-    action: action,
-    href: href,
-  });
-};
-
 let blacklisted = false;
 
 const bindKeys = async () => {
@@ -92,16 +85,16 @@ const blobList = {
           blobList.clipboardPaste();
           break;
         case keys.new_tab:
-          blobList.clickNewTab(true);
+          blobList.newTab(true);
           break;
         case keys.middle_click:
-          blobList.clickNewTab(false);
+          blobList.newTab(false);
           break;
         case keys.new_window:
-          blobList.newWindow();
+          blobList.newWindow(false);
           break;
         case keys.private_window:
-          blobList.privateWindow();
+          blobList.newWindow(true);
           break;
         default:
           return;
@@ -186,13 +179,17 @@ const blobList = {
         : blob.click();
     }
   },
-  clickNewTab: (active: boolean) => {
+  newTab: (active: boolean) => {
     const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
     blobList.hideBlobs();
     const link = (blob as HTMLAnchorElement).href;
     blob.tagName === "A" && link
-      ? sendMessage(active ? "openTabActive" : "openTab", link)
+      ? browser.runtime.sendMessage({
+          action: "newTab",
+          active: active,
+          url: link,
+        })
       : blobList.click();
   },
   clipboardCopy: () => {
@@ -210,19 +207,17 @@ const blobList = {
     blob.focus();
     blobList.hideBlobs();
   },
-  newWindow: () => {
+  newWindow: (incognito: boolean) => {
     const blob = blobList.blobs.get(blobList.overview.value);
     if (!blob) return;
     blobList.hideBlobs();
     const link = (blob as HTMLAnchorElement).href;
-    if (blob.tagName === "A" && link) sendMessage("newWindow", link);
-  },
-  privateWindow: () => {
-    const blob = blobList.blobs.get(blobList.overview.value);
-    if (!blob) return;
-    blobList.hideBlobs();
-    const link = (blob as HTMLAnchorElement).href;
-    if (blob.tagName === "A" && link) sendMessage("privateWindow", link);
+    if (blob.tagName === "A" && link)
+      browser.runtime.sendMessage({
+        action: "newWindow",
+        url: link,
+        incognito: incognito,
+      });
   },
   focus: () => {
     const blob = blobList.blobs.get(blobList.overview.value);

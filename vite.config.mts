@@ -8,6 +8,7 @@ export default defineConfig({
   resolve: {
     alias: {
       mappings: "src/mappings.ts",
+      "ext/queries": "src/ext/queries.ts",
     },
   },
   plugins: [

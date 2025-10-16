@@ -1,3 +1,4 @@
+import queries from "ext/queries";
 import { conf, keys } from "mappings";
 import "./styles.scss";
 
@@ -62,6 +63,7 @@ const blobList = {
   blobs: new Map<string, HTMLElement>(),
   container: document.createElement("div"),
   overview: document.createElement("input"),
+  query: "a,button,input,select,textarea,summary,[role='button']",
   init: () => {
     blobList.overview.type = "text";
     blobList.overview.className = "mlv2Overview";
@@ -96,6 +98,9 @@ const blobList = {
         case keys.private_window:
           blobList.newWindow(true);
           break;
+        case "s4":
+          blobList.overview.value += "s";
+          break;
         default:
           return;
       }
@@ -107,6 +112,8 @@ const blobList = {
     blobList.container.className = "mlv2Container";
     document.querySelector(".mlv2Container")?.remove();
     document.body.append(blobList.container);
+    const query = queries();
+    if (query) blobList.query += "," + query;
   },
   loadBlobs: () => {
     blobList.container.replaceChildren(blobList.overview);
@@ -114,12 +121,7 @@ const blobList = {
     blobList.overview.focus();
     let count = 0;
     for (const linkElem of document.querySelectorAll<HTMLElement>(
-      `a, button, input, select, textarea, summary, [role='button']
-      ${
-        location.host === "www.youtube.com"
-          ? ", yt-tab-shape, yt-chip-cloud-chip-renderer"
-          : ""
-      }`,
+      blobList.query,
     )) {
       if (
         linkElem.style.display === "none" ||

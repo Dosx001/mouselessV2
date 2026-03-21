@@ -9,18 +9,20 @@ with extra features and bug fixes.
 
 ## mouselessV2 vs mouseless
 
-| Features                      | mouselessV2                  | mouseless                     |
-| ----------------------------- | ---------------------------- | ----------------------------- |
-| User Settings                 | Sync to your Firefox account | Saved locally to your machine |
-| Key Bindings                  | Vim like key bindings        | Orignal key bindings          |
-| Presets                       | :x:<sup>\*</sup>             | :heavy_check_mark:            |
-| On and Off Switch             | :x:<sup>\*</sup>             | :heavy_check_mark:            |
-| Clipboard Paste               | :heavy_check_mark:           | :x:                           |
-| Duplicate Tab                 | :heavy_check_mark:           | :x:                           |
-| Open New Window from link     | :heavy_check_mark:           | :x:                           |
-| Open Private Window from link | :heavy_check_mark:           | :x:                           |
-| Scroll to Top of Page         | :heavy_check_mark:           | :x:                           |
-| Scroll to Bottom of Page      | :heavy_check_mark:           | :x:                           |
+| Features                                                                                          | mouselessV2                  | mouseless                     |
+| ------------------------------------------------------------------------------------------------- | ---------------------------- | ----------------------------- |
+| User Settings                                                                                     | Sync to your Firefox account | Saved locally to your machine |
+| Key Bindings                                                                                      | Vim like key bindings        | Orignal key bindings          |
+| Presets                                                                                           | :x:<sup>\*</sup>             | :heavy_check_mark:            |
+| On and Off Switch                                                                                 | :x:<sup>\*</sup>             | :heavy_check_mark:            |
+| Clipboard Paste                                                                                   | :heavy_check_mark:           | :x:                           |
+| Duplicate Tab                                                                                     | :heavy_check_mark:           | :x:                           |
+| Open New Window from link                                                                         | :heavy_check_mark:           | :x:                           |
+| Open Private Window from link                                                                     | :heavy_check_mark:           | :x:                           |
+| Scroll to Top of Page                                                                             | :heavy_check_mark:           | :x:                           |
+| Scroll to Bottom of Page                                                                          | :heavy_check_mark:           | :x:                           |
+| Custom [Queries](https://github.com/Dosx001/mouselessV2/blob/main/src/ext/queries.ts) per Website | :heavy_check_mark:           | :x:                           |
+| Open Search Engine Using Highlighted Text                                                         | :heavy_check_mark:           | :x:                           |
 
 <sup>\*</sup>_See [Improvements and Fixes](#improvements-and-fixes) section for more information_
 
